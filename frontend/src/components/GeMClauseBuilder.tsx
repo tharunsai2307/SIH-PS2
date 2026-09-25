@@ -87,10 +87,10 @@ export function GeMClauseBuilder() {
         <div>
           <h2 className="text-sm font-bold text-gray-900 uppercase tracking-wide flex items-center gap-2">
             <FileText size={16} className="text-[#003366]" />
-            <span>GeM Tender Clause Drafter & NIT Builder</span>
+            <span>GeM Tender Clause Assistant & Specification Helper</span>
           </h2>
           <p className="text-xs text-gray-500">
-            Generate legally vetted Special Terms and Conditions (STC) clauses ready to paste into GeM bidding documents
+            Generate standards-aligned Special Terms and Conditions (STC) clauses ready to paste into GeM bidding documents
           </p>
         </div>
 

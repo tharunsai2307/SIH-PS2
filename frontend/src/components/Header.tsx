@@ -60,15 +60,15 @@ export function Header({ activeTab, onTabChange }: HeaderProps) {
       {/* ── National Tricolor Top Strip ── */}
       <div className="tiranga-strip" />
 
-      {/* ── Top Citizen Utility Strip (GIGW 3.0 Standard) ── */}
+      {/* ── Top Utility Strip (GIGW 3.0 Alignment) ── */}
       <div className="top-utility-bar px-4 sm:px-8 lg:px-12 py-2 flex flex-wrap items-center justify-between text-xs">
         <div className="flex items-center gap-3 sm:gap-4">
           <span className="font-semibold text-gray-800 tracking-wide">
-            भारत सरकार | GOVERNMENT OF INDIA
+            स्मार्ट इंडिया हैकाथॉन | SMART INDIA HACKATHON 2024-25
           </span>
           <span className="hidden md:inline text-gray-300">|</span>
           <span className="hidden md:inline text-gray-600 font-medium">
-            उपभोक्ता मामले, खाद्य और सार्वजनिक वितरण मंत्रालय (Ministry of Consumer Affairs)
+            Problem Statement 2: AI-Powered Indian Standards Recommendation Engine
           </span>
         </div>
 
@@ -114,18 +114,18 @@ export function Header({ activeTab, onTabChange }: HeaderProps) {
             <span className="hidden sm:inline">Contrast</span>
           </button>
 
-          {/* Helpdesk */}
+          {/* Evaluation Status */}
           <span className="text-gray-700 font-medium">
-            Toll Free: <strong className="text-[#003366] font-bold">1915</strong>
+            Prototype Status: <strong className="text-[#003366] font-bold">SIH Evaluation Ready</strong>
           </span>
         </div>
       </div>
 
-      {/* ── Main Government Portal Header ── */}
+      {/* ── Main Government-Style Header ── */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-6 flex flex-col md:flex-row items-center justify-between gap-5">
-        {/* Left: Official Emblem & BIS Identity */}
+        {/* Left: State Emblem Visual Context & ISense Identity */}
         <div className="flex items-center gap-5 text-center md:text-left">
-          {/* State Emblem of India */}
+          {/* State Emblem of India (Visual Context) */}
           <img
             src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg"
             alt="State Emblem of India - Lion Capital"
@@ -134,20 +134,20 @@ export function Header({ activeTab, onTabChange }: HeaderProps) {
 
           <div className="border-l-2 border-slate-200 pl-5">
             <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-gray-900 leading-tight">
-              भारतीय मानक ब्यूरो
+              आई-सेंस · भारतीय मानक निर्णय-सहायता इंजन
             </h2>
             <h1 className="text-lg sm:text-xl font-extrabold text-[#003366] tracking-tight mt-0.5">
-              BUREAU OF INDIAN STANDARDS
+              ISense — BIS Standards Decision-Support Engine
             </h1>
             <p className="text-xs text-gray-600 font-medium flex items-center gap-2 mt-1">
               <span className="text-[#f37021] font-bold tracking-wide">मानक: पथप्रदर्शक:</span>
               <span className="text-gray-300">·</span>
-              <span>The National Standards Body of India</span>
+              <span>Smart India Hackathon (SIH 2024-25 PS-2 Prototype)</span>
             </p>
           </div>
         </div>
 
-        {/* Right: Hackathon Flagship & GeM Portal Stamp */}
+        {/* Right: Flagship Status & Decision Support Badge */}
         <div className="flex items-center gap-4">
           <div className="bg-amber-50/80 border border-amber-200/80 rounded-lg px-4 py-2.5 text-right shadow-2xs">
             <div className="flex items-center justify-end gap-2 text-xs font-bold text-amber-950">
@@ -155,23 +155,26 @@ export function Header({ activeTab, onTabChange }: HeaderProps) {
               SMART INDIA HACKATHON
             </div>
             <div className="text-[11.5px] text-amber-900 font-semibold mt-0.5">
-              PS-2 · Applicable Standards AI Engine
+              PS-2 · Procurement Standards Analysis
             </div>
             <div className="text-[10.5px] text-gray-600 font-mono mt-0.5">
-              GeM Compliance & Verification Suite
+              GeM Tender Clause Assistant · Demonstration KB
             </div>
           </div>
 
           <div className="hidden lg:flex flex-col items-center justify-center px-3.5 py-2.5 rounded-lg border border-blue-200 bg-blue-50/70 text-center shadow-2xs">
             <ShieldCheck size={22} className="text-[#003366]" />
-            <span className="text-[10.5px] font-bold text-[#003366] uppercase mt-1 tracking-wider">
-              Verified BIS Engine
+            <span className="text-[10px] font-bold text-[#003366] uppercase mt-1 tracking-wider">
+              Decision-Support Engine
+            </span>
+            <span className="text-[9.5px] text-slate-500 font-semibold">
+              SIH Prototype
             </span>
           </div>
         </div>
       </div>
 
-      {/* ── Official Government Navigation Bar ── */}
+      {/* ── Navigation Bar ── */}
       <nav className="gov-nav text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center gap-1 sm:gap-2 overflow-x-auto scrollbar-none">
           <button
@@ -187,7 +190,7 @@ export function Header({ activeTab, onTabChange }: HeaderProps) {
             className={`gov-nav-tab ${activeTab === 'catalogue' ? 'active' : ''}`}
           >
             <Layers size={15} />
-            <span>BIS Standards Repository (11)</span>
+            <span>Curated BIS Standards (11)</span>
           </button>
 
           <button
@@ -195,7 +198,7 @@ export function Header({ activeTab, onTabChange }: HeaderProps) {
             className={`gov-nav-tab ${activeTab === 'graph' ? 'active' : ''}`}
           >
             <GitFork size={15} />
-            <span>Normative Knowledge Network</span>
+            <span>Normative Standards Knowledge Network</span>
           </button>
 
           <button
@@ -203,7 +206,7 @@ export function Header({ activeTab, onTabChange }: HeaderProps) {
             className={`gov-nav-tab ${activeTab === 'gem-clauses' ? 'active' : ''}`}
           >
             <FileText size={15} />
-            <span>GeM Tender Clause Drafter</span>
+            <span>GeM Tender Clause Assistant</span>
           </button>
 
           <button
@@ -211,7 +214,7 @@ export function Header({ activeTab, onTabChange }: HeaderProps) {
             className={`gov-nav-tab ${activeTab === 'qco-orders' ? 'active' : ''}`}
           >
             <Scale size={15} />
-            <span>Quality Control Orders (QCO)</span>
+            <span>QCO Compliance Reference</span>
           </button>
 
           <button
@@ -219,7 +222,7 @@ export function Header({ activeTab, onTabChange }: HeaderProps) {
             className={`gov-nav-tab ${activeTab === 'guidelines' ? 'active' : ''}`}
           >
             <HelpCircle size={15} />
-            <span>CVC Guidelines & FAQ</span>
+            <span>Procurement Guidelines & FAQ</span>
           </button>
         </div>
       </nav>

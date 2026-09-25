@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { 
+  AlertCircle,
   AlertOctagon, 
   AlertTriangle, 
   BookOpen, 
@@ -7,9 +8,12 @@ import {
   Clipboard, 
   FileText, 
   GitBranch, 
+  HelpCircle,
+  Info,
   Printer, 
   Scale, 
   ShieldAlert, 
+  ShieldCheck,
   XCircle 
 } from 'lucide-react';
 import type { AnalyzeResponse } from '../api/isense';
@@ -19,7 +23,7 @@ interface Props {
 }
 
 export function EvaluationReport({ result }: Props) {
-  const [activeSubTab, setActiveSubTab] = useState<'clauses' | 'gaps' | 'relationships' | 'gem-clause' | 'statutory'>('clauses');
+  const [activeSubTab, setActiveSubTab] = useState<'standards' | 'coverage' | 'relationships' | 'gem-clause' | 'statutory'>('standards');
   const [copied, setCopied] = useState(false);
 
   const {
@@ -36,6 +40,10 @@ export function EvaluationReport({ result }: Props) {
     gem_clause_template,
     matched_qco,
     explanation,
+    extracted_requirements,
+    unknown_standards_detected,
+    specification_needs_clarification,
+    clarification_prompt,
   } = result;
 
   const handleCopyClause = () => {
@@ -60,23 +68,26 @@ export function EvaluationReport({ result }: Props) {
 
   return (
     <div className="gov-card">
-      {/* ── Official Government Certificate Header ── */}
+      {/* ── Decision-Support Certificate Header ── */}
       <div className="p-6 sm:p-8 border-b border-slate-200 bg-slate-50/70">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-5">
           <div className="space-y-1.5">
             <div className="flex items-center gap-2.5">
               <span className="bg-[#003366] text-white text-[10.5px] font-bold px-2.5 py-1 rounded-md tracking-wider uppercase">
-                Official BIS Assessment
+                BIS Standards Analysis Assessment
               </span>
               <span className="text-xs font-mono font-bold text-slate-700 bg-white border border-slate-200 px-2 py-0.5 rounded-md">
                 Ref: {certificate_id}
               </span>
+              <span className="text-[10px] font-bold text-emerald-800 bg-emerald-100 border border-emerald-300 px-2 py-0.5 rounded-md">
+                SIH PS-2 Prototype
+              </span>
             </div>
             <h2 className="text-xl sm:text-2xl font-extrabold text-[#003366] tracking-tight">
-              Tender Technical Compliance & Applicable Standards Certificate
+              Tender Specification Analysis & Standards Decision-Support Report
             </h2>
             <p className="text-xs text-slate-600">
-              Issued under the authority of National Standards Bureau pilot for GeM e-Procurement
+              Technical decision-support advisory for GeM & public procurement specification verification
             </p>
           </div>
 
@@ -85,10 +96,10 @@ export function EvaluationReport({ result }: Props) {
             <button
               onClick={handlePrint}
               className="btn-gov-secondary"
-              title="Print Official Certificate"
+              title="Print Decision-Support Report"
             >
               <Printer size={15} />
-              <span>Print Official Report</span>
+              <span>Print Report</span>
             </button>
             <button
               onClick={handleCopyClause}
@@ -100,8 +111,54 @@ export function EvaluationReport({ result }: Props) {
           </div>
         </div>
 
+        {/* ── Mandatory Decision-Support Notice ── */}
+        <div className="mt-5 p-3.5 bg-blue-50/80 border border-blue-200 rounded-lg flex items-center gap-2.5 text-xs text-blue-950 font-medium">
+          <Info size={18} className="text-[#003366] flex-shrink-0" />
+          <span>
+            <strong>Decision-support output:</strong> Final procurement qualification and compliance decisions remain with the authorized procurement officer.
+          </span>
+        </div>
+
+        {/* ── Ambiguity / Clarification Alert (Section 10) ── */}
+        {specification_needs_clarification && (
+          <div className="mt-4 p-4 bg-amber-50 border border-amber-300 rounded-lg flex items-start gap-3 text-xs text-amber-950">
+            <AlertTriangle size={18} className="text-amber-700 flex-shrink-0 mt-0.5" />
+            <div className="space-y-1">
+              <h4 className="font-bold text-sm text-amber-900">
+                Specification Requires Clarification
+              </h4>
+              <p className="leading-relaxed">
+                {clarification_prompt || 
+                  'The supplied specification is preliminary or ambiguous. Product domain, mandatory testing schedules, and certification requirements must be defined before final tendering.'
+                }
+              </p>
+              <p className="text-xs text-amber-800 font-semibold mt-1">
+                Candidate standards below are marked as preliminary candidates subject to clarification.
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* ── Unknown Cited Standard Warning (Section 11) ── */}
+        {unknown_standards_detected && unknown_standards_detected.length > 0 && (
+          <div className="mt-4 p-4 bg-rose-50 border border-rose-300 rounded-lg flex items-start gap-3 text-xs text-rose-950">
+            <AlertCircle size={18} className="text-rose-700 flex-shrink-0 mt-0.5" />
+            <div className="space-y-1">
+              <h4 className="font-bold text-sm text-rose-900">
+                Explicit Standard Citation Unverified in Demonstration Knowledge Base
+              </h4>
+              <p className="leading-relaxed">
+                The draft specification cites <strong>{unknown_standards_detected.join(', ')}</strong>. This standard does not exist in the 11 curated demonstration standards. The system has preserved this citation without fabricating requirements.
+              </p>
+              <p className="text-xs text-rose-800 font-semibold">
+                Please verify active status and applicability with the official BIS standards registry at bis.gov.in.
+              </p>
+            </div>
+          </div>
+        )}
+
         {/* Metadata Details Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6 pt-5 border-t border-slate-200 text-xs">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-5 pt-5 border-t border-slate-200 text-xs">
           <div className="p-3 bg-white border border-slate-200 rounded-lg">
             <span className="text-slate-400 block text-[10.5px] uppercase font-bold tracking-wider mb-0.5">Tender / Bid ID</span>
             <span className="font-mono font-bold text-slate-900 truncate block">{tender_id}</span>
@@ -115,44 +172,125 @@ export function EvaluationReport({ result }: Props) {
             <span className="font-medium text-slate-800 block truncate">{evaluation_timestamp}</span>
           </div>
           <div className="p-3 bg-white border border-slate-200 rounded-lg">
-            <span className="text-slate-400 block text-[10.5px] uppercase font-bold tracking-wider mb-0.5">Verification Status</span>
-            <span className="inline-flex items-center gap-1.5 font-bold text-emerald-700">
-              <CheckCircle2 size={14} />
-              BIS Engine Validated
+            <span className="text-slate-400 block text-[10.5px] uppercase font-bold tracking-wider mb-0.5">Knowledge Base</span>
+            <span className="inline-flex items-center gap-1.5 font-bold text-blue-900">
+              <ShieldCheck size={14} />
+              11 Curated Standards
             </span>
           </div>
         </div>
       </div>
 
-      {/* ── Executive KPI Metric Cards ── */}
+      {/* ── Grounded Requirement Extraction Overview (Section 4) ── */}
+      <div className="p-6 sm:p-8 bg-slate-50/40 border-b border-slate-200 space-y-4">
+        <div className="flex items-center justify-between">
+          <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2">
+            <BookOpen size={15} className="text-[#003366]" />
+            <span>Extracted Specification Requirements & Provenance</span>
+          </h3>
+          <span className="text-[11px] text-slate-500">
+            Strict separation: Explicit vs Inferred vs Ambiguities
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+          {/* Box 1: Explicitly Stated Requirements */}
+          <div className="p-4 bg-white border border-emerald-200 rounded-xl space-y-2 shadow-2xs">
+            <div className="flex items-center justify-between">
+              <span className="font-bold text-emerald-900">Explicit Requirements</span>
+              <span className="text-[10px] font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full">
+                EXPLICIT
+              </span>
+            </div>
+            {extracted_requirements.explicit_requirements && extracted_requirements.explicit_requirements.length > 0 ? (
+              <ul className="space-y-1.5 text-slate-700">
+                {extracted_requirements.explicit_requirements.map((req, i) => (
+                  <li key={i} className="flex items-start gap-1.5">
+                    <CheckCircle2 size={13} className="text-emerald-600 flex-shrink-0 mt-0.5" />
+                    <span>{req}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-slate-500 italic">No explicit parameters detected in specification text.</p>
+            )}
+          </div>
+
+          {/* Box 2: Inferred Requirements */}
+          <div className="p-4 bg-white border border-blue-200 rounded-xl space-y-2 shadow-2xs">
+            <div className="flex items-center justify-between">
+              <span className="font-bold text-blue-950">AI / Domain Inferences</span>
+              <span className="text-[10px] font-bold bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full">
+                INFERRED
+              </span>
+            </div>
+            {extracted_requirements.inferred_requirements && extracted_requirements.inferred_requirements.length > 0 ? (
+              <ul className="space-y-1.5 text-slate-700">
+                {extracted_requirements.inferred_requirements.map((req, i) => (
+                  <li key={i} className="flex items-start gap-1.5">
+                    <Info size={13} className="text-blue-600 flex-shrink-0 mt-0.5" />
+                    <span>{req}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-slate-500 italic">No additional domain inferences required.</p>
+            )}
+          </div>
+
+          {/* Box 3: Ambiguities & Missing Parameters */}
+          <div className="p-4 bg-white border border-amber-200 rounded-xl space-y-2 shadow-2xs">
+            <div className="flex items-center justify-between">
+              <span className="font-bold text-amber-950">Missing / Ambiguous</span>
+              <span className="text-[10px] font-bold bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full">
+                REVIEW
+              </span>
+            </div>
+            {extracted_requirements.ambiguities && extracted_requirements.ambiguities.length > 0 ? (
+              <ul className="space-y-1.5 text-slate-700">
+                {extracted_requirements.ambiguities.map((amb, i) => (
+                  <li key={i} className="flex items-start gap-1.5">
+                    <AlertTriangle size={13} className="text-amber-600 flex-shrink-0 mt-0.5" />
+                    <span>{amb}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-slate-500 italic">Specification appears complete across major parameters.</p>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* ── Executive Metric KPI Cards ── */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-6 sm:p-8 bg-white border-b border-slate-200">
         {/* Metric 1: Primary Standard */}
         <div className="kpi-box">
           <div className="kpi-lbl">Primary Standard</div>
           <div className="mt-2 flex items-baseline gap-2">
             <span className="is-code-chip text-sm font-bold">
-              {primary_standard ? primary_standard.standard.is_number : 'NOT DETECTED'}
+              {primary_standard ? primary_standard.standard.is_number : 'NOT IDENTIFIED'}
             </span>
             <span className="text-xs text-slate-500 font-medium">
               {primary_standard?.standard.year}
             </span>
           </div>
           <p className="text-xs text-slate-600 mt-2.5 truncate font-medium">
-            {primary_standard?.standard.title}
+            {primary_standard ? primary_standard.standard.title : 'Specification requires domain clarification'}
           </p>
         </div>
 
-        {/* Metric 2: Compliance Score */}
+        {/* Metric 2: Compliance Rating */}
         <div className="kpi-box">
-          <div className="kpi-lbl">Compliance Rating</div>
+          <div className="kpi-lbl">Specification Compliance Rating</div>
           <div className="mt-2 flex items-baseline gap-2">
             <span className="kpi-val">{compliance_score}%</span>
             <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full border ${getScoreBadge(compliance_score)}`}>
               {compliance_score >= 80 ? 'HIGH' : compliance_score >= 50 ? 'MODERATE' : 'INADEQUATE'}
             </span>
           </div>
-          <p className="text-xs text-slate-600 mt-2.5 font-medium">
-            {highGaps.length === 0 ? 'Meets core tender criteria' : `${highGaps.length} critical gaps identified`}
+          <p className="text-[11px] text-slate-500 mt-2.5 font-medium">
+            Similarity score index; not a statutory compliance probability
           </p>
         </div>
 
@@ -172,7 +310,7 @@ export function EvaluationReport({ result }: Props) {
             )}
           </div>
           <p className="text-xs text-slate-600 mt-2.5 truncate font-medium">
-            {matched_qco ? matched_qco.order_title : 'General BIS compliance standard'}
+            {matched_qco ? matched_qco.order_title : 'General BIS standards reference'}
           </p>
         </div>
 
@@ -184,7 +322,7 @@ export function EvaluationReport({ result }: Props) {
             <span className="text-xs text-slate-500 font-medium">Linked IS codes</span>
           </div>
           <p className="text-xs text-slate-600 mt-2.5 truncate font-medium">
-            Testing headforms & materials
+            Testing headforms, visors & materials
           </p>
         </div>
       </div>
@@ -193,28 +331,28 @@ export function EvaluationReport({ result }: Props) {
       <div className="border-b border-slate-200 bg-slate-50/60 px-6 sm:px-8 no-print">
         <div className="flex items-center gap-2 sm:gap-6 overflow-x-auto scrollbar-none text-xs font-bold">
           <button
-            onClick={() => setActiveSubTab('clauses')}
+            onClick={() => setActiveSubTab('standards')}
             className={`py-3.5 px-2 border-b-2 flex items-center gap-2 whitespace-nowrap transition-all ${
-              activeSubTab === 'clauses'
+              activeSubTab === 'standards'
                 ? 'border-[#003366] text-[#003366]'
                 : 'border-transparent text-slate-600 hover:text-slate-900'
             }`}
           >
             <BookOpen size={15} />
-            <span>Standard Specification & Clauses</span>
+            <span>Recommended Standards & Evidence</span>
           </button>
 
           <button
-            onClick={() => setActiveSubTab('gaps')}
+            onClick={() => setActiveSubTab('coverage')}
             className={`py-3.5 px-2 border-b-2 flex items-center gap-2 whitespace-nowrap transition-all ${
-              activeSubTab === 'gaps'
+              activeSubTab === 'coverage'
                 ? 'border-[#003366] text-[#003366]'
                 : 'border-transparent text-slate-600 hover:text-slate-900'
             }`}
           >
             <ShieldAlert size={15} />
             <span>
-              Coverage & Gap Action Plan
+              Coverage Matrix & Gaps
               {highGaps.length > 0 && (
                 <span className="ml-1.5 px-2 py-0.5 bg-rose-600 text-white rounded-full text-[10px] font-bold">
                   {highGaps.length}
@@ -232,7 +370,7 @@ export function EvaluationReport({ result }: Props) {
             }`}
           >
             <GitBranch size={15} />
-            <span>Normative Companion Tree ({related_standards.length})</span>
+            <span>Normative Standards Network ({related_standards.length})</span>
           </button>
 
           <button
@@ -244,7 +382,7 @@ export function EvaluationReport({ result }: Props) {
             }`}
           >
             <FileText size={15} />
-            <span>Ready-to-Use GeM Tender Clause</span>
+            <span>GeM Tender Clause Assistant</span>
           </button>
 
           <button
@@ -256,56 +394,99 @@ export function EvaluationReport({ result }: Props) {
             }`}
           >
             <Scale size={15} />
-            <span>Statutory & CVC Legal Commentary</span>
+            <span>QCO Legal Reference & Commentary</span>
           </button>
         </div>
       </div>
 
       {/* ── Sub-Tab Contents ── */}
       <div className="p-6 sm:p-8">
-        {/* SUB-TAB 1: Clauses & Standard Details */}
-        {activeSubTab === 'clauses' && (
+        {/* SUB-TAB 1: Recommended Standards & Evidence */}
+        {activeSubTab === 'standards' && (
           <div className="space-y-8">
-            {primary_standard && (
-              <div className="border border-blue-200 bg-blue-50/40 rounded-xl p-5 sm:p-6 space-y-3">
+            {/* Primary Standard Card */}
+            {primary_standard ? (
+              <div className="border border-blue-200 bg-blue-50/30 rounded-xl p-5 sm:p-6 space-y-4">
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div className="flex items-center gap-2.5">
                     <span className="is-code-chip text-base font-bold">
                       {primary_standard.standard.is_number}:{primary_standard.standard.year}
                     </span>
-                    <span className="badge-verified">ACTIVE STANDARD</span>
+                    <span className="badge-verified">ACTIVE DEMONSTRATION STANDARD</span>
                     {primary_standard.standard.certification_scheme?.mandatory && (
                       <span className="badge-critical">MANDATORY ISI MARK</span>
                     )}
                   </div>
-                  <span className="text-xs text-slate-500 font-medium">
-                    Registry Ref: {primary_standard.standard.source_reference}
-                  </span>
+                  <div className="flex items-center gap-2 text-xs">
+                    <span className="text-slate-500 font-medium">Relevance:</span>
+                    <span className="font-bold text-[#003366] bg-blue-100 px-2 py-0.5 rounded">
+                      {primary_standard.relevance_label} ({primary_standard.relevance_score})
+                    </span>
+                  </div>
                 </div>
 
-                <h3 className="text-base sm:text-lg font-bold text-slate-900">
-                  {primary_standard.standard.title}
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
-                  <strong>Scope:</strong> {primary_standard.standard.scope}
-                </p>
+                <div>
+                  <h3 className="text-base sm:text-lg font-bold text-slate-900">
+                    {primary_standard.standard.title}
+                  </h3>
+                  <p className="text-xs text-slate-600 mt-0.5">
+                    Category: <strong>{primary_standard.standard.product_type}</strong>
+                  </p>
+                </div>
 
-                {primary_standard.standard.certification_scheme && (
-                  <div className="mt-4 pt-4 border-t border-blue-200/80 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                    <div>
-                      <strong className="text-slate-700">Certification Scheme:</strong>{' '}
-                      <span className="text-slate-900 font-medium">
-                        {primary_standard.standard.certification_scheme.scheme}
-                      </span>
-                    </div>
-                    <div>
-                      <strong className="text-slate-700">Legal Enforcement:</strong>{' '}
-                      <span className="text-slate-900 font-medium">
-                        {primary_standard.standard.certification_scheme.legal_basis}
-                      </span>
+                {/* Evidence-Grounded Reason */}
+                <div className="p-3.5 bg-white border border-blue-200 rounded-lg text-xs text-slate-800 space-y-1">
+                  <strong className="text-[#003366] block font-bold">Why Recommended:</strong>
+                  <p className="leading-relaxed">{primary_standard.reason}</p>
+                </div>
+
+                {/* Contributing Signals */}
+                {primary_standard.signals_contributed && primary_standard.signals_contributed.length > 0 && (
+                  <div className="space-y-1.5">
+                    <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wider">
+                      Contributing Signals:
+                    </span>
+                    <div className="flex flex-wrap gap-2">
+                      {primary_standard.signals_contributed.map((sig, i) => (
+                        <span key={i} className="text-[11px] bg-slate-100 text-slate-700 border border-slate-200 px-2.5 py-1 rounded-md">
+                          {sig}
+                        </span>
+                      ))}
                     </div>
                   </div>
                 )}
+
+                {/* Scope */}
+                <p className="text-xs text-slate-700 leading-relaxed">
+                  <strong>Scope:</strong> {primary_standard.standard.scope}
+                </p>
+
+                {/* Traceable Evidence */}
+                {primary_standard.evidence && primary_standard.evidence.length > 0 && (
+                  <div className="pt-3 border-t border-blue-200/80 space-y-2">
+                    <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wider">
+                      Traceable Supporting Evidence:
+                    </span>
+                    <div className="space-y-1.5">
+                      {primary_standard.evidence.map((ev, idx) => (
+                        <div key={idx} className="p-2.5 bg-white/80 border border-slate-200 rounded-md text-xs flex items-start justify-between gap-3">
+                          <span className="text-slate-800 font-medium">{ev.claim}</span>
+                          <span className="text-slate-500 font-mono text-[10.5px] whitespace-nowrap">
+                            Source: {ev.source || 'Curated BIS Record'}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="p-6 bg-amber-50 border border-amber-200 rounded-xl text-center space-y-2">
+                <AlertTriangle size={24} className="text-amber-700 mx-auto" />
+                <h4 className="font-bold text-slate-900 text-sm">No Primary Standard Identified</h4>
+                <p className="text-xs text-slate-600 max-w-lg mx-auto">
+                  The specification does not clearly specify equipment type or application matching the 11 demonstration standards. Review ambiguities in the panel above.
+                </p>
               </div>
             )}
 
@@ -317,7 +498,7 @@ export function EvaluationReport({ result }: Props) {
                     Clause-by-Clause Specification Audit
                   </h4>
                   <span className="text-xs text-slate-500 font-medium">
-                    {clauses_analysis.filter(c => c.status === 'COMPLIANT').length} of {clauses_analysis.length} Clauses Referenced in Tender
+                    {clauses_analysis.filter(c => c.status === 'COMPLIANT').length} of {clauses_analysis.length} Clauses Referenced in Specification
                   </span>
                 </div>
 
@@ -376,11 +557,11 @@ export function EvaluationReport({ result }: Props) {
               </div>
             )}
 
-            {/* Testing Requirements Card */}
+            {/* Prescribed Laboratory Test Methods */}
             {primary_standard?.standard.testing_requirements && (
               <div className="border border-slate-200 rounded-xl p-5 sm:p-6 bg-slate-50/50 space-y-4">
                 <h4 className="text-xs font-bold text-slate-800 uppercase tracking-wider">
-                  Prescribed Laboratory Test Methods & Acceptance Criteria
+                  Prescribed Laboratory Test Methods & Acceptance Schedules
                 </h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
                   {Object.entries(primary_standard.standard.testing_requirements).map(([k, v]) => (
@@ -400,21 +581,28 @@ export function EvaluationReport({ result }: Props) {
         )}
 
         {/* SUB-TAB 2: Coverage Matrix & Gap Action Plan */}
-        {activeSubTab === 'gaps' && (
+        {activeSubTab === 'coverage' && (
           <div className="space-y-8">
             {/* Coverage Matrix Table */}
             <div className="space-y-3">
-              <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider">
-                Procurement Parameter Coverage Matrix
-              </h4>
+              <div className="flex items-center justify-between">
+                <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+                  Procurement Parameter Coverage Matrix
+                </h4>
+                <span className="text-xs text-slate-500">
+                  Statuses: FOUND · PARTIAL · MISSING · REVIEW
+                </span>
+              </div>
+
               <div className="overflow-x-auto border border-slate-200 rounded-xl shadow-2xs">
                 <table className="gov-table">
                   <thead>
                     <tr>
-                      <th className="w-64">Category / Requirement</th>
+                      <th className="w-56">Category / Requirement</th>
                       <th className="w-32 text-center">Status</th>
-                      <th className="w-40">Designated Standard</th>
-                      <th>Evaluation Findings & Notes</th>
+                      <th className="w-36">Supporting Standard</th>
+                      <th>Finding & Supporting Evidence</th>
+                      <th className="w-64">Suggested Action</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -427,19 +615,25 @@ export function EvaluationReport({ result }: Props) {
                           {c.status === 'FOUND' && (
                             <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
                               <CheckCircle2 size={12} />
-                              Compliant
+                              FOUND
+                            </span>
+                          )}
+                          {c.status === 'PARTIAL' && (
+                            <span className="inline-flex items-center gap-1 text-[11px] font-bold text-amber-800 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200">
+                              <AlertTriangle size={12} />
+                              PARTIAL
                             </span>
                           )}
                           {c.status === 'MISSING' && (
                             <span className="inline-flex items-center gap-1 text-[11px] font-bold text-rose-800 bg-rose-50 px-2.5 py-1 rounded-full border border-rose-200">
                               <XCircle size={12} />
-                              Missing
+                              MISSING
                             </span>
                           )}
                           {c.status === 'REVIEW' && (
-                            <span className="inline-flex items-center gap-1 text-[11px] font-bold text-amber-800 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200">
-                              <AlertTriangle size={12} />
-                              Review
+                            <span className="inline-flex items-center gap-1 text-[11px] font-bold text-blue-800 bg-blue-50 px-2.5 py-1 rounded-full border border-blue-200">
+                              <HelpCircle size={12} />
+                              REVIEW
                             </span>
                           )}
                         </td>
@@ -450,7 +644,17 @@ export function EvaluationReport({ result }: Props) {
                             <span className="text-slate-400 text-xs">—</span>
                           )}
                         </td>
-                        <td className="text-xs text-slate-700 leading-relaxed">{c.note}</td>
+                        <td className="text-xs text-slate-700 leading-relaxed">
+                          <p>{c.note}</p>
+                          {c.evidence && (
+                            <p className="text-[11px] text-slate-500 font-mono mt-0.5">
+                              Evidence: {c.evidence}
+                            </p>
+                          )}
+                        </td>
+                        <td className="text-xs text-slate-800 leading-relaxed">
+                          {c.suggested_action || <span className="text-slate-400">None required</span>}
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -463,7 +667,7 @@ export function EvaluationReport({ result }: Props) {
               <div className="space-y-4">
                 <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2">
                   <AlertOctagon size={16} className="text-rose-600" />
-                  <span>Deficiencies & Actionable Remediation for Procurement Officer</span>
+                  <span>Drafting Deficiencies & Recommended Actions for Procurement Officer</span>
                 </h4>
 
                 <div className="space-y-3.5">
@@ -492,7 +696,7 @@ export function EvaluationReport({ result }: Props) {
                           </span>
                         </div>
                         <span className="text-[11px] text-slate-500 font-medium">
-                          Risk of Tender Dispute
+                          Tender Quality Risk
                         </span>
                       </div>
 
@@ -510,6 +714,12 @@ export function EvaluationReport({ result }: Props) {
                           </p>
                         </div>
                       )}
+
+                      {gap.supporting_evidence && (
+                        <p className="text-[11px] text-slate-500 font-mono mt-2">
+                          Regulatory / Standards Basis: {gap.supporting_evidence}
+                        </p>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -518,15 +728,15 @@ export function EvaluationReport({ result }: Props) {
           </div>
         )}
 
-        {/* SUB-TAB 3: Normative Relationships */}
+        {/* SUB-TAB 3: Normative Standards Network */}
         {activeSubTab === 'relationships' && (
           <div className="space-y-5">
             <div className="p-4 bg-blue-50/60 border border-blue-200 rounded-xl text-xs text-slate-700 leading-relaxed">
               <strong className="text-[#003366] block mb-1 text-sm font-bold">
-                Normative Relationship Knowledge Graph
+                Normative Standards Knowledge Network
               </strong>
               Under BIS drafting guidelines, a primary standard cannot be implemented in isolation. 
-              The following auxiliary standards govern testing apparatus, headform geometries, and material specifications required during inspection.
+              The following companion standards govern testing apparatus, headform geometries, visors, and material specifications required during inspection.
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -546,7 +756,7 @@ export function EvaluationReport({ result }: Props) {
                         ? 'bg-emerald-100 text-emerald-800'
                         : 'bg-blue-100 text-blue-800'
                     }`}>
-                      {rel.relevance_label} RELEVANCE
+                      {rel.relevance_label} RELEVANCE ({rel.relevance_score})
                     </span>
                   </div>
 
@@ -559,7 +769,9 @@ export function EvaluationReport({ result }: Props) {
 
                   <div className="pt-2.5 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
                     <span>Category: {rel.standard.product_type}</span>
-                    <span className="font-semibold text-blue-800">Verified Citation</span>
+                    <span className="font-semibold text-blue-800">
+                      {rel.relationship_type ? rel.relationship_type.replace(/_/g, ' ').toUpperCase() : 'COMPANION'}
+                    </span>
                   </div>
                 </div>
               ))}
@@ -576,7 +788,7 @@ export function EvaluationReport({ result }: Props) {
                   Special Terms & Conditions (STC) for GeM / CPPP Bidding Documents
                 </h4>
                 <p className="text-xs text-slate-600 mt-0.5">
-                  Legally vetted clause template ready for direct insertion into GeM Portal Bid Details
+                  Vetted clause template ready for insertion into GeM Portal Bid Details
                 </p>
               </div>
 
@@ -601,7 +813,7 @@ export function EvaluationReport({ result }: Props) {
           </div>
         )}
 
-        {/* SUB-TAB 5: Statutory AI Legal Commentary */}
+        {/* SUB-TAB 5: Statutory Legal Reference & Commentary */}
         {activeSubTab === 'statutory' && (
           <div className="space-y-6">
             {/* Matched QCO Box */}
@@ -654,7 +866,7 @@ export function EvaluationReport({ result }: Props) {
 
             {/* Official Disclaimer */}
             <div className="p-4 bg-slate-50 border border-slate-200 rounded-lg text-[11px] text-slate-500 leading-normal">
-              <strong>Official Disclaimer:</strong> {result.disclaimer}
+              <strong>Disclaimer:</strong> {result.disclaimer}
             </div>
 
             {/* Print Signatures Block */}
@@ -666,8 +878,8 @@ export function EvaluationReport({ result }: Props) {
               </div>
               <div>
                 <div className="h-14 border-b border-slate-400 mb-2"></div>
-                <p className="font-bold text-slate-900">Technical Standards Officer</p>
-                <p className="text-slate-500">Bureau of Indian Standards Advisory Cell</p>
+                <p className="font-bold text-slate-900">Technical Standards Analyst</p>
+                <p className="text-slate-500">ISense Decision-Support Engine (SIH Prototype)</p>
               </div>
             </div>
           </div>

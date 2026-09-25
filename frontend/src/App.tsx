@@ -38,7 +38,7 @@ export default function App() {
       setError(
         err instanceof Error
           ? err.message
-          : 'Evaluation could not be completed. Please ensure the backend server is running on port 8000.'
+          : 'Decision-support service temporarily unavailable. Please verify backend server is active on port 8000.'
       );
     } finally {
       setLoading(false);
@@ -47,7 +47,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#f8fafc]">
-      {/* ── Official Government Header ── */}
+      {/* ── Government-Style Header ── */}
       <Header activeTab={activeTab} onTabChange={setActiveTab} />
 
       {/* ── Main Content Area ── */}
@@ -55,46 +55,46 @@ export default function App() {
         {/* EVALUATOR TAB (Core Engine) */}
         {activeTab === 'evaluator' && (
           <div className="space-y-8">
-            {/* Government Hero Banner */}
+            {/* Project Hero Banner */}
             <div className="bg-white border border-slate-200/90 rounded-xl p-6 sm:p-8 shadow-xs relative overflow-hidden">
               <div className="absolute right-0 top-0 h-full w-56 bg-gradient-to-l from-blue-50/60 to-transparent pointer-events-none" />
               
               <div className="max-w-3xl relative z-10">
                 <div className="flex items-center gap-2.5 mb-2.5">
                   <span className="bg-[#003366] text-white text-[11px] font-bold px-2.5 py-0.5 rounded-md tracking-wider uppercase">
-                    SIH Problem Statement 2 Flagship
+                    SIH Problem Statement 2
                   </span>
                   <span className="text-xs font-semibold text-slate-500">
-                    GeM & CPPP Procurement Standards Verification
+                    Decision Support for Procurement Standards (GeM / CPPP)
                   </span>
                 </div>
 
                 <h1 className="text-2xl sm:text-3xl font-extrabold text-[#003366] tracking-tight">
-                  National Standards Advisory & Tender Compliance Portal
+                  ISense — BIS Standards Decision-Support Engine
                 </h1>
                 <p className="text-xs sm:text-sm font-semibold text-slate-600 mt-1">
-                  राष्ट्रीय मानक परामर्श एवं तकनीकी निविदा अनुपालन प्रणाली (Bureau of Indian Standards)
+                  भारतीय मानक निर्णय-सहायता एवं तकनीकी निविदा विश्लेषण प्रणाली (Smart India Hackathon Prototype)
                 </p>
 
                 <p className="text-xs sm:text-sm text-slate-600 mt-3 leading-relaxed">
-                  Enter draft procurement specifications to determine the applicable Indian Standard (IS), audit mandatory Quality Control Orders (QCO), inspect normative companion standards, and detect critical gaps before publishing tenders on GeM.
+                  Analyze draft procurement specifications to identify applicable Indian Standards (IS), reference statutory Quality Control Orders (QCO), inspect normative companion standards, and detect coverage gaps before tender publication.
                 </p>
 
                 {/* Micro Stat Badges */}
                 <div className="flex flex-wrap items-center gap-5 mt-5 pt-4 border-t border-slate-100 text-xs">
                   <div className="flex items-center gap-2 font-semibold text-slate-800">
                     <ShieldCheck size={16} className="text-emerald-700" />
-                    <span>11 Active BIS Standards</span>
+                    <span>11 Curated BIS Standards (Demonstration KB)</span>
                   </div>
                   <div className="text-slate-300">|</div>
                   <div className="flex items-center gap-2 font-semibold text-slate-800">
                     <FileCheck2 size={16} className="text-[#003366]" />
-                    <span>Normative Knowledge Engine</span>
+                    <span>Normative Standards Knowledge Network</span>
                   </div>
                   <div className="text-slate-300">|</div>
                   <div className="flex items-center gap-2 font-semibold text-slate-800">
                     <Scale size={16} className="text-amber-700" />
-                    <span>Statutory QCO Enforcement</span>
+                    <span>QCO Compliance Reference</span>
                   </div>
                 </div>
               </div>
@@ -103,17 +103,17 @@ export default function App() {
             {/* Tender Specification Input Card */}
             <SpecificationInput onAnalyze={handleAnalyze} loading={loading} />
 
-            {/* Backend Connection Error */}
+            {/* Backend Connection / Fallback Error */}
             {error && (
               <div className="p-4 sm:p-5 bg-rose-50 border border-rose-200 rounded-xl flex items-start gap-3.5 text-xs text-rose-900 shadow-2xs">
                 <AlertCircle size={20} className="text-rose-600 flex-shrink-0 mt-0.5" />
                 <div className="space-y-1">
                   <h4 className="font-bold text-sm text-rose-950">
-                    Evaluation Request Failed
+                    Analysis Service Unavailable
                   </h4>
                   <p className="leading-relaxed">{error}</p>
                   <p className="text-slate-500 font-mono text-[11px]">
-                    Backend endpoint: http://localhost:8000/api/v1/analyze
+                    Backend endpoint: http://localhost:8000/api/v1/analyze · Offline standards catalogue remains accessible via the 'Curated BIS Standards' tab.
                   </p>
                 </div>
               </div>
@@ -144,7 +144,7 @@ export default function App() {
         {activeTab === 'guidelines' && <GuidelinesView />}
       </main>
 
-      {/* ── Official Government Footer ── */}
+      {/* ── Footer ── */}
       <Footer />
     </div>
   );

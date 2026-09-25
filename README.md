@@ -1,235 +1,139 @@
-# ISense — AI-Powered Indian Standards Recommendation Engine
+# ISense — AI-Powered Indian Standards Recommendation & Decision-Support Engine
 
-> **MVP Prototype** · Helmet Domain · BIS Standards Knowledge Base
-
-ISense identifies applicable Bureau of Indian Standards (BIS) for procurement specifications, expands a standards relationship graph, and detects **coverage gaps** — telling you not just *which* standard applies, but *what's still missing* from your specification.
-
----
-
-## Architecture
-
-```
-React + TypeScript (Vite)
-         │
-         ▼
-    FastAPI (Python)
-         │
-    ┌────┴────────────────┐
-    │                     │
-Requirement           Retrieval
- Extraction            Engine
-    │                     │
-    │                     ▼
-    │             pgvector + PostgreSQL
-    │                     │
-    │             Standards Graph
-    │                     │
-    └─────┬───────────────┘
-          │
-    Coverage Gap Engine ⭐
-          │
-    Evidence Validation
-          │
-    Gemini AI Explanation
-          │
-    Recommendation + Gaps
-```
+> **Smart India Hackathon (SIH 2024-25 PS-2 Prototype)**  
+> Decision-Support Engine for Identifying Applicable Indian Standards & Detecting Tender Coverage Gaps
 
 ---
 
-## Quick Start (Docker)
+## ⚠️ Important Prototype & Demonstration Notice
 
-### Prerequisites
-- Docker Desktop installed and running
+**ISense is a Smart India Hackathon prototype and is not an official BIS, GeM, CVC, or Government of India system.**
 
-### Steps
-
-```bash
-# 1. Clone / navigate to project
-cd isense
-
-# 2. Copy env file
-cp backend/.env.example backend/.env
-# Optionally add your GEMINI_API_KEY for AI explanations
-
-# 3. Start everything
-docker-compose up --build
-
-# 4. Seed the database (first time only)
-docker-compose exec backend python -m app.services.seeder
-
-# 5. Open the app
-open http://localhost:5173
-```
-
-The FastAPI docs are at: **http://localhost:8000/docs**
+- **Demonstration Knowledge Base**: This prototype operates over a curated demonstration dataset of **11 Indian Standards** governing protective headgear, companion testing headforms, and material specifications, along with statutory Quality Control Orders (QCOs). It does **not** represent the exhaustive universe of all 20,000+ BIS standards.
+- **No Live Statutory APIs**: Official live BIS and GeM transactional APIs are not publicly exposed for direct third-party write integration; this prototype utilizes authentic published gazette metadata and standards schemas in a high-fidelity local decision-support architecture.
+- **Decision-Support Role**: The engine analyzes and recommends; final procurement qualification and legal compliance decisions remain with the authorized procurement officer.
 
 ---
 
-## Local Development (without Docker)
+## Architecture & Analysis Pipeline
 
-### Backend
+```
+DRAFT TENDER SPECIFICATION
+          │
+          ▼
+1. Requirement Extraction Service
+   ├── Explicit requirements identification (Provenance: EXPLICIT)
+   ├── Domain/application inference (Provenance: INFERRED)
+   ├── Technical keyword extraction
+   └── Ambiguity & vagueness detection (Triggers clarification prompts)
+          │
+          ▼
+2. Candidate Retrieval & Deterministic Weighted Ranking
+   ├── Explicit IS-number citation boost (+0.50 deterministic weight)
+   ├── Product domain compatibility matching (+0.45 weight)
+   ├── Technical terminology overlap (+0.20 weight)
+   ├── Published scope alignment (+0.15 weight)
+   └── Mandatory certification & safety signals (+0.10 each)
+          │
+          ▼
+3. Normative Standards Knowledge Network
+   ├── Graph expansion of auxiliary test standards (e.g. IS 7692 headforms)
+   └── Material & terminology companion relationships
+          │
+          ▼
+4. Evidence-Grounded Coverage Gap Engine
+   ├── Primary Standard (FOUND | REVIEW | MISSING)
+   ├── Safety Requirements (FOUND | PARTIAL | REVIEW | MISSING)
+   ├── Test Methods & Schedules (FOUND | PARTIAL | MISSING)
+   ├── Certification / ISI Mark (FOUND | PARTIAL | MISSING)
+   ├── Installation / Usage (FOUND | REVIEW — Wearable PPE treated as REVIEW)
+   └── Normative References (FOUND | REVIEW)
+          │
+          ▼
+5. Decision-Support Reporting & GeM Clause Assistant
+   ├── Honest Relevance Score index (HIGH / MEDIUM / LOW bands)
+   ├── Traceable evidence citations & contributing signal audit
+   ├── Actionable deficiency remediation for tender officers
+   └── Vetted Special Terms & Conditions (STC) GeM clause draft
+```
 
+---
+
+## Curated Demonstration Knowledge Base (11 Standards)
+
+| IS Number | Standard Title | Domain / Application | Status |
+|-----------|----------------|----------------------|--------|
+| **IS 4151:2015** | Protective Helmets for Motorcyclists | Two-Wheeler Motorcycling | Active · Mandatory QCO |
+| **IS 2925:2019** | Industrial Safety Helmets | Construction & Industrial Work | Active · Mandatory ISI |
+| **IS 2745:1983** | Non-metal Helmets for Fire Brigade | Structural Firefighting | Active (Reaffirmed 2018) |
+| **IS 14740:1999** | Riot Control Helmets | Law Enforcement & Tactical Police | Active |
+| **IS 9562:1980** | Helmets for High Speed Racing Drivers | Motorsport Competitions | Active |
+| **IS 4129:2020** | Protective Helmets for Cyclists | Bicycle & Cycling Road Safety | Active |
+| **IS 15758:2007** | Protective Helmets for Equestrian Activities | Equestrian Sports | Active |
+| **IS 16328:2015** | Helmets for Cricket | Sports Protection (Batsmen/Keepers) | Active |
+| **IS 7692:2018** | Wooden Headforms for Testing Helmets | Normative Test Method Apparatus | Active Companion |
+| **IS 9944:1992** | Recommendations on Headform Dimensions | Normative Sizing Specification | Active Companion |
+| **IS 4151 Pt 2** | Visors for Protective Helmets | Visor Optical & Impact Criteria | Active Companion |
+
+---
+
+## Quick Start & Verification
+
+### 1. Launch Backend Demo Server
 ```bash
 cd backend
-
-# Create virtual environment
-python -m venv venv
-venv\Scripts\activate  # Windows
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Copy env file
-cp .env.example .env
-# Edit .env with your DATABASE_URL
-
-# Start PostgreSQL with pgvector separately, then:
-uvicorn app.main:app --reload
-
-# Seed the database
-python -m app.services.seeder
+python demo_server.py
 ```
+*Health Check*: `http://localhost:8000/api/v1/health`
 
-### Frontend
-
+### 2. Launch Frontend Dev Server
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
+*Portal UI*: `http://localhost:5173`
 
----
-
-## API Reference
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/api/v1/health` | Health check |
-| `POST` | `/api/v1/analyze` | **Full ISense pipeline** |
-| `GET` | `/api/v1/standards` | List all standards |
-| `GET` | `/api/v1/standards/{is_number}` | Standard detail |
-| `GET` | `/api/v1/standards/{is_number}/related` | Related standards |
-
-### POST /api/v1/analyze
-
-```json
-// Request
-{ "specification": "Motorcycle helmets conforming to IS 4151..." }
-
-// Response
-{
-  "primary_standard": { "standard": {...}, "relevance_score": 0.9 },
-  "related_standards": [...],
-  "coverage": [
-    { "category": "Primary Standard", "status": "FOUND" },
-    { "category": "Test Method",      "status": "MISSING" }
-  ],
-  "gaps": [
-    { "category": "Test Method", "severity": "HIGH", "suggestion": "..." }
-  ],
-  "explanation": "...",
-  "processing_status": "FOUND"
-}
-```
-
----
-
-## Standards Knowledge Base
-
-| IS Number | Title | Type |
-|-----------|-------|------|
-| IS 4151 | Protective Helmets for Motorcyclists | Motorcycle |
-| IS 2925 | Industrial Safety Helmets | Industrial |
-| IS 2745 | Non-metallic Helmets for Firefighters | Fire safety |
-| IS 9562 | Helmets for Racing Car Drivers | Motorsport |
-| IS 15758 | Helmets for Horse Riders | Equestrian |
-| IS 4129 | Helmets for Cyclists | Cycling |
-
-> **Note:** This is a curated prototype knowledge base for demonstration purposes. It does not represent the complete BIS database. Always verify with official BIS publications.
-
----
-
-## Demo Scenarios
-
-### Demo 1 — Complete Specification ✅
-```
-Procure protective helmets for motorcycle riders conforming to IS 4151. 
-The helmets shall bear the ISI Mark, comply with BIS certification, and 
-meet all testing requirements including shock absorption tests.
-```
-**Expected:** IS 4151 found, full coverage, no critical gaps.
-
-### Demo 2 — Missing Testing Requirement ⭐
-```
-Procure motorcycle helmets for riders. The helmets should comply with 
-applicable Indian safety standards and carry BIS ISI certification.
-```
-**Expected:** IS 4151 found, **Test Method: MISSING ❌** gap detected.
-
-### Demo 3 — Ambiguous Specification
-```
-Supply protective helmets suitable for hazardous environments.
-```
-**Expected:** MANUAL_REVIEW status, multiple gaps detected.
-
----
-
-## Running Tests
-
+### 3. Run Backend Test Suite (35 Tests)
 ```bash
 cd backend
-pip install -r requirements.txt
-pytest tests/ -v --tb=short
+.venv\Scripts\pytest
 ```
+*Verifies all 10 mandated SIH evaluation scenarios (explicit boost, unknown standards, vague input clarification, evidence-grounded coverage, deterministic fallback).*
+
+### 4. Run Frontend Production Build
+```bash
+cd frontend
+npm run build
+```
+*Compiles TypeScript and bundles production assets without errors.*
 
 ---
 
-## Project Structure
+## Built-In Demonstration Specifications
 
-```
-isense/
-├── docker-compose.yml
-├── backend/
-│   ├── app/
-│   │   ├── main.py                    # FastAPI entry point
-│   │   ├── core/
-│   │   │   ├── config.py              # Settings
-│   │   │   ├── database.py            # Async SQLAlchemy + pgvector
-│   │   │   └── logging.py             # Structured logging
-│   │   ├── models/
-│   │   │   ├── standards.py           # ORM: Standards table
-│   │   │   └── relationships.py       # ORM: Graph edges
-│   │   ├── schemas/
-│   │   │   └── analysis.py            # Pydantic schemas
-│   │   ├── services/
-│   │   │   ├── extraction.py          # Phase 5: Requirement extraction
-│   │   │   ├── coverage.py            # Phase 8 ⭐: Gap engine
-│   │   │   ├── explanation.py         # Phase 10: AI explanation
-│   │   │   └── seeder.py              # DB seed script
-│   │   ├── retrieval/
-│   │   │   └── engine.py              # Phase 6: Standard retrieval
-│   │   ├── graph/
-│   │   │   └── expansion.py           # Phase 7: Graph traversal
-│   │   └── api/v1/
-│   │       ├── router.py
-│   │       └── endpoints/
-│   │           ├── analyze.py         # Phase 12: /analyze
-│   │           ├── standards.py       # CRUD endpoints
-│   │           └── health.py          # Health check
-│   ├── data/
-│   │   └── standards_seed.py          # Phase 2: Mock BIS dataset
-│   └── tests/
-│       └── test_pipeline.py           # Phase 13: Test suite
-└── frontend/
-    └── src/
-        ├── App.tsx                    # Phase 11 ⭐: Main UI
-        ├── api/isense.ts              # API service layer
-        └── components/
-            ├── SpecificationInput.tsx  # Draft input panel
-            ├── CoverageMatrix.tsx      # Coverage display ⭐
-            ├── StandardCard.tsx        # IS standard card
-            ├── RequirementChips.tsx    # Extracted req chips
-            ├── ExplanationPanel.tsx    # AI explanation
-            └── LoadingSkeleton.tsx     # Loading state
-```
+1. **Demo 1 — Complete Motorcycle Specification**:
+   `"Procure protective motorcycle helmets for two-wheeler riders with impact resistance, retention system and BIS certification."`
+   *Result: Matches IS 4151:2015 as Primary Standard with HIGH relevance; verifies ISI certification and impact attenuation.*
+
+2. **Demo 2 — Industrial Hard Hats**:
+   `"Procure industrial safety helmets for construction workers with protective headgear requirements and testing requirements."`
+   *Result: Matches IS 2925:2019; identifies electrical insulation and penetration test schedules.*
+
+3. **Demo 3 — Explicit Citation Boost**:
+   `"Motorcycle helmets complying with IS 4151 and requiring BIS certification."`
+   *Result: Detects explicit IS 4151 citation, applies deterministic +0.50 score boost, preserves citation.*
+
+4. **Demo 4 — Vague / Ambiguous Specification**:
+   `"Helmet for general use."`
+   *Result: Activates Clarification Engine; prompts procurement officer for intended application, product category, and testing criteria.*
+
+5. **Demo 5 — Unknown Standard Non-Hallucination**:
+   `"Procure protective helmets complying with IS 999999 and requiring batch quality test reports."`
+   *Result: Detects cited number without hallucinating a fake standard; reports citation as unverified in the 11 demonstration standards.*
+
+---
+
+## License & Attribution
+
+Developed for **Smart India Hackathon (SIH 2024-25)**. Indian Standard citations are reference summaries based on publicly published gazette notifications and standard scopes under the Bureau of Indian Standards Act, 2016.

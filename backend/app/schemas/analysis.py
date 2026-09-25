@@ -1,5 +1,6 @@
 """
 Pydantic schemas for API request/response models.
+Reflects rigorous decision-support data structures for Indian Standards (BIS) analysis.
 """
 
 from __future__ import annotations
@@ -69,11 +70,15 @@ class AnalyzeRequest(BaseModel):
         min_length=10,
         max_length=5000,
         description="Procurement specification text to analyze",
-        example=(
+        examples=[
             "Procure protective helmets for motorcycle riders. The helmets shall comply "
             "with applicable Indian safety standards and include ISI certification."
-        ),
+        ],
     )
+    tender_id: str | None = None
+    department: str | None = None
+    domain: str | None = None
+    strict_mode: bool = False
 
 
 class ExtractedRequirements(BaseModel):
@@ -85,13 +90,23 @@ class ExtractedRequirements(BaseModel):
     specific_standards: list[str] = Field(default_factory=list)
     technical_keywords: list[str] = Field(default_factory=list)
     ambiguities: list[str] = Field(default_factory=list)
+    
+    # Grounding & requirement separation
+    explicit_requirements: list[str] = Field(default_factory=list)
+    inferred_requirements: list[str] = Field(default_factory=list)
+    requirement_sources: dict[str, str] = Field(default_factory=dict)  # "EXPLICIT" | "INFERRED" | "STANDARD-DERIVED"
+    unknown_standards: list[str] = Field(default_factory=list)
+    specification_needs_clarification: bool = False
+    clarification_prompt: str | None = None
 
 
 class CoverageItem(BaseModel):
     category: str
-    status: str  # FOUND | MISSING | INSUFFICIENT | REVIEW
+    status: str  # FOUND | PARTIAL | MISSING | REVIEW
     standard: str | None = None
     note: str | None = None
+    evidence: str | None = None
+    suggested_action: str | None = None
 
 
 class GapItem(BaseModel):
@@ -99,22 +114,25 @@ class GapItem(BaseModel):
     severity: str  # HIGH | MEDIUM | LOW
     description: str
     suggestion: str | None = None
+    supporting_evidence: str | None = None
 
 
 class EvidenceItem(BaseModel):
     standard_number: str
     claim: str
     source: str | None = None
-    confidence: str  # VERIFIED | INSUFFICIENT_EVIDENCE | MANUAL_REVIEW | NOT_FOUND
+    confidence: str = "VERIFIED"  # VERIFIED | INSUFFICIENT_EVIDENCE | MANUAL_REVIEW | NOT_FOUND
+    evidence_type: str = "Standard metadata"  # Standard metadata | Requirement | Test method | Certification | Normative relationship
 
 
 class RecommendedStandard(BaseModel):
     standard: StandardResponse
-    relevance_score: float
+    relevance_score: float  # Honest similarity score in [0, 1.0], not probability
     relevance_label: str  # HIGH | MEDIUM | LOW
-    reason: str
+    reason: str  # Concrete evidence-grounded explanation
     relationship_type: str | None = None  # primary | normative_reference | test_method | etc.
     evidence: list[EvidenceItem] = Field(default_factory=list)
+    signals_contributed: list[str] = Field(default_factory=list)
 
 
 class AnalyzeResponse(BaseModel):
@@ -126,8 +144,15 @@ class AnalyzeResponse(BaseModel):
     gaps: list[GapItem] = Field(default_factory=list)
     explanation: str = ""
     processing_status: str  # FOUND | MANUAL_REVIEW | NOT_FOUND
-    disclaimer: str = (
-        "This analysis is based on a curated prototype knowledge base for demonstration "
-        "purposes. It does not represent the complete BIS standards database. Always verify "
-        "with official BIS publications before procurement decisions."
+    decision_support_notice: str = (
+        "Decision-support output — final procurement qualification and compliance decisions "
+        "remain with the authorized procurement officer."
     )
+    disclaimer: str = (
+        "ISense is a Smart India Hackathon prototype and is not an official BIS, GeM, CVC "
+        "or Government of India system. Standards and regulatory information should be verified "
+        "against current official publications before procurement decisions."
+    )
+    unknown_standards_detected: list[str] = Field(default_factory=list)
+    specification_needs_clarification: bool = False
+    clarification_prompt: str | None = None

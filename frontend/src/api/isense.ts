@@ -1,6 +1,6 @@
 /**
- * ISense API Service Layer — Bureau of Indian Standards (BIS) Integration
- * Communicates with the FastAPI backend
+ * ISense API Service Layer — Decision-Support Engine
+ * Smart India Hackathon (SIH 2024-25 PS-2 Prototype)
  */
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
@@ -14,6 +14,12 @@ export interface ExtractedRequirements {
   specific_standards: string[];
   technical_keywords: string[];
   ambiguities: string[];
+  explicit_requirements?: string[];
+  inferred_requirements?: string[];
+  requirement_sources?: Record<string, string>;
+  unknown_standards?: string[];
+  specification_needs_clarification?: boolean;
+  clarification_prompt?: string | null;
 }
 
 export interface StandardClause {
@@ -53,6 +59,7 @@ export interface EvidenceItem {
   claim: string;
   source: string | null;
   confidence: string;
+  evidence_type?: string;
 }
 
 export interface RecommendedStandard {
@@ -62,13 +69,16 @@ export interface RecommendedStandard {
   reason: string;
   relationship_type: string | null;
   evidence: EvidenceItem[];
+  signals_contributed?: string[];
 }
 
 export interface CoverageItem {
   category: string;
-  status: "FOUND" | "MISSING" | "INSUFFICIENT" | "REVIEW";
+  status: "FOUND" | "PARTIAL" | "MISSING" | "REVIEW" | "INSUFFICIENT";
   standard: string | null;
   note: string | null;
+  evidence?: string | null;
+  suggested_action?: string | null;
 }
 
 export interface GapItem {
@@ -76,6 +86,7 @@ export interface GapItem {
   severity: "HIGH" | "MEDIUM" | "LOW";
   description: string;
   suggestion: string | null;
+  supporting_evidence?: string | null;
 }
 
 export interface ClauseAnalysisItem {
@@ -132,7 +143,11 @@ export interface AnalyzeResponse {
   matched_qco?: QCOOrder | null;
   explanation: string;
   processing_status: "FOUND" | "MANUAL_REVIEW" | "NOT_FOUND";
+  decision_support_notice?: string;
   disclaimer: string;
+  unknown_standards_detected?: string[];
+  specification_needs_clarification?: boolean;
+  clarification_prompt?: string | null;
 }
 
 export interface StandardSummary {
@@ -148,48 +163,60 @@ export interface StandardSummary {
   mandatory?: boolean;
 }
 
-export interface HealthResponse {
-  status: string;
-  app: string;
-  version: string;
-  environment: string;
-  organization: string;
-  database: string;
-  standards_count: number;
-  ai_configured: boolean;
-}
-
-async function fetchJson<T>(path: string, options?: RequestInit): Promise<T> {
-  const response = await fetch(`${API_BASE}${path}`, {
-    headers: { "Content-Type": "application/json" },
-    ...options,
-  });
-
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({ detail: response.statusText }));
-    throw new Error(error.detail || `Request failed: ${response.status}`);
-  }
-
-  return response.json();
-}
-
 export const api = {
-  analyze: (payload: string | AnalyzeRequest) => {
-    const body = typeof payload === "string" ? { specification: payload } : payload;
-    return fetchJson<AnalyzeResponse>("/api/v1/analyze", {
-      method: "POST",
-      body: JSON.stringify(body),
-    });
+  async health(): Promise<{ status: string; standards_count: number }> {
+    const res = await fetch(`${API_BASE}/api/v1/health`);
+    if (!res.ok) throw new Error("Health check failed");
+    return res.json();
   },
 
-  listStandards: () => fetchJson<StandardSummary[]>("/api/v1/standards"),
+  async analyze(payload: AnalyzeRequest): Promise<AnalyzeResponse> {
+    const res = await fetch(`${API_BASE}/api/v1/analyze`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ detail: "Unknown server error" }));
+      throw new Error(err.detail || `Server responded with status ${res.status}`);
+    }
+    return res.json();
+  },
 
-  getStandard: (isNumber: string) =>
-    fetchJson<StandardResponse>(`/api/v1/standards/${isNumber}`),
+  async getStandards(): Promise<StandardSummary[]> {
+    const res = await fetch(`${API_BASE}/api/v1/standards`);
+    if (!res.ok) throw new Error("Failed to load standards");
+    return res.json();
+  },
 
-  getQcoOrders: () => fetchJson<QCOOrder[]>("/api/v1/qco-orders"),
+  async listStandards(): Promise<StandardSummary[]> {
+    return this.getStandards();
+  },
 
-  getRelationships: () => fetchJson<RelationshipItem[]>("/api/v1/relationships"),
+  async getStandardDetail(isNumber: string): Promise<StandardResponse> {
+    const cleanNumber = isNumber.replace(/\s+/g, "-");
+    const res = await fetch(`${API_BASE}/api/v1/standards/${cleanNumber}`);
+    if (!res.ok) throw new Error(`Standard ${isNumber} not found`);
+    return res.json();
+  },
 
-  health: () => fetchJson<HealthResponse>("/api/v1/health"),
+  async getStandard(isNumber: string): Promise<StandardResponse> {
+    return this.getStandardDetail(isNumber);
+  },
+
+  async getRelationships(): Promise<RelationshipItem[]> {
+    const res = await fetch(`${API_BASE}/api/v1/relationships`);
+    if (!res.ok) throw new Error("Failed to load relationships");
+    return res.json();
+  },
+
+  async getQCOOrders(): Promise<QCOOrder[]> {
+    const res = await fetch(`${API_BASE}/api/v1/qco-orders`);
+    if (!res.ok) throw new Error("Failed to load QCO orders");
+    return res.json();
+  },
+
+  async getQcoOrders(): Promise<QCOOrder[]> {
+    return this.getQCOOrders();
+  },
 };

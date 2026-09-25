@@ -1,76 +1,116 @@
 """
 Phase 6: Standard Retrieval Engine
-Hybrid retrieval: keyword/BM25-style + pgvector similarity + weighted ranking.
+Retrieval pipeline:
+  Specification
+  ↓
+  Requirement extraction
+  ↓
+  Candidate generation (Product compatibility, explicit IS match, technical keywords, scope match)
+  ↓
+  Deterministic weighted ranking (Clear, documented mathematical weights with strong boost for explicit IS)
+  ↓
+  Evidence validation
+  ↓
+  Final recommendation with traceable signals
 """
 
 from __future__ import annotations
 
 import structlog
-from sqlalchemy import func, or_, select, text
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings
 from app.models.standards import Standard
-from app.schemas.analysis import ExtractedRequirements, RecommendedStandard, EvidenceItem
+from app.schemas.analysis import (
+    EvidenceItem,
+    ExtractedRequirements,
+    RecommendedStandard,
+    StandardResponse,
+)
 
 logger = structlog.get_logger(__name__)
 
+# Ranking thresholds for relevance bands
 RELEVANCE_THRESHOLDS = {
     "HIGH": 0.70,
     "MEDIUM": 0.40,
     "LOW": 0.0,
 }
 
-PRODUCT_TO_PRIMARY_STANDARD = {
-    "motorcycle helmet": "IS 4151",
-    "industrial safety helmet": "IS 2925",
-    "firefighter helmet": "IS 2745",
-    "racing helmet": "IS 9562",
-    "cycling helmet": "IS 4129",
-    "equestrian helmet": "IS 15758",
-}
+# Explicit weights used in deterministic ranking:
+# 1. Product compatibility: 0.45 (Highest primary factor for domain match)
+# 2. Explicit IS reference: 0.50 (Decisive deterministic boost when user specifies standard)
+# 3. Technical keyword overlap: 0.20 (Jaccard-like overlap of terminology)
+# 4. Scope semantic overlap: 0.15 (Contextual match in published scope)
+# 5. Mandatory certification match: 0.10 (Alignment on ISI / statutory requirements)
+# 6. Safety requirement match: 0.10 (Alignment on protective criteria)
+WEIGHT_PRODUCT_EXACT = 0.45
+WEIGHT_PRODUCT_PARTIAL = 0.25
+WEIGHT_EXPLICIT_IS = 0.50
+WEIGHT_KEYWORD_OVERLAP = 0.20
+WEIGHT_SCOPE_OVERLAP = 0.15
+WEIGHT_CERTIFICATION = 0.10
+WEIGHT_SAFETY = 0.10
 
 
-def _score_standard(standard: Standard, requirements: ExtractedRequirements) -> float:
+def _score_standard(
+    standard: Standard,
+    requirements: ExtractedRequirements,
+) -> tuple[float, list[str]]:
     """
-    Deterministic scoring: keyword overlap + product match + safety/cert signals.
-    Returns score in [0, 1].
+    Deterministic scoring: transparent multi-signal weighted ranking.
+    Returns (score in [0.0, 1.0], list of contributing signal names).
     """
     score = 0.0
-    spec_keywords = set(requirements.technical_keywords + (requirements.ambiguities or []))
+    signals: list[str] = []
 
-    # Product match (highest weight)
+    # 1. Product compatibility
     if requirements.product and standard.product_type:
         prod_lower = requirements.product.lower()
         std_prod_lower = standard.product_type.lower()
         if prod_lower == std_prod_lower:
-            score += 0.50
-        elif any(w in std_prod_lower for w in prod_lower.split()):
-            score += 0.30
+            score += WEIGHT_PRODUCT_EXACT
+            signals.append(f"Product domain match: '{standard.product_type}'")
+        elif any(word in std_prod_lower for word in prod_lower.split() if len(word) > 3):
+            score += WEIGHT_PRODUCT_PARTIAL
+            signals.append(f"Partial product keyword match with '{standard.product_type}'")
 
-    # Keyword overlap with standard keywords
-    if standard.keywords:
-        std_keywords = set(k.lower() for k in standard.keywords)
-        spec_set = set(k.lower() for k in requirements.technical_keywords)
-        if spec_set and std_keywords:
-            overlap = len(spec_set & std_keywords) / max(len(spec_set), 1)
-            score += overlap * 0.30
-
-    # Explicit IS number match
+    # 2. Explicit IS Number match — decisive deterministic boost
     if requirements.specific_standards and standard.is_number in requirements.specific_standards:
-        score += 0.40
+        score += WEIGHT_EXPLICIT_IS
+        signals.append(f"Explicit standard citation match: '{standard.is_number}'")
 
-    # Certification signal
+    # 3. Technical keyword overlap
+    if standard.keywords and requirements.technical_keywords:
+        std_keywords = {k.lower() for k in standard.keywords}
+        spec_keywords = {k.lower() for k in requirements.technical_keywords}
+        intersection = std_keywords & spec_keywords
+        if intersection:
+            overlap_ratio = len(intersection) / max(len(spec_keywords), 1)
+            score += min(overlap_ratio * WEIGHT_KEYWORD_OVERLAP, WEIGHT_KEYWORD_OVERLAP)
+            signals.append(f"Technical keyword overlap ({len(intersection)} shared terms: {', '.join(sorted(list(intersection))[:3])})")
+
+    # 4. Scope context match
+    if standard.scope:
+        scope_lower = standard.scope.lower()
+        if requirements.product and any(w in scope_lower for w in requirements.product.lower().split() if len(w) > 3):
+            score += WEIGHT_SCOPE_OVERLAP
+            signals.append("Scope description matches specified equipment application")
+
+    # 5. Certification scheme alignment
     if requirements.certification_required and standard.certification_scheme:
-        score += 0.10
+        score += WEIGHT_CERTIFICATION
+        signals.append("Mandatory BIS certification scheme defined in standard")
 
-    # Safety signal
+    # 6. Safety alignment
     if requirements.safety_required:
-        scope_lower = (standard.scope or "").lower()
-        if "safety" in scope_lower or "protect" in scope_lower:
-            score += 0.10
+        scope_text = (standard.scope or "").lower()
+        if "safety" in scope_text or "protect" in scope_text:
+            score += WEIGHT_SAFETY
+            signals.append("Safety & protection scope alignment")
 
-    return min(score, 1.0)
+    return min(round(score, 3), 1.0), signals
 
 
 def _relevance_label(score: float) -> str:
@@ -81,32 +121,51 @@ def _relevance_label(score: float) -> str:
     return "LOW"
 
 
-def _build_reason(standard: Standard, requirements: ExtractedRequirements, score: float) -> str:
+def _build_grounded_reason(
+    standard: Standard,
+    requirements: ExtractedRequirements,
+    signals: list[str],
+) -> str:
+    """Generate a factual, evidence-grounded explanation for why this standard applies."""
     reasons = []
-    if requirements.product and standard.product_type:
-        prod_lower = requirements.product.lower()
-        if prod_lower in standard.product_type.lower() or standard.product_type.lower() in prod_lower:
-            reasons.append(f"Directly matches {requirements.product} requirements")
+
+    # If explicit
     if requirements.specific_standards and standard.is_number in requirements.specific_standards:
-        reasons.append(f"Explicitly referenced in specification")
+        reasons.append(f"Explicitly referenced in the draft procurement specification as {standard.is_number}")
+
+    # If product match
+    if requirements.product and standard.product_type:
+        if requirements.product.lower() in standard.product_type.lower() or standard.product_type.lower() in requirements.product.lower():
+            reasons.append(
+                f"Specification identifies {requirements.product} and demonstration knowledge base "
+                f"associates {requirements.product} with {standard.is_number} ({standard.title})"
+            )
+
+    # If certification
     if requirements.certification_required and standard.certification_scheme:
-        reasons.append("Covers BIS certification requirements")
-    if requirements.safety_required:
-        reasons.append("Addresses safety requirements")
-    if not reasons:
-        reasons.append("Keyword and scope similarity match")
-    return "; ".join(reasons)
+        reasons.append(
+            f"Provides governing certification scheme under {standard.certification_scheme.get('scheme', 'BIS ISI Mark')}"
+        )
+
+    # Fallback to signals or generic description
+    if not reasons and signals:
+        reasons.append(signals[0])
+    elif not reasons:
+        reasons.append(
+            f"Standard identified by technical terminology overlap with {standard.title}"
+        )
+
+    return ". ".join(reasons) + "."
 
 
 async def retrieve_candidates(
     db: AsyncSession,
     requirements: ExtractedRequirements,
-) -> list[tuple[Standard, float]]:
+) -> list[tuple[Standard, float, list[str]]]:
     """
-    Phase 6: Retrieve and rank candidate standards.
-    Returns list of (Standard, score) sorted descending.
+    Phase 6: Retrieve and rank candidate standards from database.
+    Returns list of (Standard, score, signals_contributed) sorted descending.
     """
-    # Fetch all standards (small dataset for MVP)
     result = await db.execute(select(Standard).where(Standard.status != "WITHDRAWN"))
     standards = result.scalars().all()
 
@@ -114,15 +173,15 @@ async def retrieve_candidates(
         logger.warning("No standards found in database")
         return []
 
-    scored = []
+    scored: list[tuple[Standard, float, list[str]]] = []
     for std in standards:
-        score = _score_standard(std, requirements)
+        score, signals = _score_standard(std, requirements)
         if score > 0.0:
-            scored.append((std, score))
+            scored.append((std, score, signals))
 
-    # Sort by score descending
+    # Sort descending by score
     scored.sort(key=lambda x: x[1], reverse=True)
-    logger.info("Retrieval complete", candidates=len(scored))
+    logger.info("Retrieval complete", candidates_found=len(scored))
     return scored[: settings.MAX_RETRIEVAL_RESULTS]
 
 
@@ -132,10 +191,9 @@ def build_recommended_standard(
     relationship_type: str | None = None,
     reason_override: str | None = None,
     requirements: ExtractedRequirements | None = None,
+    signals_contributed: list[str] | None = None,
 ) -> RecommendedStandard:
-    """Build a RecommendedStandard response object from an ORM model."""
-    from app.schemas.analysis import StandardResponse
-
+    """Build a RecommendedStandard response object grounded in verifiable evidence."""
     std_resp = StandardResponse(
         id=standard.id,
         is_number=standard.is_number,
@@ -154,19 +212,51 @@ def build_recommended_standard(
         keywords=standard.keywords,
     )
 
-    reason = reason_override or (
-        _build_reason(standard, requirements, score) if requirements
-        else "Related standard via graph traversal"
-    )
+    signals = signals_contributed or []
+    if requirements and not signals:
+        _, signals = _score_standard(standard, requirements)
 
-    evidence = [
-        EvidenceItem(
-            standard_number=standard.is_number,
-            claim=f"Standard recorded as {standard.confidence_level}",
-            source=standard.source_reference or standard.source_url,
-            confidence=standard.confidence_level,
+    # Grounded reason
+    if reason_override:
+        reason = reason_override
+    elif requirements:
+        reason = _build_grounded_reason(standard, requirements, signals)
+    else:
+        reason = f"Companion standard linked in normative standards knowledge network for {standard.is_number}"
+
+    # Traceable evidence items
+    evidence: list[EvidenceItem] = []
+    if standard.scope:
+        evidence.append(
+            EvidenceItem(
+                standard_number=standard.is_number,
+                claim=f"Scope: {standard.scope[:180]}...",
+                source=standard.source_reference or "Demonstration Knowledge Base",
+                confidence=standard.confidence_level,
+                evidence_type="Standard metadata",
+            )
         )
-    ]
+    if standard.certification_scheme:
+        evidence.append(
+            EvidenceItem(
+                standard_number=standard.is_number,
+                claim=f"Certification: {standard.certification_scheme.get('scheme', 'BIS Mark')} "
+                      f"(Mandatory: {standard.certification_scheme.get('mandatory', False)})",
+                source=standard.certification_scheme.get("legal_basis", "BIS Act, 2016"),
+                confidence="VERIFIED",
+                evidence_type="Certification",
+            )
+        )
+    if standard.testing_requirements:
+        evidence.append(
+            EvidenceItem(
+                standard_number=standard.is_number,
+                claim=f"Testing methods: {len(standard.testing_requirements)} prescribed laboratory procedures",
+                source=standard.source_reference or "BIS Gazette",
+                confidence="VERIFIED",
+                evidence_type="Test method",
+            )
+        )
 
     return RecommendedStandard(
         standard=std_resp,
@@ -175,4 +265,5 @@ def build_recommended_standard(
         reason=reason,
         relationship_type=relationship_type or "primary",
         evidence=evidence,
+        signals_contributed=signals,
     )

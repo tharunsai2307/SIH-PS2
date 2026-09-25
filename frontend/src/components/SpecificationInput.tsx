@@ -14,94 +14,67 @@ interface Props {
   loading: boolean;
 }
 
-const OFFICIAL_TENDER_PRESETS = [
+const DEMONSTRATION_SPECIFICATIONS = [
   {
-    id: 'delhi-police',
-    title: 'Delhi Police Traffic Div.',
-    subtitle: 'Motorcycle Helmets (IS 4151:2015)',
-    tenderId: 'GEM/2026/B/789104',
-    department: 'Delhi Police (Traffic Headquarters)',
+    id: 'demo-1',
+    title: 'Demo 1: Motorcycle Helmet',
+    subtitle: 'Impact, Retention & ISI Mark',
+    tenderId: 'GEM/2026/DEMO-01',
+    department: 'Delhi Traffic Division',
     domain: 'Motorcycle Helmet',
-    badge: 'Road Safety',
-    spec: `Supply of 5,000 protective helmets for two-wheeler motorcycle riders of Delhi Police Traffic Division. 
-The helmets must strictly conform to IS 4151:2015 ("Protective Helmets for Motorcyclists"). 
-Mandatory specifications:
-1. All supplied helmets must bear the Bureau of Indian Standards (BIS) ISI Mark under a valid CM/L manufacturing license as per Helmets (Quality Control) Order 2020.
-2. Shell construction: Rigid thermoplastic with EPS impact absorbing liner of minimum 20mm density.
-3. Shock absorption: Peak deceleration shall not exceed 300g during drop tests from 1.5m height onto flat and hemispherical anvils.
-4. Retention system: Chin strap with minimum 20mm width and quick-release buckle withstanding 25 kg dynamic load without displacement.
-5. Visor: Optically clear polycarbonate with minimum 105 degrees horizontal peripheral vision.`
+    badge: 'Complete Spec',
+    spec: 'Procure protective motorcycle helmets for two-wheeler riders with impact resistance, retention system and BIS certification.'
   },
   {
-    id: 'nhai-industrial',
-    title: 'NHAI Construction',
-    subtitle: 'Safety Hard Hats (IS 2925:2019)',
-    tenderId: 'GEM/2026/B/912384',
-    department: 'National Highways Authority of India (NHAI)',
+    id: 'demo-2',
+    title: 'Demo 2: Industrial Safety',
+    subtitle: 'Construction & Testing Protocols',
+    tenderId: 'GEM/2026/DEMO-02',
+    department: 'NHAI Infrastructure Division',
     domain: 'Industrial Safety Helmet',
     badge: 'Industrial PPE',
-    spec: `Procurement of 12,000 Industrial Safety Helmets for expressway construction engineers and site workers. 
-The helmets must comply with IS 2925:2019 and carry the mandatory ISI Certification Mark. 
-Key requirements:
-1. Impact protection: Transmitted peak force shall not exceed 5000 N under 5 kg drop mass.
-2. Electrical insulation: Class E rated to withstand 2200 V AC for 1 minute with leakage under 3mA.
-3. Penetration resistance: Conical 3kg steel striker dropped from 1 meter height shall not touch headform.
-4. Flammability: Material shall be self-extinguishing within 5 seconds of flame removal.
-5. Adjustable suspension harness with 30mm vertical clearance and chin strap.`
+    spec: 'Procure industrial safety helmets for construction workers with protective headgear requirements and testing requirements.'
   },
   {
-    id: 'delhi-fire',
-    title: 'Delhi Fire Services',
-    subtitle: 'Firefighter Helmets (IS 2745:1983)',
-    tenderId: 'GEM/2026/B/445012',
-    department: 'Delhi Fire Services (HQ Connaught Place)',
-    domain: 'Firefighter Helmet',
-    badge: 'Emergency Services',
-    spec: `Procurement of 850 Non-metallic Protective Helmets for structural firefighting and emergency rescue operations.
-Conformity to IS 2745:1983 (Reaffirmed 2018) is mandatory.
-Stipulations:
-1. Thermal insulation: Outer shell and liner shall not ignite, deform, or drip when exposed to 260°C radiant heat for 5 minutes.
-2. Impact energy attenuation under high temperature conditioning.
-3. Heat-resistant Kevlar neck shroud and anti-fog gold-coated polycarbonate face shield.
-4. Heavy duty retention system with emergency quick-release mechanism.`
+    id: 'demo-3',
+    title: 'Demo 3: Explicit IS 4151',
+    subtitle: 'Direct Standard Citation Boost',
+    tenderId: 'GEM/2026/DEMO-03',
+    department: 'State Transport Department',
+    domain: 'Motorcycle Helmet',
+    badge: 'Explicit IS Match',
+    spec: 'Motorcycle helmets complying with IS 4151 and requiring BIS certification.'
   },
   {
-    id: 'crpf-riot',
-    title: 'CRPF Tactical Police',
-    subtitle: 'Riot Control Helmets (IS 14740:1999)',
-    tenderId: 'GEM/2026/B/551209',
-    department: 'Central Reserve Police Force (MHA)',
-    domain: 'Tactical Riot Helmet',
-    badge: 'Law Enforcement',
-    spec: `Supply of 3,500 riot control protective helmets for law enforcement personnel conforming to IS 14740:1999.
-Requirements:
-1. High-impact polycarbonate shell covering crown, temporal, and occipital regions with extended nape protector.
-2. Polycarbonate shatter-proof visor withstanding pellet impact at 120 m/s without cracking.
-3. Chemical splash resistance against petrol, tear gas solvent, and corrosive agents.
-4. Standard ISI marking and MHA technical committee verification.`
+    id: 'demo-4',
+    title: 'Demo 4: Vague / Ambiguous',
+    subtitle: 'Clarification Engine Trigger',
+    tenderId: 'GEM/2026/DEMO-04',
+    department: 'Public Works Division',
+    domain: 'General Headgear',
+    badge: 'Ambiguity Test',
+    spec: 'Helmet for general use.'
   },
   {
-    id: 'defective-draft',
-    title: '⚠️ Defective Tender Draft',
-    subtitle: 'Gap Simulation (Missing Standards)',
-    tenderId: 'GEM/2026/B/DRAFT-001',
-    department: 'Public Works Department (PWD)',
-    domain: 'Protective Headgear',
-    badge: 'Audit Simulator',
-    spec: `Procurement of 2,000 helmets for road construction survey teams.
-Helmets should be lightweight, comfortable to wear in summer, durable, and white in colour.
-The contractor must deliver within 30 days to the regional PWD depot.`
+    id: 'demo-5',
+    title: 'Demo 5: Unknown Standard',
+    subtitle: 'IS 999999 Non-Hallucination',
+    tenderId: 'GEM/2026/DEMO-05',
+    department: 'Testing Laboratory Division',
+    domain: 'Research Evaluation',
+    badge: 'Negative Test',
+    spec: 'Procure protective helmets complying with IS 999999 and requiring batch quality test reports.'
   }
 ];
 
 export function SpecificationInput({ onAnalyze, loading }: Props) {
-  const [tenderId, setTenderId] = useState('GEM/2026/B/789104');
-  const [department, setDepartment] = useState('Delhi Police (Traffic Headquarters)');
-  const [domain, setDomain] = useState('Motorcycle Helmet');
-  const [spec, setSpec] = useState(OFFICIAL_TENDER_PRESETS[0].spec);
+  const [tenderId, setTenderId] = useState(DEMONSTRATION_SPECIFICATIONS[0].tenderId);
+  const [department, setDepartment] = useState(DEMONSTRATION_SPECIFICATIONS[0].department);
+  const [domain, setDomain] = useState(DEMONSTRATION_SPECIFICATIONS[0].domain);
+  const [spec, setSpec] = useState(DEMONSTRATION_SPECIFICATIONS[0].spec);
   const [strictMode, setStrictMode] = useState(true);
 
-  const handleSelectPreset = (preset: typeof OFFICIAL_TENDER_PRESETS[0]) => {
+  const handleSelectPreset = (preset: typeof DEMONSTRATION_SPECIFICATIONS[0]) => {
     setTenderId(preset.tenderId);
     setDepartment(preset.department);
     setDomain(preset.domain);
@@ -136,10 +109,10 @@ export function SpecificationInput({ onAnalyze, loading }: Props) {
           </div>
           <div>
             <h2 className="text-sm font-bold text-gray-900 uppercase tracking-wide">
-              Procurement Tender Specification Input
+              Procurement Specification Evaluator
             </h2>
             <p className="text-xs text-gray-500">
-              Government e-Marketplace (GeM) & Central Public Procurement Portal (CPPP) Verification
+              Analysis & Decision-Support for Indian Procurement Standards (GeM / CPPP)
             </p>
           </div>
         </div>
@@ -155,19 +128,19 @@ export function SpecificationInput({ onAnalyze, loading }: Props) {
       </div>
 
       <div className="gov-card-body space-y-6">
-        {/* Real-World Public Sector Tender Presets */}
+        {/* Built-in Demonstration Specifications */}
         <div>
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs font-bold text-gray-700 uppercase tracking-wider">
-              Load Official Department Tender Template:
+              Load Demonstration Specification:
             </span>
             <span className="text-[11px] text-gray-500">
-              Click any template to auto-populate
+              Click any demonstration specification to test the decision-support engine
             </span>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3">
-            {OFFICIAL_TENDER_PRESETS.map((preset) => {
+            {DEMONSTRATION_SPECIFICATIONS.map((preset) => {
               const isSelected = tenderId === preset.tenderId;
               return (
                 <button
@@ -200,85 +173,111 @@ export function SpecificationInput({ onAnalyze, loading }: Props) {
           </div>
         </div>
 
+        {/* Input Form */}
         <form onSubmit={handleSubmit} className="space-y-5">
-          {/* Metadata Row: Tender ID & Department */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {/* Metadata Row */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <label className="block text-xs font-bold text-gray-700 uppercase mb-1.5 flex items-center gap-1.5">
-                <Hash size={13} className="text-slate-400" />
-                <span>GeM Bid / Tender Ref. Number:</span>
+              <label className="gov-label flex items-center gap-1.5">
+                <Hash size={13} className="text-gray-400" />
+                <span>Tender / Bid Reference (Optional)</span>
               </label>
               <input
                 type="text"
                 value={tenderId}
                 onChange={(e) => setTenderId(e.target.value)}
-                placeholder="e.g. GEM/2026/B/891240"
-                className="w-full text-xs font-mono px-3.5 py-2.5 border border-slate-300 rounded-lg bg-white text-gray-900 focus:border-[#003366] focus:ring-2 focus:ring-[#003366]/10 focus:outline-none transition-all"
+                placeholder="e.g. GEM/2026/B/789104"
+                className="gov-input font-mono text-xs"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-700 uppercase mb-1.5 flex items-center gap-1.5">
-                <Building size={13} className="text-slate-400" />
-                <span>Procuring Ministry / Department:</span>
+              <label className="gov-label flex items-center gap-1.5">
+                <Building size={13} className="text-gray-400" />
+                <span>Procuring Department / Authority</span>
               </label>
               <input
                 type="text"
                 value={department}
                 onChange={(e) => setDepartment(e.target.value)}
-                placeholder="e.g. Delhi Police, NHAI, Railways, CPWD"
-                className="w-full text-xs px-3.5 py-2.5 border border-slate-300 rounded-lg bg-white text-gray-900 focus:border-[#003366] focus:ring-2 focus:ring-[#003366]/10 focus:outline-none transition-all"
+                placeholder="e.g. Ministry / Public Entity"
+                className="gov-input text-xs"
               />
+            </div>
+
+            <div>
+              <label className="gov-label flex items-center gap-1.5">
+                <span>Product Domain Focus</span>
+              </label>
+              <select
+                value={domain}
+                onChange={(e) => setDomain(e.target.value)}
+                className="gov-input text-xs"
+              >
+                <option value="Motorcycle Helmet">Motorcycle Helmets (IS 4151)</option>
+                <option value="Industrial Safety Helmet">Industrial Safety Helmets (IS 2925)</option>
+                <option value="Firefighter Helmet">Firefighter Helmets (IS 2745)</option>
+                <option value="Tactical Riot Helmet">Tactical Riot Helmets (IS 14740)</option>
+                <option value="Racing Helmet">Racing Helmets (IS 9562)</option>
+                <option value="Cycling Helmet">Cycling Helmets (IS 4129)</option>
+                <option value="Equestrian Helmet">Equestrian Helmets (IS 15758)</option>
+                <option value="General Headgear">General Protective Headgear</option>
+              </select>
             </div>
           </div>
 
-          {/* Draft Specification Textarea */}
+          {/* Main Specification Textarea */}
           <div>
-            <label className="block text-xs font-bold text-gray-700 uppercase mb-1.5 flex items-center justify-between">
-              <span>
-                Technical Specification / Scope of Work Draft:
-                <span className="text-red-500 ml-1">*</span>
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="gov-label mb-0">
+                Draft Procurement Specification Text <span className="text-red-500">*</span>
+              </label>
+              <span className="text-[11px] text-gray-500 font-mono">
+                {spec.length} characters (min 10)
               </span>
-              <span className="text-gray-400 font-normal text-[11px]">
-                {spec.length} characters
-              </span>
-            </label>
+            </div>
+
             <textarea
-              id="specification-input"
-              rows={7}
+              rows={6}
               value={spec}
               onChange={(e) => setSpec(e.target.value)}
-              placeholder="Paste or type procurement specification, testing criteria, safety requirements, and certification standards here..."
-              className="gov-textarea"
+              placeholder="Paste draft tender clauses, technical specifications, or equipment requirements..."
+              className="gov-input font-mono text-xs leading-relaxed resize-y"
+              required
             />
           </div>
 
-          {/* Controls & Submit */}
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-4 border-t border-slate-200">
-            <label className="flex items-center gap-2 text-xs font-semibold text-gray-700 cursor-pointer select-none">
+          {/* Bottom Bar: Strict Mode & Analyze Button */}
+          <div className="pt-2 flex flex-wrap items-center justify-between gap-4">
+            <label className="flex items-center gap-2 cursor-pointer text-xs text-gray-700 select-none">
               <input
                 type="checkbox"
                 checked={strictMode}
                 onChange={(e) => setStrictMode(e.target.checked)}
-                className="w-4 h-4 rounded text-[#003366] border-slate-300 focus:ring-[#003366]"
+                className="rounded border-slate-300 text-[#003366] focus:ring-[#003366]"
               />
-              <span>Strict Quality Control Order (QCO) Verification</span>
+              <span className="font-semibold text-slate-800">
+                Strict Standards Compliance Audit
+              </span>
+              <span className="text-slate-500 text-[11px]">
+                (Flags omissions of mandatory ISI Mark and Quality Control Orders)
+              </span>
             </label>
 
             <button
               type="submit"
               disabled={loading || spec.trim().length < 10}
-              className="btn-gov-primary w-full sm:w-auto justify-center"
+              className="btn-gov-primary flex items-center gap-2 px-6 py-2.5 shadow-sm text-sm"
             >
               {loading ? (
                 <>
                   <Loader2 size={16} className="animate-spin" />
-                  <span>Evaluating against BIS Registry...</span>
+                  <span>Analyzing Specification...</span>
                 </>
               ) : (
                 <>
-                  <Sparkles size={16} className="text-amber-300" />
-                  <span>Evaluate Tender Specification</span>
+                  <Sparkles size={16} />
+                  <span>Analyze Specification</span>
                 </>
               )}
             </button>

@@ -28,13 +28,11 @@ async def analyze_specification(
 ):
     """
     Full ISense pipeline:
-    1. Extract requirements from specification
-    2. Retrieve candidate standards
-    3. Graph-expand related standards
-    4. Analyze coverage gaps
-    5. Generate AI explanation
-
-    This is the demo-centerpiece endpoint.
+    1. Extract requirements from specification (Explicit vs Inferred vs Ambiguities)
+    2. Retrieve candidate standards with deterministic multi-signal ranking
+    3. Graph-expand related normative standards
+    4. Analyze evidence-grounded coverage gaps
+    5. Generate factual explanation with decision-support notice
     """
     logger.info("Analysis request received", spec_length=len(request.specification))
 
@@ -49,8 +47,12 @@ async def analyze_specification(
         related = []
         processing_status = "NOT_FOUND"
 
-        if candidates:
-            top_std, top_score = candidates[0]
+        if requirements.unknown_standards and not requirements.specific_standards:
+            # Explicit standard reference detected, but no matching standard exists in demonstration KB
+            primary = None
+            processing_status = "MANUAL_REVIEW"
+        elif candidates:
+            top_std, top_score, top_signals = candidates[0]
 
             if top_score >= 0.20:
                 primary = build_recommended_standard(
@@ -58,6 +60,7 @@ async def analyze_specification(
                     score=top_score,
                     relationship_type="primary",
                     requirements=requirements,
+                    signals_contributed=top_signals,
                 )
                 processing_status = "FOUND"
 
@@ -66,13 +69,14 @@ async def analyze_specification(
 
                 # Append lower-ranked candidates (not already in graph expansion)
                 graph_is_numbers = {r.standard.is_number for r in related}
-                for std, score in candidates[1:]:
+                for std, score, signals in candidates[1:]:
                     if std.is_number not in graph_is_numbers and score >= 0.15:
                         related.append(build_recommended_standard(
                             standard=std,
                             score=score,
                             relationship_type="related_product",
                             requirements=requirements,
+                            signals_contributed=signals,
                         ))
 
                 related.sort(key=lambda r: r.relevance_score, reverse=True)
@@ -82,7 +86,7 @@ async def analyze_specification(
         # ── Phase 8: Coverage Gap Engine ─────────────────────────────────────
         coverage, gaps = analyze_coverage(requirements, primary, related)
 
-        # ── Phase 10: AI Explanation ─────────────────────────────────────────
+        # ── Phase 10: AI / Deterministic Explanation ─────────────────────────
         explanation = await generate_explanation(
             specification=request.specification,
             requirements=requirements,
@@ -97,6 +101,8 @@ async def analyze_specification(
             summary_parts.append(f"Product: {requirements.product}")
         if requirements.application:
             summary_parts.append(f"Application: {requirements.application}")
+        if requirements.unknown_standards:
+            summary_parts.append(f"Unknown Standards: {', '.join(requirements.unknown_standards)}")
         spec_summary = " | ".join(summary_parts) if summary_parts else "Specification analysis complete"
 
         return AnalyzeResponse(
@@ -108,6 +114,9 @@ async def analyze_specification(
             gaps=gaps,
             explanation=explanation,
             processing_status=processing_status,
+            unknown_standards_detected=requirements.unknown_standards,
+            specification_needs_clarification=requirements.specification_needs_clarification,
+            clarification_prompt=requirements.clarification_prompt,
         )
 
     except Exception as e:

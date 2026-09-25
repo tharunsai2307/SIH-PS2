@@ -28,14 +28,14 @@ export function QCOOrdersView() {
           <div>
             <h2 className="text-sm font-bold text-gray-900 uppercase tracking-wide flex items-center gap-2">
               <Scale size={16} className="text-[#003366]" />
-              <span>Statutory Quality Control Orders (QCO) Gazette Registry</span>
+              <span>Quality Control Orders (QCO) Compliance Reference</span>
             </h2>
             <p className="text-xs text-gray-500">
-              Compulsory Standards Enforcement Notifications issued under Section 16 of the Bureau of Indian Standards Act, 2016
+              Statutory Quality Control Orders reference repository for procurement officers under the BIS Act, 2016
             </p>
           </div>
           <span className="badge-critical text-[11px]">
-            Statutory Force of Law
+            Statutory Reference
           </span>
         </div>
 
