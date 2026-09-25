@@ -1,0 +1,13 @@
+"""API v1 router — aggregates all endpoints."""
+
+from fastapi import APIRouter
+
+from app.api.v1.endpoints.analyze import router as analyze_router
+from app.api.v1.endpoints.health import router as health_router
+from app.api.v1.endpoints.standards import router as standards_router
+
+api_router = APIRouter()
+
+api_router.include_router(health_router, tags=["Health"])
+api_router.include_router(analyze_router, prefix="/analyze", tags=["Analysis"])
+api_router.include_router(standards_router, prefix="/standards", tags=["Standards"])
