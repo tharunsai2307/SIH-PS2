@@ -3,19 +3,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
 
 :root {
-  --color-bg: #0a0f1e;
-  --color-surface: #0f1629;
-  --color-surface-2: #141c35;
-  --color-border: rgba(99, 133, 255, 0.15);
-  --color-border-bright: rgba(99, 133, 255, 0.35);
-  --color-primary: #6385ff;
-  --color-primary-glow: rgba(99, 133, 255, 0.25);
-  --color-found: #10d48e;
-  --color-missing: #ff4d6d;
-  --color-review: #f59e0b;
-  --color-insufficient: #fb923c;
-  --color-text: #e2e8f8;
-  --color-text-muted: #7b8cb8;
+  --color-bg: #f8fafc;
+  --color-surface: #ffffff;
+  --color-surface-2: #f1f5f9;
+  --color-border: #e2e8f0;
+  --color-border-bright: #cbd5e1;
+  --color-primary: #1e3a8a; /* Gov India Blue */
+  --color-primary-glow: rgba(30, 58, 138, 0.2);
+  --color-found: #059669;
+  --color-missing: #dc2626;
+  --color-review: #d97706;
+  --color-insufficient: #ea580c;
+  --color-text: #0f172a;
+  --color-text-muted: #475569;
 }
 
 * {
@@ -39,55 +39,52 @@ body {
 
 /* Scrollbar */
 ::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: var(--color-surface); }
+::-webkit-scrollbar-track { background: var(--color-surface-2); }
 ::-webkit-scrollbar-thumb { background: var(--color-border-bright); border-radius: 3px; }
 
 /* Animated gradient background */
 .bg-mesh {
-  background:
-    radial-gradient(ellipse 80% 50% at 20% 0%, rgba(99, 133, 255, 0.08) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 40% at 80% 100%, rgba(16, 212, 142, 0.05) 0%, transparent 60%),
-    var(--color-bg);
+  background: var(--color-bg);
 }
 
-/* Glass card */
+/* Glass card -> White Card */
 .glass {
-  background: rgba(15, 22, 41, 0.7);
-  backdrop-filter: blur(20px);
+  background: #ffffff;
   border: 1px solid var(--color-border);
-  border-radius: 16px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
 }
 
 .glass:hover {
   border-color: var(--color-border-bright);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
-/* Glow button */
+/* Glow button -> Solid Flat Button */
 .btn-primary {
-  background: linear-gradient(135deg, #6385ff 0%, #4a6cf7 100%);
+  background: var(--color-primary);
   color: white;
   font-weight: 600;
-  padding: 14px 32px;
-  border-radius: 12px;
+  padding: 12px 24px;
+  border-radius: 6px;
   border: none;
   cursor: pointer;
   font-size: 15px;
   transition: all 0.2s ease;
-  box-shadow: 0 4px 20px rgba(99, 133, 255, 0.3);
   font-family: inherit;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 }
 
 .btn-primary:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 8px 30px rgba(99, 133, 255, 0.45);
+  background: #1e40af;
 }
 
 .btn-primary:active {
-  transform: translateY(0);
+  transform: translateY(1px);
 }
 
 .btn-primary:disabled {
-  opacity: 0.5;
+  opacity: 0.6;
   cursor: not-allowed;
   transform: none;
 }
@@ -95,16 +92,16 @@ body {
 /* Textarea */
 .spec-textarea {
   width: 100%;
-  background: rgba(10, 15, 30, 0.8);
-  border: 1px solid var(--color-border);
-  border-radius: 12px;
+  background: #ffffff;
+  border: 1px solid var(--color-border-bright);
+  border-radius: 6px;
   color: var(--color-text);
   font-family: 'Inter', sans-serif;
   font-size: 14px;
   line-height: 1.7;
   padding: 16px;
   resize: vertical;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s;
   outline: none;
 }
 
@@ -114,32 +111,32 @@ body {
 }
 
 .spec-textarea::placeholder {
-  color: var(--color-text-muted);
+  color: #94a3b8;
 }
 
 /* Coverage badge */
 .badge-found {
-  color: var(--color-found);
-  background: rgba(16, 212, 142, 0.1);
-  border: 1px solid rgba(16, 212, 142, 0.3);
+  color: #064e3b;
+  background: #d1fae5;
+  border: 1px solid #10b981;
 }
 
 .badge-missing {
-  color: var(--color-missing);
-  background: rgba(255, 77, 109, 0.1);
-  border: 1px solid rgba(255, 77, 109, 0.3);
+  color: #7f1d1d;
+  background: #fee2e2;
+  border: 1px solid #ef4444;
 }
 
 .badge-review {
-  color: var(--color-review);
-  background: rgba(245, 158, 11, 0.1);
-  border: 1px solid rgba(245, 158, 11, 0.3);
+  color: #78350f;
+  background: #fef3c7;
+  border: 1px solid #f59e0b;
 }
 
 .badge-insufficient {
-  color: var(--color-insufficient);
-  background: rgba(251, 146, 60, 0.1);
-  border: 1px solid rgba(251, 146, 60, 0.3);
+  color: #7c2d12;
+  background: #ffedd5;
+  border: 1px solid #f97316;
 }
 
 /* Severity badges */
