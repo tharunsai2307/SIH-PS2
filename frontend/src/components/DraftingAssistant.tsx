@@ -71,14 +71,14 @@ export function DraftingAssistant() {
       <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-xs relative overflow-hidden">
         <div className="max-w-3xl">
           <div className="flex items-center gap-2 mb-2">
-            <span className="bg-[#003366] text-white text-[11px] font-bold px-2 py-0.5 rounded tracking-wide uppercase">
-              Phase 5 Innovation
+            <span className="bg-[#003366] text-white text-xs font-bold px-2.5 py-0.5 rounded-md tracking-wider uppercase">
+              Procurement Clause Drafter
             </span>
             <span className="text-xs font-semibold text-slate-500">
               Interactive Tender Specification Drafting Assistant
             </span>
           </div>
-          <h2 className="text-2xl font-extrabold text-[#003366]">
+          <h2 className="text-2xl font-extrabold text-[#003366] tracking-normal leading-snug">
             Smart Tender Drafting & Real-Time Gap Remediation
           </h2>
           <p className="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed">
@@ -254,15 +254,15 @@ export function DraftingAssistant() {
                 <div className="gov-card-header flex items-center justify-between">
                   <span className="font-bold text-xs text-slate-800 uppercase tracking-wide flex items-center gap-1.5">
                     <Layers size={14} className="text-[#003366]" />
-                    <span>Coverage Matrix (Phase 4 Innovation)</span>
+                    <span>Requirement Coverage Matrix</span>
                   </span>
-                  <span className="text-[11px] text-slate-500">
+                  <span className="text-xs text-slate-500 font-semibold">
                     {result.coverage.filter(c => c.status === 'FOUND').length} / {result.coverage.length} Met
                   </span>
                 </div>
 
                 <div className="p-0 overflow-x-auto">
-                  <table className="w-full text-left text-xs border-collapse">
+                  <table className="gov-table">
                     <thead className="bg-slate-50 border-b border-slate-200 text-slate-600">
                       <tr>
                         <th className="p-2.5 font-semibold">Category</th>

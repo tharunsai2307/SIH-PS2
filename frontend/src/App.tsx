@@ -86,7 +86,7 @@ export default function App() {
               <div className="max-w-3xl relative z-10">
                 <div className="flex items-center gap-2.5 mb-2.5">
                   <span className="bg-[#003366] text-white text-[11px] font-bold px-2.5 py-0.5 rounded-md tracking-wider uppercase">
-                    SIH Problem Statement 2
+                    Bureau of Indian Standards
                   </span>
                   <span className="text-xs font-semibold text-slate-500">
                     Decision Support for Procurement Standards (GeM / CPPP)
@@ -97,7 +97,7 @@ export default function App() {
                   ISense — BIS Standards Decision-Support Engine
                 </h1>
                 <p className="text-xs sm:text-sm font-semibold text-slate-600 mt-1.5">
-                  भारतीय मानक निर्णय-सहायता एवं तकनीकी निविदा विश्लेषण प्रणाली (Smart India Hackathon Prototype)
+                  भारतीय मानक निर्णय-सहायता एवं तकनीकी निविदा विश्लेषण प्रणाली (National Procurement Decision-Support Platform)
                 </p>
 
                 <p className="text-xs sm:text-sm text-slate-600 mt-3.5 leading-relaxed">
@@ -108,7 +108,7 @@ export default function App() {
                 <div className="flex flex-wrap items-center gap-5 mt-5 pt-4 border-t border-slate-100 text-xs">
                   <div className="flex items-center gap-2 font-semibold text-slate-800">
                     <ShieldCheck size={16} className="text-emerald-700" />
-                    <span>11 Curated BIS Standards (Demonstration KB)</span>
+                    <span>11 Curated BIS Standards</span>
                   </div>
                   <div className="text-slate-300">|</div>
                   <div className="flex items-center gap-2 font-semibold text-slate-800">
@@ -141,7 +141,7 @@ export default function App() {
                   </h4>
                   <p className="leading-relaxed">{error}</p>
                   <p className="text-slate-500 font-mono text-[11px]">
-                    Backend endpoint: http://localhost:8000/api/v1/analyze · Offline standards catalogue remains accessible via the 'Curated BIS Standards' tab.
+                    Backend endpoint: http://localhost:8000/api/v1/analyze · Standards catalogue remains accessible via the 'Curated BIS Standards' tab.
                   </p>
                 </div>
               </div>
@@ -156,13 +156,13 @@ export default function App() {
           </div>
         )}
 
-        {/* DRAFTING ASSISTANT TAB (Phase 5 ⭐) */}
+        {/* DRAFTING ASSISTANT TAB */}
         {activeTab === 'drafter' && <DraftingAssistant />}
 
-        {/* GeM PROCUREMENT PORTAL & CHROME EXTENSION DEMO TAB (Phases 6 & 7) */}
+        {/* GeM PROCUREMENT PORTAL & BROWSER EXTENSION TAB */}
         {activeTab === 'portal-demo' && <PortalDemoView />}
 
-        {/* PROTOTYPE EVALUATION BENCHMARK TAB (Phase 8) */}
+        {/* EVALUATION BENCHMARK TAB */}
         {activeTab === 'evaluation' && <EvaluationDashboard />}
 
         {/* STANDARDS CATALOGUE TAB */}

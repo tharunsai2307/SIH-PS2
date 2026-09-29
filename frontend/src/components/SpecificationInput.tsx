@@ -19,70 +19,70 @@ interface Props {
 
 const DEMONSTRATION_SPECIFICATIONS = [
   {
-    id: 'demo-1',
-    title: 'Demo 1: Motorcycle Helmet',
+    id: 'spec-1',
+    title: 'Preset 1: Motorcycle Helmet',
     subtitle: 'Impact, Retention & ISI Mark',
-    tenderId: 'GEM/2026/DEMO-01',
+    tenderId: 'GEM/2026/B/104151',
     department: 'Delhi Traffic Division',
     domain: 'Motorcycle Helmet',
     badge: 'Complete Spec',
     spec: 'Procure protective motorcycle helmets for two-wheeler riders with impact resistance, retention system and BIS certification.'
   },
   {
-    id: 'demo-2',
-    title: 'Demo 2: Industrial Safety',
+    id: 'spec-2',
+    title: 'Preset 2: Industrial Safety',
     subtitle: 'Construction & Testing Protocols',
-    tenderId: 'GEM/2026/DEMO-02',
+    tenderId: 'GEM/2026/B/102925',
     department: 'NHAI Infrastructure Division',
     domain: 'Industrial Safety Helmet',
     badge: 'Industrial PPE',
     spec: 'Procure industrial safety helmets for construction workers with protective headgear requirements and testing requirements.'
   },
   {
-    id: 'demo-3',
-    title: 'Demo 3: Explicit IS 4151',
+    id: 'spec-3',
+    title: 'Preset 3: Explicit IS 4151',
     subtitle: 'Direct Standard Citation Boost',
-    tenderId: 'GEM/2026/DEMO-03',
+    tenderId: 'GEM/2026/B/104152',
     department: 'State Transport Department',
     domain: 'Motorcycle Helmet',
     badge: 'Explicit IS Match',
     spec: 'Motorcycle helmets complying with IS 4151 and requiring BIS certification.'
   },
   {
-    id: 'demo-4',
-    title: 'Demo 4: Vague / Ambiguous',
+    id: 'spec-4',
+    title: 'Preset 4: Vague / Ambiguous',
     subtitle: 'Clarification Engine Trigger',
-    tenderId: 'GEM/2026/DEMO-04',
+    tenderId: 'GEM/2026/B/100099',
     department: 'Public Works Division',
     domain: 'General Headgear',
-    badge: 'Ambiguity Test',
+    badge: 'Ambiguous Spec',
     spec: 'Helmet for general use.'
   },
   {
-    id: 'demo-5',
-    title: 'Demo 5: Unknown Standard',
-    subtitle: 'IS 999999 Non-Hallucination',
-    tenderId: 'GEM/2026/DEMO-05',
+    id: 'spec-5',
+    title: 'Preset 5: Unlisted Standard',
+    subtitle: 'IS 999999 Preserved Citation',
+    tenderId: 'GEM/2026/B/109999',
     department: 'Testing Laboratory Division',
     domain: 'Research Evaluation',
-    badge: 'Negative Test',
+    badge: 'Unlisted Code',
     spec: 'Procure protective helmets complying with IS 999999 and requiring batch quality test reports.'
   },
   {
-    id: 'demo-6',
-    title: 'Demo 6: Hindi (हिंदी)',
+    id: 'spec-6',
+    title: 'Preset 6: Hindi (हिंदी)',
     subtitle: 'BHASHINI Multilingual Input',
-    tenderId: 'GEM/2026/DEMO-HI',
+    tenderId: 'GEM/2026/B/105001',
     department: 'उत्तर प्रदेश राज्य सड़क परिवहन निगम',
     domain: 'Motorcycle Helmet',
     badge: 'BHASHINI NMT',
     spec: 'मोटरसाइकिल चालकों के लिए सुरक्षात्मक हेलमेट और झटका अवशोषण परीक्षण और बीआईएस प्रमाणीकरण'
   },
   {
-    id: 'demo-7',
-    title: 'Demo 7: Tamil (தமிழ்)',
+    id: 'spec-7',
+    title: 'Preset 7: Tamil (தமிழ்)',
     subtitle: 'BHASHINI Multilingual Input',
-    tenderId: 'GEM/2026/DEMO-TA',
+    tenderId: 'GEM/2026/B/105002',
     department: 'தமிழ்நாடு அரசு போக்குவரத்துக் கழகம்',
     domain: 'Motorcycle Helmet',
     badge: 'BHASHINI NMT',
@@ -210,10 +210,10 @@ export function SpecificationInput({ onAnalyze, onAnalyzePdf, loading }: Props) 
         <div>
           <label className="gov-label flex items-center justify-between mb-2">
             <span className="flex items-center gap-1.5">
-              <span>Demonstration Presets (Phases 1, 2, 8):</span>
+              <span>Standard Procurement Presets:</span>
             </span>
             <span className="text-[11px] text-gray-500 font-normal">
-              Click any chip to populate specification
+              Click any card to populate procurement specification
             </span>
           </label>
 
@@ -236,7 +236,7 @@ export function SpecificationInput({ onAnalyze, onAnalyzePdf, loading }: Props) 
                       {preset.title}
                     </span>
                     <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${
-                      preset.id.startsWith('demo-6') || preset.id.startsWith('demo-7')
+                      preset.id === 'spec-6' || preset.id === 'spec-7'
                         ? 'bg-purple-100 text-purple-800'
                         : isSelected
                         ? 'bg-[#003366] text-white'
@@ -333,7 +333,7 @@ export function SpecificationInput({ onAnalyze, onAnalyzePdf, loading }: Props) 
             </div>
           )}
 
-          {/* MODE 2: PDF UPLOAD (PHASE 3) */}
+          {/* MODE 2: PDF UPLOAD */}
           {inputMode === 'pdf' && (
             <div className="p-6 border-2 border-dashed border-slate-300 rounded-xl bg-slate-50/50 text-center space-y-4">
               <input

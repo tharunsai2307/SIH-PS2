@@ -64,15 +64,15 @@ export function EvaluationDashboard() {
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="max-w-2xl">
             <div className="flex items-center gap-2 mb-2">
-              <span className="bg-[#003366] text-white text-[11px] font-bold px-2 py-0.5 rounded tracking-wide uppercase">
-                Phase 8 Innovation
+              <span className="bg-[#003366] text-white text-xs font-bold px-2.5 py-0.5 rounded-md tracking-wider uppercase">
+                Standards Precision Benchmarks
               </span>
               <span className="text-xs font-semibold text-slate-500">
-                Scientific Prototype Evaluation & SIH Presentation Evidence
+                Reproducible Quality Metrics & Test Scenarios
               </span>
             </div>
-            <h2 className="text-2xl font-extrabold text-[#003366]">
-              Evaluation Benchmark & Measurable Metrics
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#003366] tracking-normal leading-snug">
+              Standards Evaluation & Precision Benchmarks
             </h2>
             <p className="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed">
               Automated reproducible test suite validating 14 real-world procurement scenarios across Precision@K, Recall@K, ambiguous refusal behavior, multilingual queries (Hindi/Tamil), and PDF documents.

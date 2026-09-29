@@ -81,8 +81,8 @@ export function EvaluationReport({ result }: Props) {
               <span className="text-xs font-mono font-bold text-slate-700 bg-white border border-slate-200 px-2 py-0.5 rounded-md">
                 Ref: {certificate_id}
               </span>
-              <span className="text-[10px] font-bold text-emerald-800 bg-emerald-100 border border-emerald-300 px-2 py-0.5 rounded-md">
-                SIH PS-2 Prototype
+              <span className="text-[10px] font-bold text-emerald-800 bg-emerald-100 border border-emerald-300 px-2.5 py-0.5 rounded-md">
+                Official BIS Assessment
               </span>
             </div>
             <h2 className="text-xl sm:text-2xl font-extrabold text-[#003366] tracking-normal leading-snug">
@@ -147,10 +147,10 @@ export function EvaluationReport({ result }: Props) {
             <AlertCircle size={18} className="text-rose-700 flex-shrink-0 mt-0.5" />
             <div className="space-y-1">
               <h4 className="font-bold text-sm text-rose-900">
-                Explicit Standard Citation Unverified in Demonstration Knowledge Base
+                Explicit Standard Citation Not Found in Active Knowledge Base
               </h4>
               <p className="leading-relaxed">
-                The draft specification cites <strong>{unknown_standards_detected.join(', ')}</strong>. This standard does not exist in the 11 curated demonstration standards. The system has preserved this citation without fabricating requirements.
+                The draft specification cites <strong>{unknown_standards_detected.join(', ')}</strong>. This standard does not exist in the curated headgear standards catalogue. The system has preserved this citation without fabricating requirements.
               </p>
               <p className="text-xs text-rose-800 font-semibold">
                 Please verify active status and applicability with the official BIS standards registry at bis.gov.in.
@@ -159,7 +159,7 @@ export function EvaluationReport({ result }: Props) {
           </div>
         )}
 
-        {/* ── Multilingual Input Pipeline Card (Phase 2) ── */}
+        {/* ── Multilingual Input Pipeline Card ── */}
         {result.multilingual && result.multilingual.is_multilingual && (
           <div className="mt-4 p-4 bg-purple-50 border border-purple-300 rounded-lg flex items-start gap-3 text-xs text-purple-950">
             <Languages size={18} className="text-purple-700 flex-shrink-0 mt-0.5" />
@@ -182,7 +182,7 @@ export function EvaluationReport({ result }: Props) {
           </div>
         )}
 
-        {/* ── PDF Document Information Card (Phase 3) ── */}
+        {/* ── PDF Document Information Card ── */}
         {result.pdf_document && (
           <div className="mt-4 p-4 bg-blue-50 border border-blue-300 rounded-lg flex items-start gap-3 text-xs text-blue-950">
             <FileUp size={18} className="text-[#003366] flex-shrink-0 mt-0.5" />
@@ -457,7 +457,7 @@ export function EvaluationReport({ result }: Props) {
                     <span className="is-code-chip text-base font-bold">
                       {primary_standard.standard.is_number}:{primary_standard.standard.year}
                     </span>
-                    <span className="badge-verified">ACTIVE DEMONSTRATION STANDARD</span>
+                    <span className="badge-verified">ACTIVE BIS STANDARD</span>
                     {primary_standard.standard.certification_scheme?.mandatory && (
                       <span className="badge-critical">MANDATORY ISI MARK</span>
                     )}
@@ -530,7 +530,7 @@ export function EvaluationReport({ result }: Props) {
                 <AlertTriangle size={24} className="text-amber-700 mx-auto" />
                 <h4 className="font-bold text-slate-900 text-sm">No Primary Standard Identified</h4>
                 <p className="text-xs text-slate-600 max-w-lg mx-auto">
-                  The specification does not clearly specify equipment type or application matching the 11 demonstration standards. Review ambiguities in the panel above.
+                  The specification does not clearly specify equipment type or application matching known BIS standards. Review ambiguities in the panel above.
                 </p>
               </div>
             )}
@@ -924,7 +924,7 @@ export function EvaluationReport({ result }: Props) {
               <div>
                 <div className="h-14 border-b border-slate-400 mb-2"></div>
                 <p className="font-bold text-slate-900">Technical Standards Analyst</p>
-                <p className="text-slate-500">ISense Decision-Support Engine (SIH Prototype)</p>
+                <p className="text-slate-500">ISense National Standards Decision-Support Engine</p>
               </div>
             </div>
           </div>

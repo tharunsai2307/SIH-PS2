@@ -67,10 +67,10 @@ export function GuidelinesView() {
             </div>
           </div>
 
-          {/* SIH PS-2 Innovation Architecture */}
+          {/* Core Innovation Architecture */}
           <div className="p-4 bg-blue-50/50 border border-blue-200 rounded-lg text-xs space-y-2">
             <h3 className="font-bold text-sm text-[#003366]">
-              ISense Architecture for Smart India Hackathon (SIH 2024-25) — Problem Statement 2
+              ISense Intelligent Architecture for Public Procurement Standards Compliance
             </h3>
             <p className="text-gray-700 leading-relaxed">
               <strong>Core Innovation:</strong> Traditional search engines only tell an officer which standard applies. ISense's dual-engine architecture:

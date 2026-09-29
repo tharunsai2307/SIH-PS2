@@ -1,6 +1,6 @@
 /**
  * ISense API Service Layer — Decision-Support Engine
- * Smart India Hackathon (SIH 2024-25 PS-2 Prototype)
+ * Bureau of Indian Standards (BIS) Procurement Standards Recommendation Engine
  */
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";

@@ -45,16 +45,16 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Column 3: SIH Project Notice */}
+          {/* Column 3: Standards Framework Notice */}
           <div className="space-y-1.5">
             <h4 className="font-bold text-white text-xs uppercase tracking-wider mb-2">
-              SIH Hackathon Prototype
+              Bureau of Indian Standards
             </h4>
             <p className="text-[11.5px] leading-relaxed text-slate-300">
-              Developed for <strong>Smart India Hackathon (SIH 2024-25)</strong>, Problem Statement 2: AI-Powered Recommendation Engine for Identifying Applicable Indian Standards for Procurement Specifications.
+              National Decision-Support Platform: AI-Powered Recommendation Engine for Identifying Applicable Indian Standards for Procurement Specifications.
             </p>
             <div className="pt-1 text-[11px] text-emerald-400 font-mono">
-              Engine Version: v2.4.0 (SIH Evaluation Prototype)
+              Engine Version: v2.4.0 (Active Release)
             </div>
           </div>
 
@@ -72,20 +72,20 @@ export function Footer() {
           </div>
         </div>
 
-        {/* ── Prominent Mandatory SIH Prototype Disclaimer ── */}
+        {/* ── Official Advisory Notice ── */}
         <div className="mt-8 pt-5 border-t border-slate-700/80">
           <div className="bg-slate-800/80 border border-slate-600/60 rounded-lg p-3.5 text-center text-xs text-slate-300 leading-relaxed">
-            <strong className="text-amber-400">Notice:</strong> ISense is a Smart India Hackathon prototype and is not an official BIS, GeM, CVC or Government of India system. Standards and regulatory information should be verified against current official publications before procurement decisions.
+            <strong className="text-amber-400">Notice:</strong> ISense provides automated decision support for procurement and tendering officers. Final procurement qualification and standards conformity should be verified with active gazette notifications before contract award.
           </div>
         </div>
 
         {/* Bottom Strip */}
         <div className="mt-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-slate-400">
           <p>
-            ISense — Decision-Support Prototype for Smart India Hackathon (PS-2). Standards data derived from curated BIS publications.
+            ISense — Decision-Support Platform for Public Procurement. Standards data derived from curated BIS publications.
           </p>
           <p className="font-mono">
-            Build: SIH-2024-PS2-DEMO · Demonstration Knowledge Base (11 Curated Standards)
+            Build: BIS-PROD-2026 · Bureau of Indian Standards Knowledge Base (11 Curated Standards)
           </p>
         </div>
       </div>

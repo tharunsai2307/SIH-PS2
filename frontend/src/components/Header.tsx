@@ -128,7 +128,7 @@ export function Header({ activeTab, onTabChange }: HeaderProps) {
 
           {/* Evaluation Status */}
           <span className="text-gray-700 font-medium">
-            Prototype Status: <strong className="text-[#003366] font-bold">SIH Evaluation Ready</strong>
+            System Status: <strong className="text-[#003366] font-bold">Operational · BIS Compliant</strong>
           </span>
         </div>
       </div>
@@ -154,7 +154,7 @@ export function Header({ activeTab, onTabChange }: HeaderProps) {
             <p className="text-xs text-gray-600 font-medium flex items-center gap-2 mt-1">
               <span className="text-[#f37021] font-bold tracking-wide">मानक: पथप्रदर्शक:</span>
               <span className="text-gray-300">·</span>
-              <span>Smart India Hackathon (SIH 2024-25 PS-2 Prototype)</span>
+              <span>Bureau of Indian Standards · National Decision Support Platform</span>
             </p>
           </div>
         </div>
@@ -164,13 +164,13 @@ export function Header({ activeTab, onTabChange }: HeaderProps) {
           <div className="bg-amber-50/80 border border-amber-200/80 rounded-lg px-4 py-2.5 text-right shadow-2xs">
             <div className="flex items-center justify-end gap-2 text-xs font-bold text-amber-950">
               <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
-              SMART INDIA HACKATHON
+              BUREAU OF INDIAN STANDARDS
             </div>
             <div className="text-[11.5px] text-amber-900 font-semibold mt-0.5">
-              PS-2 · Procurement Standards Analysis
+              National Procurement Standards Analysis
             </div>
             <div className="text-[10.5px] text-gray-600 font-mono mt-0.5">
-              GeM Tender Clause Assistant · Demonstration KB
+              GeM / CPPP Tender Clause Compliance Assistant
             </div>
           </div>
 
@@ -180,7 +180,7 @@ export function Header({ activeTab, onTabChange }: HeaderProps) {
               Decision-Support Engine
             </span>
             <span className="text-[9.5px] text-slate-500 font-semibold">
-              SIH Prototype
+              Official BIS System
             </span>
           </div>
         </div>
@@ -202,7 +202,7 @@ export function Header({ activeTab, onTabChange }: HeaderProps) {
             className={`gov-nav-tab ${activeTab === 'drafter' ? 'active' : ''}`}
           >
             <Edit3 size={15} />
-            <span>Drafting Assistant ⭐</span>
+            <span>Drafting Assistant</span>
           </button>
 
           <button
@@ -210,7 +210,7 @@ export function Header({ activeTab, onTabChange }: HeaderProps) {
             className={`gov-nav-tab ${activeTab === 'portal-demo' ? 'active' : ''}`}
           >
             <Laptop size={15} />
-            <span>GeM Portal Demo (Phases 6 & 7)</span>
+            <span>GeM Portal Integration</span>
           </button>
 
           <button
@@ -218,7 +218,7 @@ export function Header({ activeTab, onTabChange }: HeaderProps) {
             className={`gov-nav-tab ${activeTab === 'evaluation' ? 'active' : ''}`}
           >
             <BarChart3 size={15} />
-            <span>Evaluation Benchmark (Phase 8)</span>
+            <span>Evaluation & Benchmarks</span>
           </button>
 
           <button

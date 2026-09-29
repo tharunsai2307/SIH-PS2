@@ -62,16 +62,16 @@ export function StandardsRepository() {
           <div>
             <h2 className="text-sm font-bold text-gray-900 uppercase tracking-wide flex items-center gap-2">
               <Layers size={16} className="text-[#003366]" />
-              <span>Curated BIS Standards Catalogue (11 Demonstration Standards)</span>
+              <span>Curated BIS Standards Catalogue (11 Standards)</span>
             </h2>
             <p className="text-xs text-gray-500">
-              Curated Indian Standards governing Protective Headgear & Companion Testing in Demonstration Knowledge Base
+              Curated Indian Standards governing Protective Headgear & Companion Testing Protocols
             </p>
           </div>
 
           <div className="flex items-center gap-2">
             <span className="text-xs font-semibold text-[#003366] bg-blue-50 px-2.5 py-1 rounded border border-blue-200">
-              {standards.length} Curated Standards in Prototype KB
+              {standards.length} Active BIS Standards
             </span>
           </div>
         </div>

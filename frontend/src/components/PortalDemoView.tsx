@@ -26,7 +26,7 @@ export function PortalDemoView() {
         <div className="max-w-3xl">
           <div className="flex items-center gap-2.5 mb-2.5">
             <span className="bg-[#003366] text-white text-xs font-bold px-2.5 py-0.5 rounded-md tracking-wider uppercase">
-              Phase 6 & 7 Demonstration
+              Portal Integration & Extension
             </span>
             <span className="text-xs font-semibold text-slate-500">
               Procurement Portal Integration & Lightweight Chrome Extension
@@ -41,14 +41,14 @@ export function PortalDemoView() {
         </div>
       </div>
 
-      {/* Two cards: Chrome Extension (Phase 6) and Clean API (Phase 7) */}
+      {/* Two cards: Chrome Extension and Clean API */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Card 1: Chrome Extension */}
         <div className="gov-card">
           <div className="gov-card-header flex items-center justify-between">
             <div className="flex items-center gap-2 font-bold text-xs text-slate-800 uppercase tracking-wide">
               <Globe size={16} className="text-[#003366]" />
-              <span>Phase 6: Chrome Extension Prototype</span>
+              <span>Browser Overlay Extension</span>
             </div>
             <span className="text-xs font-bold bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded-full">
               Manifest V3
@@ -67,7 +67,7 @@ export function PortalDemoView() {
                 <li>Go to <code>chrome://extensions/</code></li>
                 <li>Turn on <strong>Developer mode</strong> (top-right).</li>
                 <li>Click <strong>Load unpacked</strong> and select folder: <code className="font-mono text-slate-800">chrome_extension</code>.</li>
-                <li>Open the mock procurement portal below and select any text!</li>
+                <li>Open the procurement portal simulation below and select any text!</li>
               </ol>
             </div>
 
@@ -79,7 +79,7 @@ export function PortalDemoView() {
                 className="btn-gov-primary w-full flex items-center justify-center gap-2 py-3 text-sm font-bold"
               >
                 <Laptop size={15} />
-                <span>Launch Mock GeM Procurement Portal ↗</span>
+                <span>Open Procurement Portal Simulation ↗</span>
               </a>
             </div>
           </div>
@@ -90,7 +90,7 @@ export function PortalDemoView() {
           <div className="gov-card-header flex items-center justify-between">
             <div className="flex items-center gap-2 font-bold text-xs text-slate-800 uppercase tracking-wide">
               <Code2 size={16} className="text-[#003366]" />
-              <span>Phase 7: Clean /api/analyze Endpoint</span>
+              <span>Open Procurement API (/api/analyze)</span>
             </div>
             <span className="text-[10px] font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full">
               REST JSON
@@ -129,7 +129,7 @@ export function PortalDemoView() {
         <div className="gov-card-header flex items-center justify-between">
           <div className="flex items-center gap-2 font-bold text-xs text-slate-800 uppercase tracking-wide">
             <Laptop size={16} className="text-[#003366]" />
-            <span>Interactive Demonstration — Mock GeM Portal</span>
+            <span>Interactive GeM Portal Simulation</span>
           </div>
           <a
             href="/mock_procurement_portal.html"
