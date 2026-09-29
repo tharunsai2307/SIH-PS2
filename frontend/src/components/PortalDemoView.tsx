@@ -92,7 +92,7 @@ export function PortalDemoView() {
               <Code2 size={16} className="text-[#003366]" />
               <span>Open Procurement API (/api/analyze)</span>
             </div>
-            <span className="text-[10px] font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full">
+            <span className="text-xs font-bold bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-full">
               REST JSON
             </span>
           </div>
@@ -103,20 +103,20 @@ export function PortalDemoView() {
             </p>
 
             <div className="relative">
-              <pre className="p-3.5 bg-slate-900 text-slate-100 rounded-lg font-mono text-[11px] leading-relaxed overflow-x-auto">
+              <pre className="p-4 bg-slate-900 text-slate-100 rounded-lg font-mono text-xs leading-relaxed overflow-x-auto">
                 {curlCode}
               </pre>
               <button
                 onClick={handleCopyCurl}
-                className="absolute right-2 top-2 px-2 py-1 bg-slate-800 hover:bg-slate-700 text-white rounded text-[10px] font-semibold transition-colors"
+                className="absolute right-2.5 top-2.5 px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-white rounded text-xs font-semibold transition-colors"
               >
                 {copiedCurl ? 'Copied!' : 'Copy cURL'}
               </button>
             </div>
 
-            <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-lg text-emerald-900 space-y-1">
+            <div className="p-3.5 bg-emerald-50 border border-emerald-200 rounded-lg text-emerald-900 space-y-1">
               <strong>Response Schema:</strong>
-              <p className="font-mono text-[11px]">
+              <p className="font-mono text-xs">
                 {`{ standards: [...], related_standards: [...], coverage: [...], gaps: [...] }`}
               </p>
             </div>

@@ -137,7 +137,7 @@ export function StandardsRepository() {
                           {s.title}
                         </div>
                         {s.scope && (
-                          <div className="text-[11px] text-gray-500 line-clamp-1 mt-0.5">
+                          <div className="text-xs text-gray-500 mt-1 leading-relaxed">
                             {s.scope}
                           </div>
                         )}
@@ -150,11 +150,11 @@ export function StandardsRepository() {
                       </td>
                       <td className="text-center">
                         {s.mandatory ? (
-                          <span className="text-[10px] font-bold text-red-700 bg-red-50 border border-red-200 px-1.5 py-0.5 rounded">
+                          <span className="text-xs font-bold text-red-700 bg-red-50 border border-red-200 px-2 py-1 rounded inline-block">
                             MANDATORY (ISI)
                           </span>
                         ) : (
-                          <span className="text-[10px] font-medium text-gray-600 bg-gray-100 px-1.5 py-0.5 rounded">
+                          <span className="text-xs font-medium text-gray-600 bg-gray-100 px-2 py-1 rounded inline-block">
                             Voluntary
                           </span>
                         )}
@@ -262,11 +262,11 @@ export function StandardsRepository() {
                   </h4>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {Object.entries(selectedStandard.testing_requirements).map(([k, v]) => (
-                      <div key={k} className="p-2.5 bg-slate-50 border border-gray-200 rounded">
-                        <span className="font-bold text-[#003366] uppercase block text-[11px]">
+                      <div key={k} className="p-3 bg-slate-50 border border-gray-200 rounded-md">
+                        <span className="font-bold text-[#003366] uppercase block text-xs">
                           {k.replace(/_/g, ' ')}
                         </span>
-                        <span className="text-gray-700">{v as string}</span>
+                        <span className="text-gray-700 leading-relaxed text-xs">{v as string}</span>
                       </div>
                     ))}
                   </div>

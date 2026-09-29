@@ -75,12 +75,12 @@ export function Header({ activeTab, onTabChange }: HeaderProps) {
       {/* ── Top Utility Strip (GIGW 3.0 Alignment) ── */}
       <div className="top-utility-bar px-4 sm:px-8 lg:px-12 py-2 flex flex-wrap items-center justify-between text-xs">
         <div className="flex items-center gap-3 sm:gap-4">
-          <span className="font-semibold text-gray-800 tracking-wide">
-            स्मार्ट इंडिया हैकाथॉन | SMART INDIA HACKATHON 2024-25
+          <span className="font-semibold text-gray-800">
+            भारतीय मानक ब्यूरो | BUREAU OF INDIAN STANDARDS · GOVT. OF INDIA
           </span>
           <span className="hidden md:inline text-gray-300">|</span>
           <span className="hidden md:inline text-gray-600 font-medium">
-            Problem Statement 2: AI-Powered Indian Standards Recommendation Engine
+            National Standards Recommendation Engine for Public Procurement
           </span>
         </div>
 
@@ -92,7 +92,7 @@ export function Header({ activeTab, onTabChange }: HeaderProps) {
 
           {/* Text Resize Controls */}
           <div className="flex items-center gap-1 bg-white border border-gray-200 rounded-md px-2 py-0.5 shadow-2xs">
-            <span className="text-gray-500 mr-1 text-[11px] font-medium hidden sm:inline">Text Size:</span>
+            <span className="text-gray-500 mr-1 text-xs font-medium hidden sm:inline">Text Size:</span>
             <button
               onClick={() => handleFontSize(-1)}
               title="Decrease Font Size"
@@ -166,20 +166,20 @@ export function Header({ activeTab, onTabChange }: HeaderProps) {
               <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
               BUREAU OF INDIAN STANDARDS
             </div>
-            <div className="text-[11.5px] text-amber-900 font-semibold mt-0.5">
+            <div className="text-xs text-amber-900 font-semibold mt-0.5">
               National Procurement Standards Analysis
             </div>
-            <div className="text-[10.5px] text-gray-600 font-mono mt-0.5">
+            <div className="text-xs text-gray-600 font-mono mt-0.5">
               GeM / CPPP Tender Clause Compliance Assistant
             </div>
           </div>
 
-          <div className="hidden lg:flex flex-col items-center justify-center px-3.5 py-2.5 rounded-lg border border-blue-200 bg-blue-50/70 text-center shadow-2xs">
+          <div className="hidden lg:flex flex-col items-center justify-center px-4 py-2.5 rounded-lg border border-blue-200 bg-blue-50/70 text-center shadow-2xs">
             <ShieldCheck size={22} className="text-[#003366]" />
-            <span className="text-[10px] font-bold text-[#003366] uppercase mt-1 tracking-wider">
-              Decision-Support Engine
+            <span className="text-xs font-bold text-[#003366] uppercase mt-1 tracking-wider">
+              Decision Support
             </span>
-            <span className="text-[9.5px] text-slate-500 font-semibold">
+            <span className="text-xs text-slate-600 font-semibold">
               Official BIS System
             </span>
           </div>
@@ -188,7 +188,7 @@ export function Header({ activeTab, onTabChange }: HeaderProps) {
 
       {/* ── Navigation Bar ── */}
       <nav className="gov-nav text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center gap-1 sm:gap-2 overflow-x-auto scrollbar-none">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center gap-1 sm:gap-2 overflow-x-auto">
           <button
             onClick={() => onTabChange('evaluator')}
             className={`gov-nav-tab ${activeTab === 'evaluator' ? 'active' : ''}`}
@@ -210,7 +210,7 @@ export function Header({ activeTab, onTabChange }: HeaderProps) {
             className={`gov-nav-tab ${activeTab === 'portal-demo' ? 'active' : ''}`}
           >
             <Laptop size={15} />
-            <span>GeM Portal Integration</span>
+            <span>GeM Integration</span>
           </button>
 
           <button
@@ -218,7 +218,7 @@ export function Header({ activeTab, onTabChange }: HeaderProps) {
             className={`gov-nav-tab ${activeTab === 'evaluation' ? 'active' : ''}`}
           >
             <BarChart3 size={15} />
-            <span>Evaluation & Benchmarks</span>
+            <span>Benchmarks</span>
           </button>
 
           <button
@@ -226,7 +226,7 @@ export function Header({ activeTab, onTabChange }: HeaderProps) {
             className={`gov-nav-tab ${activeTab === 'catalogue' ? 'active' : ''}`}
           >
             <Layers size={15} />
-            <span>Curated BIS Standards (11)</span>
+            <span>Standards Catalogue</span>
           </button>
 
           <button
@@ -234,7 +234,7 @@ export function Header({ activeTab, onTabChange }: HeaderProps) {
             className={`gov-nav-tab ${activeTab === 'graph' ? 'active' : ''}`}
           >
             <GitFork size={15} />
-            <span>Normative Standards Knowledge Network</span>
+            <span>Normative Network</span>
           </button>
 
           <button
@@ -242,7 +242,7 @@ export function Header({ activeTab, onTabChange }: HeaderProps) {
             className={`gov-nav-tab ${activeTab === 'gem-clauses' ? 'active' : ''}`}
           >
             <FileText size={15} />
-            <span>GeM Tender Clause Assistant</span>
+            <span>GeM Clauses</span>
           </button>
 
           <button
@@ -250,7 +250,7 @@ export function Header({ activeTab, onTabChange }: HeaderProps) {
             className={`gov-nav-tab ${activeTab === 'qco-orders' ? 'active' : ''}`}
           >
             <Scale size={15} />
-            <span>QCO Compliance Reference</span>
+            <span>QCO Orders</span>
           </button>
 
           <button
@@ -258,7 +258,7 @@ export function Header({ activeTab, onTabChange }: HeaderProps) {
             className={`gov-nav-tab ${activeTab === 'guidelines' ? 'active' : ''}`}
           >
             <HelpCircle size={15} />
-            <span>Procurement Guidelines & FAQ</span>
+            <span>Guidelines & FAQ</span>
           </button>
         </div>
       </nav>

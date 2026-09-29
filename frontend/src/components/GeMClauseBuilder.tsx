@@ -163,7 +163,7 @@ export function GeMClauseBuilder() {
             <h3 className="text-xs font-bold text-gray-800 uppercase tracking-wider">
               Vetted Clause for GeM Portal Special Terms & Conditions:
             </h3>
-            <span className="text-[11px] text-gray-500 font-medium">
+            <span className="text-xs text-gray-500 font-medium">
               Format: Plain Text / PDF Attachment
             </span>
           </div>

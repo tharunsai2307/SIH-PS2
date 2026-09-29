@@ -220,25 +220,25 @@ export function DraftingAssistant() {
                       {result.compliance_score}%
                     </span>
                   </div>
-                  <span className="text-[11px] font-mono text-slate-500">
+                  <span className="text-xs font-mono text-slate-500">
                     Cert: {result.certificate_id}
                   </span>
                 </div>
 
                 {result.primary_standard ? (
-                  <div className="p-3.5 bg-blue-50/70 border border-blue-200 rounded-lg">
-                    <div className="flex items-center justify-between mb-1">
+                  <div className="p-4 bg-blue-50/70 border border-blue-200 rounded-lg space-y-1.5">
+                    <div className="flex items-center justify-between gap-2">
                       <span className="is-code-chip text-xs font-bold">
                         {result.primary_standard.standard.is_number}
                       </span>
-                      <span className="text-[10px] font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full">
-                        MATCH RELEVANCE: {Math.round(result.primary_standard.relevance_score * 100)}%
+                      <span className="text-xs font-bold text-emerald-800 bg-emerald-100 px-2.5 py-1 rounded-full">
+                        MATCH: {Math.round(result.primary_standard.relevance_score * 100)}%
                       </span>
                     </div>
                     <h4 className="text-xs font-bold text-slate-900 mt-1">
                       {result.primary_standard.standard.title}
                     </h4>
-                    <p className="text-[11.5px] text-slate-600 mt-1">
+                    <p className="text-xs text-slate-600 leading-relaxed mt-1">
                       {result.primary_standard.reason}
                     </p>
                   </div>
@@ -265,38 +265,38 @@ export function DraftingAssistant() {
                   <table className="gov-table">
                     <thead className="bg-slate-50 border-b border-slate-200 text-slate-600">
                       <tr>
-                        <th className="p-2.5 font-semibold">Category</th>
-                        <th className="p-2.5 font-semibold text-center">Status</th>
-                        <th className="p-2.5 font-semibold">Observation</th>
+                        <th className="p-3 font-semibold">Category</th>
+                        <th className="p-3 font-semibold text-center">Status</th>
+                        <th className="p-3 font-semibold">Observation</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100">
                       {result.coverage.map((item, idx) => (
                         <tr key={idx} className="hover:bg-slate-50/50">
-                          <td className="p-2.5 font-bold text-slate-900">
+                          <td className="p-3 font-bold text-slate-900 text-xs">
                             {item.category}
                           </td>
-                          <td className="p-2.5 text-center">
+                          <td className="p-3 text-center">
                             {item.status === 'FOUND' && (
-                              <span className="inline-flex items-center gap-1 text-[10.5px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
-                                <CheckCircle2 size={11} />
+                              <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
+                                <CheckCircle2 size={12} />
                                 FOUND
                               </span>
                             )}
                             {(item.status === 'PARTIAL' || item.status === 'REVIEW') && (
-                              <span className="inline-flex items-center gap-1 text-[10.5px] font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200">
-                                <AlertTriangle size={11} />
+                              <span className="inline-flex items-center gap-1 text-xs font-bold text-amber-800 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200">
+                                <AlertTriangle size={12} />
                                 {item.status}
                               </span>
                             )}
                             {item.status === 'MISSING' && (
-                              <span className="inline-flex items-center gap-1 text-[10.5px] font-bold text-rose-800 bg-rose-50 px-2 py-0.5 rounded-full border border-rose-200">
-                                <XCircle size={11} />
+                              <span className="inline-flex items-center gap-1 text-xs font-bold text-rose-800 bg-rose-50 px-2.5 py-1 rounded-full border border-rose-200">
+                                <XCircle size={12} />
                                 MISSING
                               </span>
                             )}
                           </td>
-                          <td className="p-2.5 text-slate-600 text-[11px] leading-relaxed">
+                          <td className="p-3 text-slate-600 text-xs leading-relaxed">
                             {item.note}
                           </td>
                         </tr>
@@ -314,7 +314,7 @@ export function DraftingAssistant() {
                       <AlertTriangle size={14} className="text-rose-600" />
                       <span>Missing Requirements & Instant Remediation ({result.gaps.length})</span>
                     </span>
-                    <span className="text-[11px] text-rose-800 font-semibold">
+                    <span className="text-xs text-rose-800 font-semibold">
                       Click (+) to append clause into draft
                     </span>
                   </div>
@@ -323,13 +323,13 @@ export function DraftingAssistant() {
                     {result.gaps.map((gap, idx) => (
                       <div
                         key={idx}
-                        className="p-3.5 bg-white border border-slate-200 rounded-lg shadow-2xs space-y-2"
+                        className="p-4 bg-white border border-slate-200 rounded-lg shadow-2xs space-y-2"
                       >
-                        <div className="flex items-center justify-between">
-                          <span className="text-xs font-bold text-slate-900">
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="text-xs font-bold text-slate-900 leading-snug">
                             [{gap.category}] {gap.description}
                           </span>
-                          <span className={`text-[9.5px] font-bold px-1.5 py-0.5 rounded uppercase ${
+                          <span className={`text-xs font-bold px-2 py-0.5 rounded uppercase flex-shrink-0 ${
                             gap.severity === 'HIGH'
                               ? 'bg-rose-100 text-rose-800'
                               : 'bg-amber-100 text-amber-800'
@@ -339,17 +339,17 @@ export function DraftingAssistant() {
                         </div>
 
                         {gap.suggestion && (
-                          <div className="p-2.5 bg-slate-50 border border-slate-200 rounded text-xs font-mono text-slate-700 flex items-start justify-between gap-3">
+                          <div className="p-3 bg-slate-50 border border-slate-200 rounded text-xs font-mono text-slate-700 flex items-start justify-between gap-3">
                             <p className="leading-relaxed">
                               {gap.suggestion}
                             </p>
                             <button
                               type="button"
                               onClick={() => handleInsertClause(gap.suggestion!)}
-                              className="inline-flex items-center gap-1 bg-[#003366] text-white hover:bg-[#002244] px-2.5 py-1 rounded text-[11px] font-semibold flex-shrink-0 transition-colors"
+                              className="inline-flex items-center gap-1 bg-[#003366] text-white hover:bg-[#002244] px-3 py-1.5 rounded text-xs font-semibold flex-shrink-0 transition-colors"
                               title="Append this clause to your draft specification"
                             >
-                              <PlusCircle size={12} />
+                              <PlusCircle size={13} />
                               <span>Insert</span>
                             </button>
                           </div>

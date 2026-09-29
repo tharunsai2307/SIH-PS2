@@ -50,10 +50,10 @@ export function Footer() {
             <h4 className="font-bold text-white text-xs uppercase tracking-wider mb-2">
               Bureau of Indian Standards
             </h4>
-            <p className="text-[11.5px] leading-relaxed text-slate-300">
+            <p className="text-xs leading-relaxed text-slate-300">
               National Decision-Support Platform: AI-Powered Recommendation Engine for Identifying Applicable Indian Standards for Procurement Specifications.
             </p>
-            <div className="pt-1 text-[11px] text-emerald-400 font-mono">
+            <div className="pt-1 text-xs text-emerald-400 font-mono">
               Engine Version: v2.4.0 (Active Release)
             </div>
           </div>
@@ -63,7 +63,7 @@ export function Footer() {
             <h4 className="font-bold text-white text-xs uppercase tracking-wider mb-2">
               Regulatory Framework References
             </h4>
-            <ul className="space-y-1 text-[11.5px]">
+            <ul className="space-y-1.5 text-xs text-slate-300">
               <li>Rule 144 of General Financial Rules (GFR), 2017</li>
               <li>CVC Guidelines on Technical Specifications (2021)</li>
               <li>Bureau of Indian Standards Act, 2016</li>
@@ -80,7 +80,7 @@ export function Footer() {
         </div>
 
         {/* Bottom Strip */}
-        <div className="mt-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-slate-400">
+        <div className="mt-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-400">
           <p>
             ISense — Decision-Support Platform for Public Procurement. Standards data derived from curated BIS publications.
           </p>

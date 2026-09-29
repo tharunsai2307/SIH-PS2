@@ -109,7 +109,7 @@
       <div class="isense-card">
         <div class="isense-header">
           <div class="isense-brand">
-            <span class="isense-badge">SIH PS-2</span>
+            <span class="isense-badge">BIS ISense</span>
             <strong>ISense — BIS Standards Assistant</strong>
           </div>
           <button class="isense-close" id="isense-close-btn">&times;</button>
@@ -129,7 +129,7 @@
       <div class="isense-card">
         <div class="isense-header">
           <div class="isense-brand">
-            <span class="isense-badge">SIH PS-2</span>
+            <span class="isense-badge">BIS ISense</span>
             <strong>ISense — Connection Notice</strong>
           </div>
           <button class="isense-close" id="isense-close-btn">&times;</button>

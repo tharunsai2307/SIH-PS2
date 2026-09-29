@@ -90,32 +90,32 @@ export function NormativeGraphView() {
           {/* Visual Node Diagram */}
           <div className="p-6 bg-slate-50 border border-gray-200 rounded-lg text-center">
             <div className="inline-block p-4 bg-white border-2 border-[#003366] rounded-lg shadow-sm mb-6">
-              <span className="text-[10px] font-bold text-gray-500 uppercase block">Selected Primary Standard</span>
+              <span className="text-xs font-bold text-gray-500 uppercase block mb-1">Selected Primary Standard</span>
               <span className="text-lg font-mono font-extrabold text-[#003366]">{selectedStandard}</span>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-left">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 text-left">
               {activeRelationships.map((rel, i) => {
                 const isSource = rel.source === selectedStandard;
                 const other = isSource ? rel.target : rel.source;
                 return (
-                  <div key={i} className="p-3.5 bg-white border border-gray-200 rounded-md hover:border-[#003366] transition-colors">
+                  <div key={i} className="p-4 bg-white border border-gray-200 rounded-lg hover:border-[#003366] transition-colors shadow-2xs">
                     <div className="flex items-center justify-between gap-2 mb-2">
                       <div className="flex items-center gap-1.5 font-mono font-bold text-xs text-[#003366]">
                         <span>{selectedStandard}</span>
                         <ArrowRight size={12} className="text-gray-400" />
                         <span className="is-code-chip">{other}</span>
                       </div>
-                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded border ${getBadgeClass(rel.type)}`}>
+                      <span className={`text-xs font-bold px-2.5 py-1 rounded border ${getBadgeClass(rel.type)}`}>
                         {rel.type.replace(/_/g, ' ').toUpperCase()}
                       </span>
                     </div>
 
-                    <p className="text-xs text-gray-700 leading-snug">
+                    <p className="text-xs text-gray-700 leading-relaxed">
                       {rel.description}
                     </p>
 
-                    <div className="mt-2 pt-2 border-t border-gray-100 flex items-center justify-between text-[11px] text-gray-500">
+                    <div className="mt-3 pt-2.5 border-t border-gray-100 flex items-center justify-between text-xs text-gray-500">
                       <span>Normative Link Strength</span>
                       <div className="w-16 h-1.5 bg-gray-200 rounded-full overflow-hidden">
                         <div

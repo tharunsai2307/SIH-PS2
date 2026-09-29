@@ -34,7 +34,7 @@ export function QCOOrdersView() {
               Statutory Quality Control Orders reference repository for procurement officers under the BIS Act, 2016
             </p>
           </div>
-          <span className="badge-critical text-[11px]">
+          <span className="badge-critical text-xs">
             Statutory Reference
           </span>
         </div>
@@ -78,16 +78,16 @@ export function QCOOrdersView() {
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs mb-3">
-                    <div className="p-2.5 bg-slate-50 border border-gray-200 rounded">
-                      <span className="text-gray-500 block text-[11px] font-bold uppercase">Notified By</span>
-                      <span className="font-medium text-gray-900">{qco.ministry}</span>
+                    <div className="p-3.5 bg-slate-50 border border-gray-200 rounded-md">
+                      <span className="text-gray-500 block text-xs font-bold uppercase mb-1">Notified By</span>
+                      <span className="font-medium text-gray-900 leading-relaxed">{qco.ministry}</span>
                     </div>
-                    <div className="p-2.5 bg-slate-50 border border-gray-200 rounded">
-                      <span className="text-gray-500 block text-[11px] font-bold uppercase">Mandated Standard</span>
+                    <div className="p-3.5 bg-slate-50 border border-gray-200 rounded-md">
+                      <span className="text-gray-500 block text-xs font-bold uppercase mb-1">Mandated Standard</span>
                       <span className="font-mono font-bold text-[#003366]">{qco.standard_mandated}</span>
                     </div>
-                    <div className="p-2.5 bg-slate-50 border border-gray-200 rounded">
-                      <span className="text-gray-500 block text-[11px] font-bold uppercase">Date of Gazette Notification</span>
+                    <div className="p-3.5 bg-slate-50 border border-gray-200 rounded-md">
+                      <span className="text-gray-500 block text-xs font-bold uppercase mb-1">Date of Gazette Notification</span>
                       <span className="font-medium text-gray-900">{qco.date}</span>
                     </div>
                   </div>
@@ -96,14 +96,14 @@ export function QCOOrdersView() {
                     {qco.summary}
                   </p>
 
-                  <div className="p-3 bg-amber-50/70 border border-amber-200 rounded text-xs space-y-1">
+                  <div className="p-4 bg-amber-50/70 border border-amber-200 rounded-lg text-xs space-y-1.5">
                     <div className="text-amber-950 font-bold">
                       Central Vigilance Commission (CVC) Tender Directive:
                     </div>
-                    <p className="text-amber-900">
+                    <p className="text-amber-900 leading-relaxed">
                       {qco.cvc_guideline}
                     </p>
-                    <div className="pt-1 text-[11.5px] text-red-800 font-semibold">
+                    <div className="pt-1 text-xs text-red-800 font-semibold">
                       Statutory Penalties: {qco.penalties}
                     </div>
                   </div>

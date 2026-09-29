@@ -75,13 +75,13 @@ export function EvaluationReport({ result }: Props) {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-5">
           <div className="space-y-1.5">
             <div className="flex items-center gap-2.5">
-              <span className="bg-[#003366] text-white text-[10.5px] font-bold px-2.5 py-1 rounded-md tracking-wider uppercase">
+              <span className="bg-[#003366] text-white text-xs font-bold px-2.5 py-1 rounded-md tracking-wider uppercase">
                 BIS Standards Analysis Assessment
               </span>
               <span className="text-xs font-mono font-bold text-slate-700 bg-white border border-slate-200 px-2 py-0.5 rounded-md">
                 Ref: {certificate_id}
               </span>
-              <span className="text-[10px] font-bold text-emerald-800 bg-emerald-100 border border-emerald-300 px-2.5 py-0.5 rounded-md">
+              <span className="text-xs font-bold text-emerald-800 bg-emerald-100 border border-emerald-300 px-2.5 py-1 rounded-md">
                 Official BIS Assessment
               </span>
             </div>
@@ -168,7 +168,7 @@ export function EvaluationReport({ result }: Props) {
                 <h4 className="font-bold text-sm text-purple-900">
                   Multilingual Specification Detected ({result.multilingual.language_name})
                 </h4>
-                <span className="text-[10px] font-bold bg-purple-200 text-purple-800 px-2 py-0.5 rounded">
+                <span className="text-xs font-bold bg-purple-200 text-purple-800 px-2.5 py-1 rounded">
                   {result.multilingual.engine}
                 </span>
               </div>
@@ -191,11 +191,11 @@ export function EvaluationReport({ result }: Props) {
                 <h4 className="font-bold text-sm text-blue-900">
                   Tender PDF Document Extracted ({result.pdf_document.title})
                 </h4>
-                <span className="text-[10px] font-bold bg-blue-200 text-blue-900 px-2 py-0.5 rounded">
+                <span className="text-xs font-bold bg-blue-200 text-blue-900 px-2.5 py-1 rounded">
                   {result.pdf_document.total_pages} Pages · {result.pdf_document.total_characters} Characters
                 </span>
               </div>
-              <p className="text-slate-600 font-mono text-[11px] line-clamp-2">
+              <p className="text-slate-600 font-mono text-xs leading-relaxed break-words">
                 Preview: {result.pdf_document.extracted_text_preview}
               </p>
             </div>
@@ -204,20 +204,20 @@ export function EvaluationReport({ result }: Props) {
 
         {/* Metadata Details Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-5 pt-5 border-t border-slate-200 text-xs">
-          <div className="p-3 bg-white border border-slate-200 rounded-lg">
-            <span className="text-slate-400 block text-[10.5px] uppercase font-bold tracking-wider mb-0.5">Tender / Bid ID</span>
-            <span className="font-mono font-bold text-slate-900 truncate block">{tender_id}</span>
+          <div className="p-4 bg-white border border-slate-200 rounded-xl">
+            <span className="text-slate-500 block text-xs uppercase font-bold tracking-wider mb-1">Tender / Bid ID</span>
+            <span className="font-mono font-bold text-slate-900 block break-words">{tender_id}</span>
           </div>
-          <div className="p-3 bg-white border border-slate-200 rounded-lg">
-            <span className="text-slate-400 block text-[10.5px] uppercase font-bold tracking-wider mb-0.5">Procuring Authority</span>
-            <span className="font-semibold text-slate-900 truncate block">{department}</span>
+          <div className="p-4 bg-white border border-slate-200 rounded-xl">
+            <span className="text-slate-500 block text-xs uppercase font-bold tracking-wider mb-1">Procuring Authority</span>
+            <span className="font-semibold text-slate-900 block break-words">{department}</span>
           </div>
-          <div className="p-3 bg-white border border-slate-200 rounded-lg">
-            <span className="text-slate-400 block text-[10.5px] uppercase font-bold tracking-wider mb-0.5">Evaluation Timestamp</span>
-            <span className="font-medium text-slate-800 block truncate">{evaluation_timestamp}</span>
+          <div className="p-4 bg-white border border-slate-200 rounded-xl">
+            <span className="text-slate-500 block text-xs uppercase font-bold tracking-wider mb-1">Evaluation Timestamp</span>
+            <span className="font-medium text-slate-800 block break-words">{evaluation_timestamp}</span>
           </div>
-          <div className="p-3 bg-white border border-slate-200 rounded-lg">
-            <span className="text-slate-400 block text-[10.5px] uppercase font-bold tracking-wider mb-0.5">Knowledge Base</span>
+          <div className="p-4 bg-white border border-slate-200 rounded-xl">
+            <span className="text-slate-500 block text-xs uppercase font-bold tracking-wider mb-1">Knowledge Base</span>
             <span className="inline-flex items-center gap-1.5 font-bold text-blue-900">
               <ShieldCheck size={14} />
               11 Curated Standards
@@ -233,7 +233,7 @@ export function EvaluationReport({ result }: Props) {
             <BookOpen size={15} className="text-[#003366]" />
             <span>Extracted Specification Requirements & Provenance</span>
           </h3>
-          <span className="text-[11px] text-slate-500">
+          <span className="text-xs text-slate-500">
             Strict separation: Explicit vs Inferred vs Ambiguities
           </span>
         </div>
@@ -243,7 +243,7 @@ export function EvaluationReport({ result }: Props) {
           <div className="p-4 bg-white border border-emerald-200 rounded-xl space-y-2 shadow-2xs">
             <div className="flex items-center justify-between">
               <span className="font-bold text-emerald-900">Explicit Requirements</span>
-              <span className="text-[10px] font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full">
+              <span className="text-xs font-bold bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-full">
                 EXPLICIT
               </span>
             </div>
@@ -265,7 +265,7 @@ export function EvaluationReport({ result }: Props) {
           <div className="p-4 bg-white border border-blue-200 rounded-xl space-y-2 shadow-2xs">
             <div className="flex items-center justify-between">
               <span className="font-bold text-blue-950">AI / Domain Inferences</span>
-              <span className="text-[10px] font-bold bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full">
+              <span className="text-xs font-bold bg-blue-100 text-blue-800 px-2.5 py-1 rounded-full">
                 INFERRED
               </span>
             </div>
@@ -287,7 +287,7 @@ export function EvaluationReport({ result }: Props) {
           <div className="p-4 bg-white border border-amber-200 rounded-xl space-y-2 shadow-2xs">
             <div className="flex items-center justify-between">
               <span className="font-bold text-amber-950">Missing / Ambiguous</span>
-              <span className="text-[10px] font-bold bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full">
+              <span className="text-xs font-bold bg-amber-100 text-amber-800 px-2.5 py-1 rounded-full">
                 REVIEW
               </span>
             </div>
@@ -320,7 +320,7 @@ export function EvaluationReport({ result }: Props) {
               {primary_standard?.standard.year}
             </span>
           </div>
-          <p className="text-xs text-slate-600 mt-2.5 truncate font-medium">
+          <p className="text-xs text-slate-600 mt-2.5 font-medium leading-relaxed">
             {primary_standard ? primary_standard.standard.title : 'Specification requires domain clarification'}
           </p>
         </div>
@@ -330,11 +330,11 @@ export function EvaluationReport({ result }: Props) {
           <div className="kpi-lbl">Specification Compliance Rating</div>
           <div className="mt-2 flex items-baseline gap-2">
             <span className="kpi-val">{compliance_score}%</span>
-            <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full border ${getScoreBadge(compliance_score)}`}>
+            <span className={`text-xs font-bold px-2.5 py-1 rounded-full border ${getScoreBadge(compliance_score)}`}>
               {compliance_score >= 80 ? 'HIGH' : compliance_score >= 50 ? 'MODERATE' : 'INADEQUATE'}
             </span>
           </div>
-          <p className="text-[11px] text-slate-500 mt-2.5 font-medium">
+          <p className="text-xs text-slate-500 mt-2.5 font-medium">
             Similarity score index; not a statutory compliance probability
           </p>
         </div>
@@ -354,7 +354,7 @@ export function EvaluationReport({ result }: Props) {
               </span>
             )}
           </div>
-          <p className="text-xs text-slate-600 mt-2.5 truncate font-medium">
+          <p className="text-xs text-slate-600 mt-2.5 font-medium leading-relaxed">
             {matched_qco ? matched_qco.order_title : 'General BIS standards reference'}
           </p>
         </div>
@@ -366,7 +366,7 @@ export function EvaluationReport({ result }: Props) {
             <span className="kpi-val">{related_standards.length}</span>
             <span className="text-xs text-slate-500 font-medium">Linked IS codes</span>
           </div>
-          <p className="text-xs text-slate-600 mt-2.5 truncate font-medium">
+          <p className="text-xs text-slate-600 mt-2.5 font-medium leading-relaxed">
             Testing headforms, visors & materials
           </p>
         </div>
@@ -374,10 +374,10 @@ export function EvaluationReport({ result }: Props) {
 
       {/* ── Sub-Navigation Tabs ── */}
       <div className="border-b border-slate-200 bg-slate-50/60 px-6 sm:px-8 no-print">
-        <div className="flex items-center gap-2 sm:gap-6 overflow-x-auto scrollbar-none text-xs font-bold">
+        <div className="flex items-center gap-2 sm:gap-6 overflow-x-auto scrollbar-thin text-xs font-bold">
           <button
             onClick={() => setActiveSubTab('standards')}
-            className={`py-3.5 px-2 border-b-2 flex items-center gap-2 whitespace-nowrap transition-all ${
+            className={`py-3.5 px-3 border-b-2 flex items-center gap-2 whitespace-nowrap transition-all ${
               activeSubTab === 'standards'
                 ? 'border-[#003366] text-[#003366]'
                 : 'border-transparent text-slate-600 hover:text-slate-900'
@@ -389,7 +389,7 @@ export function EvaluationReport({ result }: Props) {
 
           <button
             onClick={() => setActiveSubTab('coverage')}
-            className={`py-3.5 px-2 border-b-2 flex items-center gap-2 whitespace-nowrap transition-all ${
+            className={`py-3.5 px-3 border-b-2 flex items-center gap-2 whitespace-nowrap transition-all ${
               activeSubTab === 'coverage'
                 ? 'border-[#003366] text-[#003366]'
                 : 'border-transparent text-slate-600 hover:text-slate-900'
@@ -399,7 +399,7 @@ export function EvaluationReport({ result }: Props) {
             <span>
               Coverage Matrix & Gaps
               {highGaps.length > 0 && (
-                <span className="ml-1.5 px-2 py-0.5 bg-rose-600 text-white rounded-full text-[10px] font-bold">
+                <span className="ml-1.5 px-2.5 py-0.5 bg-rose-600 text-white rounded-full text-xs font-bold">
                   {highGaps.length}
                 </span>
               )}
@@ -408,7 +408,7 @@ export function EvaluationReport({ result }: Props) {
 
           <button
             onClick={() => setActiveSubTab('relationships')}
-            className={`py-3.5 px-2 border-b-2 flex items-center gap-2 whitespace-nowrap transition-all ${
+            className={`py-3.5 px-3 border-b-2 flex items-center gap-2 whitespace-nowrap transition-all ${
               activeSubTab === 'relationships'
                 ? 'border-[#003366] text-[#003366]'
                 : 'border-transparent text-slate-600 hover:text-slate-900'
@@ -420,7 +420,7 @@ export function EvaluationReport({ result }: Props) {
 
           <button
             onClick={() => setActiveSubTab('gem-clause')}
-            className={`py-3.5 px-2 border-b-2 flex items-center gap-2 whitespace-nowrap transition-all ${
+            className={`py-3.5 px-3 border-b-2 flex items-center gap-2 whitespace-nowrap transition-all ${
               activeSubTab === 'gem-clause'
                 ? 'border-[#003366] text-[#003366]'
                 : 'border-transparent text-slate-600 hover:text-slate-900'
@@ -432,7 +432,7 @@ export function EvaluationReport({ result }: Props) {
 
           <button
             onClick={() => setActiveSubTab('statutory')}
-            className={`py-3.5 px-2 border-b-2 flex items-center gap-2 whitespace-nowrap transition-all ${
+            className={`py-3.5 px-3 border-b-2 flex items-center gap-2 whitespace-nowrap transition-all ${
               activeSubTab === 'statutory'
                 ? 'border-[#003366] text-[#003366]'
                 : 'border-transparent text-slate-600 hover:text-slate-900'
@@ -488,12 +488,12 @@ export function EvaluationReport({ result }: Props) {
                 {/* Contributing Signals */}
                 {primary_standard.signals_contributed && primary_standard.signals_contributed.length > 0 && (
                   <div className="space-y-1.5">
-                    <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wider">
+                    <span className="text-xs font-bold text-slate-600 uppercase tracking-wider">
                       Contributing Signals:
                     </span>
                     <div className="flex flex-wrap gap-2">
                       {primary_standard.signals_contributed.map((sig, i) => (
-                        <span key={i} className="text-[11px] bg-slate-100 text-slate-700 border border-slate-200 px-2.5 py-1 rounded-md">
+                        <span key={i} className="text-xs bg-slate-100 text-slate-700 border border-slate-200 px-2.5 py-1 rounded-md">
                           {sig}
                         </span>
                       ))}
@@ -509,14 +509,14 @@ export function EvaluationReport({ result }: Props) {
                 {/* Traceable Evidence */}
                 {primary_standard.evidence && primary_standard.evidence.length > 0 && (
                   <div className="pt-3 border-t border-blue-200/80 space-y-2">
-                    <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wider">
+                    <span className="text-xs font-bold text-slate-600 uppercase tracking-wider">
                       Traceable Supporting Evidence:
                     </span>
                     <div className="space-y-1.5">
                       {primary_standard.evidence.map((ev, idx) => (
-                        <div key={idx} className="p-2.5 bg-white/80 border border-slate-200 rounded-md text-xs flex items-start justify-between gap-3">
-                          <span className="text-slate-800 font-medium">{ev.claim}</span>
-                          <span className="text-slate-500 font-mono text-[10.5px] whitespace-nowrap">
+                        <div key={idx} className="p-3 bg-white/80 border border-slate-200 rounded-md text-xs flex items-start justify-between gap-3">
+                          <span className="text-slate-800 font-medium leading-relaxed">{ev.claim}</span>
+                          <span className="text-slate-500 font-mono text-xs flex-shrink-0">
                             Source: {ev.source || 'Curated BIS Record'}
                           </span>
                         </div>
@@ -572,12 +572,12 @@ export function EvaluationReport({ result }: Props) {
                           </td>
                           <td className="text-center">
                             {cl.status === 'COMPLIANT' ? (
-                              <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
+                              <span className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
                                 <CheckCircle2 size={12} />
                                 Specified
                               </span>
                             ) : (
-                              <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-amber-800 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200">
+                              <span className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-800 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200">
                                 <AlertTriangle size={12} />
                                 Omitted
                               </span>
@@ -611,7 +611,7 @@ export function EvaluationReport({ result }: Props) {
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
                   {Object.entries(primary_standard.standard.testing_requirements).map(([k, v]) => (
                     <div key={k} className="p-3.5 bg-white border border-slate-200 rounded-lg shadow-2xs">
-                      <div className="text-[11px] font-bold text-[#003366] uppercase tracking-wide">
+                      <div className="text-xs font-bold text-[#003366] uppercase tracking-wide">
                         {k.replace(/_/g, ' ')}
                       </div>
                       <div className="text-xs text-slate-700 mt-1.5 leading-relaxed">
@@ -658,25 +658,25 @@ export function EvaluationReport({ result }: Props) {
                         </td>
                         <td className="text-center">
                           {c.status === 'FOUND' && (
-                            <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
+                            <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
                               <CheckCircle2 size={12} />
                               FOUND
                             </span>
                           )}
                           {c.status === 'PARTIAL' && (
-                            <span className="inline-flex items-center gap-1 text-[11px] font-bold text-amber-800 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200">
+                            <span className="inline-flex items-center gap-1 text-xs font-bold text-amber-800 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200">
                               <AlertTriangle size={12} />
                               PARTIAL
                             </span>
                           )}
                           {c.status === 'MISSING' && (
-                            <span className="inline-flex items-center gap-1 text-[11px] font-bold text-rose-800 bg-rose-50 px-2.5 py-1 rounded-full border border-rose-200">
+                            <span className="inline-flex items-center gap-1 text-xs font-bold text-rose-800 bg-rose-50 px-2.5 py-1 rounded-full border border-rose-200">
                               <XCircle size={12} />
                               MISSING
                             </span>
                           )}
                           {c.status === 'REVIEW' && (
-                            <span className="inline-flex items-center gap-1 text-[11px] font-bold text-blue-800 bg-blue-50 px-2.5 py-1 rounded-full border border-blue-200">
+                            <span className="inline-flex items-center gap-1 text-xs font-bold text-blue-800 bg-blue-50 px-2.5 py-1 rounded-full border border-blue-200">
                               <HelpCircle size={12} />
                               REVIEW
                             </span>
@@ -692,7 +692,7 @@ export function EvaluationReport({ result }: Props) {
                         <td className="text-xs text-slate-700 leading-relaxed">
                           <p>{c.note}</p>
                           {c.evidence && (
-                            <p className="text-[11px] text-slate-500 font-mono mt-0.5">
+                            <p className="text-xs text-slate-500 font-mono mt-1">
                               Evidence: {c.evidence}
                             </p>
                           )}
@@ -728,7 +728,7 @@ export function EvaluationReport({ result }: Props) {
                       <div className="flex items-center justify-between gap-2 mb-2">
                         <div className="flex items-center gap-2">
                           <span
-                            className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full ${
+                            className={`text-xs font-bold uppercase px-2.5 py-1 rounded-full ${
                               gap.severity === 'HIGH'
                                 ? 'bg-rose-600 text-white'
                                 : 'bg-amber-600 text-white'
@@ -740,7 +740,7 @@ export function EvaluationReport({ result }: Props) {
                             {gap.category}
                           </span>
                         </div>
-                        <span className="text-[11px] text-slate-500 font-medium">
+                        <span className="text-xs text-slate-500 font-medium">
                           Tender Quality Risk
                         </span>
                       </div>
@@ -750,7 +750,7 @@ export function EvaluationReport({ result }: Props) {
                       </p>
 
                       {gap.suggestion && (
-                        <div className="mt-3 pt-3 border-t border-slate-200/80 bg-white p-3 rounded-lg border border-slate-200">
+                        <div className="mt-3 pt-3 border-t border-slate-200/80 bg-white p-3.5 rounded-lg border border-slate-200">
                           <strong className="text-xs text-[#003366] block mb-1">
                             Recommended Tender Amendment:
                           </strong>
@@ -761,7 +761,7 @@ export function EvaluationReport({ result }: Props) {
                       )}
 
                       {gap.supporting_evidence && (
-                        <p className="text-[11px] text-slate-500 font-mono mt-2">
+                        <p className="text-xs text-slate-500 font-mono mt-2">
                           Regulatory / Standards Basis: {gap.supporting_evidence}
                         </p>
                       )}
@@ -796,7 +796,7 @@ export function EvaluationReport({ result }: Props) {
                         {rel.standard.year}
                       </span>
                     </div>
-                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                    <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${
                       rel.relevance_label === 'HIGH'
                         ? 'bg-emerald-100 text-emerald-800'
                         : 'bg-blue-100 text-blue-800'
@@ -812,7 +812,7 @@ export function EvaluationReport({ result }: Props) {
                     {rel.reason}
                   </p>
 
-                  <div className="pt-2.5 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
+                  <div className="pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
                     <span>Category: {rel.standard.product_type}</span>
                     <span className="font-semibold text-blue-800">
                       {rel.relationship_type ? rel.relationship_type.replace(/_/g, ' ').toUpperCase() : 'COMPANION'}
@@ -872,13 +872,13 @@ export function EvaluationReport({ result }: Props) {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs text-amber-900">
-                  <div className="p-2.5 bg-white/70 rounded-lg border border-amber-200">
+                  <div className="p-3.5 bg-white/80 rounded-lg border border-amber-200">
                     <strong>Gazette Notification:</strong> {matched_qco.gazette_no}
                   </div>
-                  <div className="p-2.5 bg-white/70 rounded-lg border border-amber-200">
+                  <div className="p-3.5 bg-white/80 rounded-lg border border-amber-200">
                     <strong>Issued By:</strong> {matched_qco.ministry}
                   </div>
-                  <div className="p-2.5 bg-white/70 rounded-lg border border-amber-200">
+                  <div className="p-3.5 bg-white/80 rounded-lg border border-amber-200">
                     <strong>Enforcement:</strong> {matched_qco.enforcement_status}
                   </div>
                 </div>
@@ -910,7 +910,7 @@ export function EvaluationReport({ result }: Props) {
             </div>
 
             {/* Official Disclaimer */}
-            <div className="p-4 bg-slate-50 border border-slate-200 rounded-lg text-[11px] text-slate-500 leading-normal">
+            <div className="p-4 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-500 leading-relaxed">
               <strong>Disclaimer:</strong> {result.disclaimer}
             </div>
 

@@ -85,7 +85,7 @@ export default function App() {
               
               <div className="max-w-3xl relative z-10">
                 <div className="flex items-center gap-2.5 mb-2.5">
-                  <span className="bg-[#003366] text-white text-[11px] font-bold px-2.5 py-0.5 rounded-md tracking-wider uppercase">
+                  <span className="bg-[#003366] text-white text-xs font-bold px-2.5 py-1 rounded-md tracking-wider uppercase">
                     Bureau of Indian Standards
                   </span>
                   <span className="text-xs font-semibold text-slate-500">
@@ -140,7 +140,7 @@ export default function App() {
                     Analysis Service Unavailable
                   </h4>
                   <p className="leading-relaxed">{error}</p>
-                  <p className="text-slate-500 font-mono text-[11px]">
+                  <p className="text-slate-500 font-mono text-xs">
                     Backend endpoint: http://localhost:8000/api/v1/analyze · Standards catalogue remains accessible via the 'Curated BIS Standards' tab.
                   </p>
                 </div>

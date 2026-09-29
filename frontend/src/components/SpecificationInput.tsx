@@ -212,7 +212,7 @@ export function SpecificationInput({ onAnalyze, onAnalyzePdf, loading }: Props) 
             <span className="flex items-center gap-1.5">
               <span>Standard Procurement Presets:</span>
             </span>
-            <span className="text-[11px] text-gray-500 font-normal">
+            <span className="text-xs text-gray-500 font-normal">
               Click any card to populate procurement specification
             </span>
           </label>
@@ -232,10 +232,10 @@ export function SpecificationInput({ onAnalyze, onAnalyzePdf, loading }: Props) 
                   }`}
                 >
                   <div className="flex items-center justify-between gap-1.5 mb-1.5">
-                    <span className="font-bold text-gray-900 text-xs sm:text-[13px] truncate">
+                    <span className="font-bold text-gray-900 text-xs sm:text-[13px] leading-snug">
                       {preset.title}
                     </span>
-                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${
+                    <span className={`text-xs font-bold px-2.5 py-1 rounded-md flex-shrink-0 ${
                       preset.id === 'spec-6' || preset.id === 'spec-7'
                         ? 'bg-purple-100 text-purple-800'
                         : isSelected
@@ -245,7 +245,7 @@ export function SpecificationInput({ onAnalyze, onAnalyzePdf, loading }: Props) 
                       {preset.badge}
                     </span>
                   </div>
-                  <p className="text-xs text-gray-500 line-clamp-1 leading-normal">
+                  <p className="text-xs text-gray-600 mt-1 leading-normal">
                     {preset.subtitle}
                   </p>
                 </button>
@@ -357,7 +357,7 @@ export function SpecificationInput({ onAnalyze, onAnalyzePdf, loading }: Props) 
                   <button
                     type="button"
                     onClick={() => setSelectedPdf(null)}
-                    className="text-rose-600 hover:underline ml-2 text-[11px]"
+                    className="text-rose-600 hover:underline ml-2 text-xs font-semibold"
                   >
                     Change
                   </button>
@@ -367,7 +367,7 @@ export function SpecificationInput({ onAnalyze, onAnalyzePdf, loading }: Props) 
                   <p className="text-xs font-bold text-slate-800">
                     Upload an Official Tender PDF Document
                   </p>
-                  <p className="text-[11px] text-slate-500">
+                  <p className="text-xs text-slate-500">
                     ISense extracts technical schedules, product clauses, and statutory mandates page-by-page.
                   </p>
                 </div>
@@ -404,7 +404,7 @@ export function SpecificationInput({ onAnalyze, onAnalyzePdf, loading }: Props) 
               <span className="font-semibold text-slate-800">
                 Strict Standards Compliance Audit
               </span>
-              <span className="text-slate-500 text-[11px]">
+              <span className="text-slate-500 text-xs">
                 (Flags omissions of mandatory ISI Mark and Quality Control Orders)
               </span>
             </label>
