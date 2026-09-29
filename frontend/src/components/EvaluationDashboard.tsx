@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { 
   BarChart3, 
   CheckCircle2, 
@@ -33,9 +33,8 @@ export function EvaluationDashboard() {
     }
   };
 
-  useEffect(() => {
-    fetchBenchmark();
-  }, []);
+  // Removed auto-run on mount — user must click "Run Benchmark" to avoid
+  // hitting the backend on every page browse (fix #17)
 
   const handleDownloadJson = () => {
     if (!data) return;
@@ -229,7 +228,16 @@ export function EvaluationDashboard() {
               </tr>
             </thead>
             <tbody>
-              {filteredCases.map((tc) => (
+              {filteredCases.length === 0 ? (
+                <tr>
+                  <td colSpan={7} className="text-center py-10 text-xs text-slate-500">
+                    {data
+                      ? `No test cases match the "${categoryFilter}" filter. Try "All Cases".`
+                      : 'Click "Run Benchmark" above to execute the evaluation test suite.'}
+                  </td>
+                </tr>
+              ) : (
+                filteredCases.map((tc) => (
                 <tr key={tc.id}>
                   <td className="font-mono font-bold text-slate-700">
                     {tc.id}
@@ -274,7 +282,8 @@ export function EvaluationDashboard() {
                     {tc.latency_ms} ms
                   </td>
                 </tr>
-              ))}
+              ))
+              )}
             </tbody>
           </table>
         </div>

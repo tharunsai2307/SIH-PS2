@@ -8,10 +8,10 @@ export function Footer() {
             <h4 className="font-bold text-white text-sm uppercase tracking-wide">
               Standards Reference Domain
             </h4>
-            <p className="text-slate-300 text-[11.5px] leading-relaxed">
+            <p className="text-slate-300 text-xs leading-relaxed">
               Based on Indian Standards published by the Bureau of Indian Standards (BIS), established under the Bureau of Indian Standards Act, 2016.
             </p>
-            <p className="text-[11.5px] text-amber-300 font-semibold">
+            <p className="text-xs text-amber-300 font-semibold">
               Official BIS Portal: bis.gov.in
             </p>
           </div>

@@ -122,7 +122,7 @@ export function GeMClauseBuilder() {
             <select
               value={selectedStandard}
               onChange={(e) => setSelectedStandard(e.target.value as keyof typeof CLAUSE_TEMPLATES)}
-              className="w-full text-xs font-bold p-2 border border-gray-300 rounded bg-white text-[#003366] focus:outline-none"
+              className="w-full text-xs font-bold py-2.5 px-3 border-[1.5px] border-gray-300 rounded-[9px] bg-white text-[#003366] focus:outline-none focus:border-[#003366] focus:ring-2 focus:ring-[#003366]/10"
             >
               {Object.entries(CLAUSE_TEMPLATES).map(([code, t]) => (
                 <option key={code} value={code}>
@@ -140,7 +140,7 @@ export function GeMClauseBuilder() {
               type="text"
               value={tenderRef}
               onChange={(e) => setTenderRef(e.target.value)}
-              className="w-full text-xs font-mono p-2 border border-gray-300 rounded bg-white focus:outline-none"
+              className="w-full text-xs font-mono py-2.5 px-3 border-[1.5px] border-gray-300 rounded-[9px] bg-white focus:outline-none focus:border-[#003366] focus:ring-2 focus:ring-[#003366]/10"
             />
           </div>
 
@@ -152,7 +152,7 @@ export function GeMClauseBuilder() {
               type="text"
               value={department}
               onChange={(e) => setDepartment(e.target.value)}
-              className="w-full text-xs p-2 border border-gray-300 rounded bg-white focus:outline-none"
+              className="w-full text-xs py-2.5 px-3 border-[1.5px] border-gray-300 rounded-[9px] bg-white focus:outline-none focus:border-[#003366] focus:ring-2 focus:ring-[#003366]/10"
             />
           </div>
         </div>

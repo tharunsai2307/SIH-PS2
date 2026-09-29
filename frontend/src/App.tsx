@@ -23,6 +23,11 @@ import { EvaluationDashboard } from './components/EvaluationDashboard';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<NavTab>('evaluator');
+
+  const handleTabChange = (tab: NavTab) => {
+    setActiveTab(tab);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<AnalyzeResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -72,7 +77,7 @@ export default function App() {
   return (
     <div className="min-h-screen flex flex-col bg-[#f8fafc]">
       {/* ── Government-Style Header ── */}
-      <Header activeTab={activeTab} onTabChange={setActiveTab} />
+      <Header activeTab={activeTab} onTabChange={handleTabChange} />
 
       {/* ── Main Content Area ── */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">

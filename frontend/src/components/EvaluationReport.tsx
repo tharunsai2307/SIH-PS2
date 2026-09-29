@@ -49,11 +49,13 @@ export function EvaluationReport({ result }: Props) {
   } = result;
 
   const handleCopyClause = () => {
-    if (gem_clause_template) {
-      navigator.clipboard.writeText(gem_clause_template);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2500);
+    if (!gem_clause_template) {
+      alert('GeM clause template is not available for this analysis result.');
+      return;
     }
+    navigator.clipboard.writeText(gem_clause_template);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2500);
   };
 
   const handlePrint = () => {
@@ -310,7 +312,7 @@ export function EvaluationReport({ result }: Props) {
       {/* ── Executive Metric KPI Cards ── */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-6 sm:p-8 bg-white border-b border-slate-200">
         {/* Metric 1: Primary Standard */}
-        <div className="kpi-box">
+        <div className="kpi-box min-h-[120px] flex flex-col">
           <div className="kpi-lbl">Primary Standard</div>
           <div className="mt-2 flex items-baseline gap-2">
             <span className="is-code-chip text-sm font-bold">
@@ -326,7 +328,7 @@ export function EvaluationReport({ result }: Props) {
         </div>
 
         {/* Metric 2: Compliance Rating */}
-        <div className="kpi-box">
+        <div className="kpi-box min-h-[120px] flex flex-col">
           <div className="kpi-lbl">Specification Compliance Rating</div>
           <div className="mt-2 flex items-baseline gap-2">
             <span className="kpi-val">{compliance_score}%</span>
@@ -340,7 +342,7 @@ export function EvaluationReport({ result }: Props) {
         </div>
 
         {/* Metric 3: Mandatory QCO Order Status */}
-        <div className="kpi-box">
+        <div className="kpi-box min-h-[120px] flex flex-col">
           <div className="kpi-lbl">Quality Control Order</div>
           <div className="mt-2">
             {matched_qco ? (
@@ -360,7 +362,7 @@ export function EvaluationReport({ result }: Props) {
         </div>
 
         {/* Metric 4: Normative Companion Standards */}
-        <div className="kpi-box">
+        <div className="kpi-box min-h-[120px] flex flex-col">
           <div className="kpi-lbl">Companion Standards</div>
           <div className="mt-2 flex items-baseline gap-2">
             <span className="kpi-val">{related_standards.length}</span>
@@ -374,7 +376,7 @@ export function EvaluationReport({ result }: Props) {
 
       {/* ── Sub-Navigation Tabs ── */}
       <div className="border-b border-slate-200 bg-slate-50/60 px-6 sm:px-8 no-print">
-        <div className="flex items-center gap-2 sm:gap-6 overflow-x-auto scrollbar-thin text-xs font-bold">
+        <div className="flex items-center gap-2 sm:gap-6 overflow-x-auto pb-px text-xs font-bold" style={{scrollbarWidth: 'thin'}}>
           <button
             onClick={() => setActiveSubTab('standards')}
             className={`py-3.5 px-3 border-b-2 flex items-center gap-2 whitespace-nowrap transition-all ${
@@ -514,7 +516,7 @@ export function EvaluationReport({ result }: Props) {
                     </span>
                     <div className="space-y-1.5">
                       {primary_standard.evidence.map((ev, idx) => (
-                        <div key={idx} className="p-3 bg-white/80 border border-slate-200 rounded-md text-xs flex items-start justify-between gap-3">
+                        <div key={idx} className="p-3 bg-white/80 border border-slate-200 rounded-md text-xs flex flex-col sm:flex-row items-start justify-between gap-2">
                           <span className="text-slate-800 font-medium leading-relaxed">{ev.claim}</span>
                           <span className="text-slate-500 font-mono text-xs flex-shrink-0">
                             Source: {ev.source || 'Curated BIS Record'}
@@ -750,7 +752,7 @@ export function EvaluationReport({ result }: Props) {
                       </p>
 
                       {gap.suggestion && (
-                        <div className="mt-3 pt-3 border-t border-slate-200/80 bg-white p-3.5 rounded-lg border border-slate-200">
+                        <div className="mt-3 pt-3 border border-slate-200 bg-white p-3.5 rounded-lg">
                           <strong className="text-xs text-[#003366] block mb-1">
                             Recommended Tender Amendment:
                           </strong>

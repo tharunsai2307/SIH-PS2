@@ -127,7 +127,7 @@ export function Header({ activeTab, onTabChange }: HeaderProps) {
           </button>
 
           {/* Evaluation Status */}
-          <span className="text-gray-700 font-medium">
+          <span className="hidden lg:inline text-gray-700 font-medium">
             System Status: <strong className="text-[#003366] font-bold">Operational · BIS Compliant</strong>
           </span>
         </div>

@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
-import { ArrowRight, Info, Network } from 'lucide-react';
+import { ArrowRight, Info, Loader2, Network } from 'lucide-react';
 import type { RelationshipItem } from '../api/isense';
 import { api } from '../api/isense';
 
 export function NormativeGraphView() {
   const [relationships, setRelationships] = useState<RelationshipItem[]>([]);
   const [selectedStandard, setSelectedStandard] = useState('IS 4151');
-  const [, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function load() {
@@ -64,7 +64,7 @@ export function NormativeGraphView() {
             <select
               value={selectedStandard}
               onChange={(e) => setSelectedStandard(e.target.value)}
-              className="text-xs font-mono font-bold px-3 py-1.5 border border-gray-300 rounded bg-white text-[#003366] focus:outline-none"
+              className="text-xs font-mono font-bold px-3 py-1.5 border border-gray-300 rounded bg-white text-[#003366] focus:outline-none focus:ring-2 focus:ring-[#003366]/20"
             >
               {standardsList.map((s) => (
                 <option key={s} value={s}>
@@ -87,54 +87,68 @@ export function NormativeGraphView() {
             </div>
           </div>
 
-          {/* Visual Node Diagram */}
-          <div className="p-6 bg-slate-50 border border-gray-200 rounded-lg text-center">
-            <div className="inline-block p-4 bg-white border-2 border-[#003366] rounded-lg shadow-sm mb-6">
-              <span className="text-xs font-bold text-gray-500 uppercase block mb-1">Selected Primary Standard</span>
-              <span className="text-lg font-mono font-extrabold text-[#003366]">{selectedStandard}</span>
+          {/* Loading State */}
+          {loading ? (
+            <div className="py-16 flex flex-col items-center gap-3 text-slate-500">
+              <Loader2 size={28} className="animate-spin text-[#003366]" />
+              <span className="text-xs font-medium">Loading normative relationships...</span>
             </div>
+          ) : (
+            <>
+              {/* Visual Node Diagram */}
+              <div className="p-6 bg-slate-50 border border-gray-200 rounded-lg text-center">
+                <div className="inline-block p-4 bg-white border-2 border-[#003366] rounded-lg shadow-sm mb-6">
+                  <span className="text-xs font-bold text-gray-500 uppercase block mb-1">Selected Primary Standard</span>
+                  <span className="text-lg font-mono font-extrabold text-[#003366]">{selectedStandard}</span>
+                </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 text-left">
-              {activeRelationships.map((rel, i) => {
-                const isSource = rel.source === selectedStandard;
-                const other = isSource ? rel.target : rel.source;
-                return (
-                  <div key={i} className="p-4 bg-white border border-gray-200 rounded-lg hover:border-[#003366] transition-colors shadow-2xs">
-                    <div className="flex items-center justify-between gap-2 mb-2">
-                      <div className="flex items-center gap-1.5 font-mono font-bold text-xs text-[#003366]">
-                        <span>{selectedStandard}</span>
-                        <ArrowRight size={12} className="text-gray-400" />
-                        <span className="is-code-chip">{other}</span>
-                      </div>
-                      <span className={`text-xs font-bold px-2.5 py-1 rounded border ${getBadgeClass(rel.type)}`}>
-                        {rel.type.replace(/_/g, ' ').toUpperCase()}
-                      </span>
-                    </div>
-
-                    <p className="text-xs text-gray-700 leading-relaxed">
-                      {rel.description}
+                {activeRelationships.length === 0 ? (
+                  <div className="py-8 flex flex-col items-center gap-2 text-slate-500">
+                    <Info size={20} className="text-slate-400" />
+                    <p className="text-xs font-medium text-slate-600">
+                      No normative links recorded for <strong>{selectedStandard}</strong> in the knowledge base.
                     </p>
-
-                    <div className="mt-3 pt-2.5 border-t border-gray-100 flex items-center justify-between text-xs text-gray-500">
-                      <span>Normative Link Strength</span>
-                      <div className="w-16 h-1.5 bg-gray-200 rounded-full overflow-hidden">
-                        <div
-                          className="h-full bg-[#003366]"
-                          style={{ width: `${Math.round(rel.strength * 100)}%` }}
-                        />
-                      </div>
-                    </div>
+                    <p className="text-xs text-slate-400">Try selecting IS 4151 or IS 2925 to see active relationships.</p>
                   </div>
-                );
-              })}
-            </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 text-left">
+                    {activeRelationships.map((rel, i) => {
+                      const isSource = rel.source === selectedStandard;
+                      const other = isSource ? rel.target : rel.source;
+                      return (
+                        <div key={i} className="p-4 bg-white border border-gray-200 rounded-lg hover:border-[#003366] transition-colors shadow-2xs">
+                          <div className="flex items-center justify-between gap-2 mb-2">
+                            <div className="flex items-center gap-1.5 font-mono font-bold text-xs text-[#003366]">
+                              <span>{selectedStandard}</span>
+                              <ArrowRight size={12} className="text-gray-400" />
+                              <span className="is-code-chip">{other}</span>
+                            </div>
+                            <span className={`text-xs font-bold px-2.5 py-1 rounded border ${getBadgeClass(rel.type)}`}>
+                              {rel.type.replace(/_/g, ' ').toUpperCase()}
+                            </span>
+                          </div>
 
-            {activeRelationships.length === 0 && (
-              <p className="text-xs text-gray-500 py-6">
-                No active normative links recorded for {selectedStandard}.
-              </p>
-            )}
-          </div>
+                          <p className="text-xs text-gray-700 leading-relaxed">
+                            {rel.description}
+                          </p>
+
+                          <div className="mt-3 pt-2.5 border-t border-gray-100 flex items-center justify-between text-xs text-gray-500">
+                            <span>Normative Link Strength</span>
+                            <div className="w-16 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                              <div
+                                className="h-full bg-[#003366]"
+                                style={{ width: `${Math.round(rel.strength * 100)}%` }}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>

@@ -23,6 +23,7 @@ export function DraftingAssistant() {
   const [result, setResult] = useState<AnalyzeResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const [insertedIdx, setInsertedIdx] = useState<number | null>(null);
 
   const handleAnalyze = async () => {
     if (draftText.trim().length < 5) return;
@@ -44,11 +45,18 @@ export function DraftingAssistant() {
     }
   };
 
-  const handleInsertClause = (clauseText: string) => {
+  const handleInsertClause = (clauseText: string, idx: number) => {
     setDraftText((prev) => {
       const trimmed = prev.trim();
       return `${trimmed}\n- ${clauseText}`;
     });
+    setInsertedIdx(idx);
+    setTimeout(() => setInsertedIdx(null), 2000);
+    // Scroll textarea to bottom after insert
+    setTimeout(() => {
+      const ta = document.getElementById('draft-textarea') as HTMLTextAreaElement | null;
+      if (ta) ta.scrollTop = ta.scrollHeight;
+    }, 50);
   };
 
   const handleCopyDraft = () => {
@@ -119,6 +127,7 @@ export function DraftingAssistant() {
             <div className="gov-card-body space-y-4">
               <div>
                 <textarea
+                  id="draft-textarea"
                   rows={10}
                   value={draftText}
                   onChange={(e) => setDraftText(e.target.value)}
@@ -345,12 +354,19 @@ export function DraftingAssistant() {
                             </p>
                             <button
                               type="button"
-                              onClick={() => handleInsertClause(gap.suggestion!)}
-                              className="inline-flex items-center gap-1 bg-[#003366] text-white hover:bg-[#002244] px-3 py-1.5 rounded text-xs font-semibold flex-shrink-0 transition-colors"
+                              onClick={() => handleInsertClause(gap.suggestion!, idx)}
+                              className={`inline-flex items-center gap-1 px-3 py-1.5 rounded text-xs font-semibold flex-shrink-0 transition-colors ${
+                                insertedIdx === idx
+                                  ? 'bg-emerald-600 text-white'
+                                  : 'bg-[#003366] text-white hover:bg-[#002244]'
+                              }`}
                               title="Append this clause to your draft specification"
                             >
-                              <PlusCircle size={13} />
-                              <span>Insert</span>
+                              {insertedIdx === idx ? (
+                                <><Check size={13} /><span>Inserted!</span></>
+                              ) : (
+                                <><PlusCircle size={13} /><span>Insert</span></>
+                              )}
                             </button>
                           </div>
                         )}

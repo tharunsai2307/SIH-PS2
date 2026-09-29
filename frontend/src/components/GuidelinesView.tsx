@@ -90,11 +90,11 @@ export function GuidelinesView() {
             </h3>
 
             {faqs.map((f, i) => (
-              <div key={i} className="p-3.5 border border-gray-200 rounded-md bg-white">
-                <h4 className="font-bold text-xs text-[#003366] mb-1">
+              <div key={i} className="p-4 sm:p-5 border border-gray-200 rounded-md bg-white space-y-2">
+                <h4 className="font-bold text-xs text-[#003366] leading-snug">
                   Q: {f.q}
                 </h4>
-                <p className="text-xs text-gray-700 leading-relaxed">
+                <p className="text-xs text-gray-700 leading-relaxed pt-1 border-t border-gray-100">
                   {f.a}
                 </p>
               </div>

@@ -111,6 +111,7 @@ export function SpecificationInput({ onAnalyze, onAnalyzePdf, loading }: Props) 
   const handleReset = () => {
     setTenderId('');
     setDepartment('');
+    setDomain(DEMONSTRATION_SPECIFICATIONS[0].domain);
     setSpec('');
     setSelectedPdf(null);
   };
@@ -217,7 +218,7 @@ export function SpecificationInput({ onAnalyze, onAnalyzePdf, loading }: Props) 
             </span>
           </label>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3.5">
             {DEMONSTRATION_SPECIFICATIONS.map((preset) => {
               const isSelected = inputMode === 'text' && spec === preset.spec;
               return (

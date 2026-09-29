@@ -34,7 +34,7 @@ export function QCOOrdersView() {
               Statutory Quality Control Orders reference repository for procurement officers under the BIS Act, 2016
             </p>
           </div>
-          <span className="badge-critical text-xs">
+          <span className="badge-critical">
             Statutory Reference
           </span>
         </div>

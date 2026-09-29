@@ -147,7 +147,15 @@ export function PortalDemoView() {
             src="/mock_procurement_portal.html"
             title="Mock GeM Procurement Portal"
             className="w-full h-[620px] border-none"
-          />
+          >
+            <div className="flex flex-col items-center justify-center h-full py-16 text-center gap-3 text-slate-500">
+              <Laptop size={28} className="text-slate-300" />
+              <p className="text-xs font-medium">The procurement portal simulation could not be loaded.</p>
+              <a href="/mock_procurement_portal.html" target="_blank" rel="noreferrer" className="text-xs text-[#003366] font-semibold underline">
+                Open in a new tab instead ↗
+              </a>
+            </div>
+          </iframe>
         </div>
       </div>
     </div>

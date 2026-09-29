@@ -15,7 +15,7 @@ export function StandardsRepository() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedFilter, setSelectedFilter] = useState('ALL');
   const [selectedStandard, setSelectedStandard] = useState<StandardResponse | null>(null);
-  const [, setDetailLoading] = useState(false);
+  const [detailLoading, setDetailLoading] = useState(false);
 
   useEffect(() => {
     async function loadStandards() {
@@ -86,7 +86,7 @@ export function StandardsRepository() {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 placeholder="Search standard by IS Number, Title (e.g. IS 4151, Motorcyclist, Industrial, Headform)..."
-                className="w-full text-xs pl-9 pr-3 py-2 border border-gray-300 rounded bg-white focus:border-[#003366] focus:outline-none"
+                className="w-full text-xs pl-9 pr-3 py-2.5 border-[1.5px] border-gray-300 rounded-[9px] bg-white focus:border-[#003366] focus:outline-none focus:ring-2 focus:ring-[#003366]/10 font-inherit"
               />
             </div>
 
@@ -165,10 +165,17 @@ export function StandardsRepository() {
                             e.stopPropagation();
                             handleSelectStandard(s.is_number);
                           }}
-                          className="text-xs font-semibold text-[#003366] hover:underline inline-flex items-center gap-1"
+                          className="text-xs font-semibold text-[#003366] hover:underline inline-flex items-center gap-1 disabled:opacity-50"
+                          disabled={detailLoading}
                         >
-                          <span>View</span>
-                          <ChevronRight size={12} />
+                          {detailLoading ? (
+                            <span className="animate-pulse">Loading...</span>
+                          ) : (
+                            <>
+                              <span>View</span>
+                              <ChevronRight size={12} />
+                            </>
+                          )}
                         </button>
                       </td>
                     </tr>
