@@ -7,10 +7,22 @@ import {
   Scale, 
   Search, 
   ShieldCheck, 
-  Sun 
+  Sun,
+  Edit3,
+  Laptop,
+  BarChart3
 } from 'lucide-react';
 
-export type NavTab = 'evaluator' | 'catalogue' | 'graph' | 'gem-clauses' | 'qco-orders' | 'guidelines';
+export type NavTab = 
+  | 'evaluator' 
+  | 'drafter' 
+  | 'portal-demo' 
+  | 'evaluation' 
+  | 'catalogue' 
+  | 'graph' 
+  | 'gem-clauses' 
+  | 'qco-orders' 
+  | 'guidelines';
 
 interface HeaderProps {
   activeTab: NavTab;
@@ -133,10 +145,10 @@ export function Header({ activeTab, onTabChange }: HeaderProps) {
           />
 
           <div className="border-l-2 border-slate-200 pl-5">
-            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-gray-900 leading-tight">
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 leading-tight">
               आई-सेंस · भारतीय मानक निर्णय-सहायता इंजन
             </h2>
-            <h1 className="text-lg sm:text-xl font-extrabold text-[#003366] tracking-tight mt-0.5">
+            <h1 className="text-lg sm:text-xl font-extrabold text-[#003366] mt-1 tracking-normal">
               ISense — BIS Standards Decision-Support Engine
             </h1>
             <p className="text-xs text-gray-600 font-medium flex items-center gap-2 mt-1">
@@ -182,7 +194,31 @@ export function Header({ activeTab, onTabChange }: HeaderProps) {
             className={`gov-nav-tab ${activeTab === 'evaluator' ? 'active' : ''}`}
           >
             <Search size={15} />
-            <span>Tender Specification Evaluator</span>
+            <span>Tender Evaluator</span>
+          </button>
+
+          <button
+            onClick={() => onTabChange('drafter')}
+            className={`gov-nav-tab ${activeTab === 'drafter' ? 'active' : ''}`}
+          >
+            <Edit3 size={15} />
+            <span>Drafting Assistant ⭐</span>
+          </button>
+
+          <button
+            onClick={() => onTabChange('portal-demo')}
+            className={`gov-nav-tab ${activeTab === 'portal-demo' ? 'active' : ''}`}
+          >
+            <Laptop size={15} />
+            <span>GeM Portal Demo (Phases 6 & 7)</span>
+          </button>
+
+          <button
+            onClick={() => onTabChange('evaluation')}
+            className={`gov-nav-tab ${activeTab === 'evaluation' ? 'active' : ''}`}
+          >
+            <BarChart3 size={15} />
+            <span>Evaluation Benchmark (Phase 8)</span>
           </button>
 
           <button

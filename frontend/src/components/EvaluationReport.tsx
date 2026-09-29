@@ -14,7 +14,9 @@ import {
   Scale, 
   ShieldAlert, 
   ShieldCheck,
-  XCircle 
+  XCircle,
+  Languages,
+  FileUp
 } from 'lucide-react';
 import type { AnalyzeResponse } from '../api/isense';
 
@@ -83,7 +85,7 @@ export function EvaluationReport({ result }: Props) {
                 SIH PS-2 Prototype
               </span>
             </div>
-            <h2 className="text-xl sm:text-2xl font-extrabold text-[#003366] tracking-tight">
+            <h2 className="text-xl sm:text-2xl font-extrabold text-[#003366] tracking-normal leading-snug">
               Tender Specification Analysis & Standards Decision-Support Report
             </h2>
             <p className="text-xs text-slate-600">
@@ -152,6 +154,49 @@ export function EvaluationReport({ result }: Props) {
               </p>
               <p className="text-xs text-rose-800 font-semibold">
                 Please verify active status and applicability with the official BIS standards registry at bis.gov.in.
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* ── Multilingual Input Pipeline Card (Phase 2) ── */}
+        {result.multilingual && result.multilingual.is_multilingual && (
+          <div className="mt-4 p-4 bg-purple-50 border border-purple-300 rounded-lg flex items-start gap-3 text-xs text-purple-950">
+            <Languages size={18} className="text-purple-700 flex-shrink-0 mt-0.5" />
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <h4 className="font-bold text-sm text-purple-900">
+                  Multilingual Specification Detected ({result.multilingual.language_name})
+                </h4>
+                <span className="text-[10px] font-bold bg-purple-200 text-purple-800 px-2 py-0.5 rounded">
+                  {result.multilingual.engine}
+                </span>
+              </div>
+              <p className="leading-relaxed text-purple-900">
+                Original Query: <em className="font-medium">"{result.multilingual.original_query}"</em>
+              </p>
+              <p className="text-xs text-purple-800 font-semibold">
+                Normalized Technical English Query: <strong>"{result.multilingual.normalized_query}"</strong>
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* ── PDF Document Information Card (Phase 3) ── */}
+        {result.pdf_document && (
+          <div className="mt-4 p-4 bg-blue-50 border border-blue-300 rounded-lg flex items-start gap-3 text-xs text-blue-950">
+            <FileUp size={18} className="text-[#003366] flex-shrink-0 mt-0.5" />
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <h4 className="font-bold text-sm text-blue-900">
+                  Tender PDF Document Extracted ({result.pdf_document.title})
+                </h4>
+                <span className="text-[10px] font-bold bg-blue-200 text-blue-900 px-2 py-0.5 rounded">
+                  {result.pdf_document.total_pages} Pages · {result.pdf_document.total_characters} Characters
+                </span>
+              </div>
+              <p className="text-slate-600 font-mono text-[11px] line-clamp-2">
+                Preview: {result.pdf_document.extracted_text_preview}
               </p>
             </div>
           </div>

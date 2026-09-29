@@ -1,0 +1,261 @@
+/**
+ * ISense Overlay & Floating Action Button Styles
+ * Styled with Government-grade deep navy & gold accents
+ */
+
+#isense-floating-action-btn {
+  position: absolute;
+  z-index: 2147483647;
+  display: none;
+  align-items: center;
+  gap: 6px;
+  background-color: #003366;
+  color: #ffffff;
+  border: 1px solid #f59e0b;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  transition: transform 0.15s ease, background-color 0.15s ease;
+}
+
+#isense-floating-action-btn:hover {
+  background-color: #002244;
+  transform: translateY(-1px);
+}
+
+#isense-overlay-modal {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 440px;
+  max-width: 90vw;
+  max-height: 88vh;
+  z-index: 2147483646;
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #cbd5e1;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.isense-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-height: 88vh;
+}
+
+.isense-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: #003366;
+  color: #ffffff;
+  border-bottom: 2px solid #f59e0b;
+}
+
+.isense-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.isense-badge {
+  background: #f59e0b;
+  color: #000;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.isense-close {
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  font-size: 20px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.isense-body {
+  padding: 16px;
+  overflow-y: auto;
+  font-size: 12px;
+  color: #1e293b;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.isense-loading {
+  text-align: center;
+  padding: 30px 10px;
+}
+
+.isense-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #e2e8f0;
+  border-top-color: #003366;
+  border-radius: 50%;
+  animation: isense-spin 0.8s linear infinite;
+  margin: 0 auto 12px;
+}
+
+@keyframes isense-spin {
+  to { transform: rotate(360deg); }
+}
+
+.isense-query-preview {
+  font-style: italic;
+  color: #64748b;
+  font-size: 11px;
+}
+
+.isense-primary-box {
+  background: #f8fafc;
+  border: 1px solid #bfdbfe;
+  border-left: 4px solid #003366;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.isense-primary-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.isense-is-chip {
+  background: #003366;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.isense-score-badge {
+  background: #dcfce7;
+  color: #166534;
+  font-weight: 700;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.isense-primary-box h3 {
+  margin: 0 0 4px;
+  font-size: 13px;
+  color: #0f172a;
+}
+
+.isense-primary-box p {
+  margin: 0;
+  font-size: 11.5px;
+  color: #475569;
+}
+
+.isense-section h4 {
+  margin: 0 0 8px;
+  font-size: 12px;
+  color: #003366;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.isense-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+}
+
+.isense-table th, .isense-table td {
+  padding: 6px 8px;
+  text-align: left;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.isense-table th {
+  background: #f1f5f9;
+  color: #475569;
+  font-weight: 600;
+}
+
+.isense-status-found {
+  color: #15803d;
+  font-weight: 700;
+}
+
+.isense-status-partial {
+  color: #b45309;
+  font-weight: 700;
+}
+
+.isense-status-missing {
+  color: #b91c1c;
+  font-weight: 700;
+}
+
+.isense-gaps-list {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 11.5px;
+  color: #b91c1c;
+}
+
+.isense-suggestion {
+  font-size: 11px;
+  color: #003366;
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+  border-radius: 4px;
+  padding: 4px 8px;
+  margin-top: 4px;
+}
+
+.isense-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.isense-tag {
+  background: #e2e8f0;
+  color: #334155;
+  font-size: 10.5px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.isense-footer {
+  margin-top: 6px;
+  padding-top: 10px;
+  border-top: 1px solid #e2e8f0;
+  text-align: right;
+}
+
+.isense-full-btn {
+  display: inline-block;
+  background: #003366;
+  color: #ffffff !important;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 11px;
+  padding: 6px 12px;
+  border-radius: 6px;
+}

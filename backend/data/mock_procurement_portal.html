@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GeM Portal — Bid Specification Drafter (Demonstration Mock)</title>
+  <style>
+    :root {
+      --gem-primary: #003366;
+      --gem-accent: #f59e0b;
+      --gem-bg: #f1f5f9;
+      --gem-card: #ffffff;
+      --gem-border: #cbd5e1;
+    }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: var(--gem-bg);
+      color: #1e293b;
+      line-height: 1.5;
+    }
+    .top-strip {
+      background: #ffffff;
+      border-bottom: 1px solid var(--gem-border);
+      padding: 6px 24px;
+      font-size: 11px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #64748b;
+    }
+    .gem-nav {
+      background: var(--gem-primary);
+      color: #ffffff;
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 3px solid var(--gem-accent);
+    }
+    .gem-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .gem-logo {
+      background: #ffffff;
+      color: var(--gem-primary);
+      font-weight: 900;
+      font-size: 16px;
+      padding: 4px 8px;
+      border-radius: 4px;
+      letter-spacing: 0.5px;
+    }
+    .gem-title {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+    }
+    .gem-subtitle {
+      font-size: 11px;
+      color: #94a3b8;
+    }
+    .demo-banner {
+      background: #e0f2fe;
+      border-bottom: 1px solid #7dd3fc;
+      padding: 10px 24px;
+      font-size: 12px;
+      color: #0369a1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .container {
+      max-width: 1100px;
+      margin: 24px auto;
+      padding: 0 16px;
+    }
+    .card {
+      background: var(--gem-card);
+      border-radius: 8px;
+      border: 1px solid var(--gem-border);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+    .card-header {
+      background: #f8fafc;
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--gem-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .card-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #0f172a;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .card-body {
+      padding: 20px;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #334155;
+    }
+    input, select, textarea {
+      padding: 8px 12px;
+      border: 1px solid var(--gem-border);
+      border-radius: 6px;
+      font-size: 13px;
+      font-family: inherit;
+    }
+    textarea {
+      height: 120px;
+      resize: vertical;
+      line-height: 1.6;
+    }
+    .preset-chips {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .preset-btn {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 11.5px;
+      font-weight: 600;
+      cursor: pointer;
+      color: #334155;
+    }
+    .preset-btn:hover {
+      background: #e2e8f0;
+      border-color: #94a3b8;
+    }
+    .btn-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid #e2e8f0;
+    }
+    .btn-gem {
+      background: #003366;
+      color: #ffffff;
+      padding: 9px 18px;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-isense {
+      background: #ffffff;
+      color: #003366;
+      border: 1.5px solid #003366;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 2px 4px rgba(0, 51, 102, 0.1);
+    }
+    .btn-isense:hover {
+      background: #f0f7ff;
+    }
+    .hint-box {
+      background: #fefce8;
+      border: 1px solid #fef08a;
+      border-radius: 6px;
+      padding: 12px;
+      font-size: 12px;
+      color: #854d0e;
+      margin-top: 16px;
+    }
+    /* Inline Results Container */
+    #portal-isense-result {
+      margin-top: 20px;
+      padding: 16px;
+      border: 1px solid #93c5fd;
+      background: #f0f7ff;
+      border-radius: 8px;
+      display: none;
+    }
+    .badge-primary {
+      background: #003366;
+      color: #ffffff;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 11px;
+    }
+    table.res-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 12px;
+      background: #ffffff;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid #cbd5e1;
+    }
+    table.res-table th, table.res-table td {
+      padding: 8px 12px;
+      border-bottom: 1px solid #e2e8f0;
+      text-align: left;
+    }
+    table.res-table th {
+      background: #f8fafc;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="top-strip">
+    <span>Government of India · Ministry of Commerce & Industry · Government e-Marketplace (GeM)</span>
+    <span>Demo Environment · SIH PS-2 Portal Integration Simulation</span>
+  </div>
+
+  <nav class="gem-nav">
+    <div class="gem-brand">
+      <div class="gem-logo">GeM</div>
+      <div>
+        <div class="gem-title">Government e-Marketplace</div>
+        <div class="gem-subtitle">Direct Procurement & Bidding Portal (Mock Interface)</div>
+      </div>
+    </div>
+    <div>
+      <span style="font-size: 12px; font-weight: 600; color: #f59e0b;">
+        Tender Creation Wizard · Step 2 of 4
+      </span>
+    </div>
+  </nav>
+
+  <div class="demo-banner">
+    <div>
+      <strong>💡 Innovation Demonstration (Phase 6 & 7):</strong>
+      This mock page illustrates how ISense integrates with procurement portals without modifying core government systems.
+      <strong>Select text</strong> to trigger the Chrome Extension, or click <strong>"Check with ISense"</strong> below!
+    </div>
+    <a href="http://localhost:5173" style="color: #0369a1; font-weight: 700; text-decoration: underline;">
+      Open Full ISense ↗
+    </a>
+  </div>
+
+  <div class="container">
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">1. Bid Parameters & Procuring Authority</span>
+        <span style="font-size: 11px; color: #64748b;">BID NO: GEM/2026/B/892019</span>
+      </div>
+      <div class="card-body">
+        <div class="grid-2">
+          <div class="form-group">
+            <label>Ministry / Department:</label>
+            <input type="text" value="Ministry of Road Transport and Highways" readonly>
+          </div>
+          <div class="form-group">
+            <label>Procuring Division:</label>
+            <input type="text" value="National Highway Traffic Safety Unit" readonly>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label>Item Category:</label>
+            <input type="text" value="Personal Protective Headgear & Helmets" readonly>
+          </div>
+          <div class="form-group">
+            <label>Total Quantity:</label>
+            <input type="text" value="5,000 Units" readonly>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">2. Technical Specifications & Quality Schedule</span>
+        <span style="font-size: 11px; color: #003366; font-weight: 600;">Drafting Mode</span>
+      </div>
+      <div class="card-body">
+        <label style="display: block; margin-bottom: 8px;">Try Sample Specifications:</label>
+        <div class="preset-chips">
+          <button class="preset-btn" onclick="setSpec('motorcycle')">🏍️ Motorcycle Helmets</button>
+          <button class="preset-btn" onclick="setSpec('industrial')">👷 Industrial Hard Hats</button>
+          <button class="preset-btn" onclick="setSpec('vague')">❓ Vague Specification</button>
+          <button class="preset-btn" onclick="setSpec('hindi')">🇮🇳 Hindi Multilingual</button>
+        </div>
+
+        <div class="form-group">
+          <label for="tender-spec-text">Technical Specification Clauses (Editable):</label>
+          <textarea id="tender-spec-text">Supply of protective helmets for motorcycle two-wheeler riders with impact resistance, retention system and mandatory BIS certification.</textarea>
+        </div>
+
+        <div class="hint-box">
+          👉 <strong>Tip for Evaluators:</strong>
+          You can <em>highlight/select</em> any words inside the box above to test the <strong>Chrome Extension</strong> overlay, OR click the button below to test direct <strong>FastAPI /api/analyze</strong> integration!
+        </div>
+
+        <div class="btn-row">
+          <button class="btn-isense" id="btn-call-isense">
+            <span>🛡️</span>
+            <span>Check with ISense Decision Support</span>
+          </button>
+          <button class="btn-gem">Save & Proceed to STC ➔</button>
+        </div>
+
+        <!-- Inline Results Container -->
+        <div id="portal-isense-result">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span class="badge-primary" id="res-is-number">IS 4151:2015</span>
+              <strong id="res-is-title" style="font-size: 13px; color: #003366;"></strong>
+            </div>
+            <span id="res-score-badge" style="font-size: 11px; font-weight: 700; color: #166534; background: #dcfce7; padding: 2px 8px; border-radius: 4px;">
+              HIGH RELEVANCE
+            </span>
+          </div>
+
+          <p id="res-reason" style="font-size: 12px; color: #334155; margin: 4px 0 12px;"></p>
+
+          <strong style="font-size: 12px; color: #003366; display: block; margin-bottom: 6px;">
+            📋 ISense Coverage & Deficiencies Matrix:
+          </strong>
+          <table class="res-table">
+            <thead>
+              <tr>
+                <th>Category</th>
+                <th>Status</th>
+                <th>Standard</th>
+                <th>Observation</th>
+              </tr>
+            </thead>
+            <tbody id="res-coverage-tbody"></tbody>
+          </table>
+
+          <div id="res-gaps-box" style="margin-top: 12px; padding: 10px; background: #fff1f2; border: 1px solid #fecdd3; border-radius: 6px; font-size: 11.5px; color: #9f1239;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const SPECS = {
+      motorcycle: "Supply of protective helmets for motorcycle two-wheeler riders with impact resistance, retention system and mandatory BIS certification.",
+      industrial: "Procure industrial safety helmets for construction workers with protective headgear requirements and drop test penetration requirements.",
+      vague: "Helmet for general use.",
+      hindi: "मोटरसाइकिल चालकों के लिए सुरक्षात्मक हेलमेट और झटका अवशोषण परीक्षण"
+    };
+
+    function setSpec(key) {
+      document.getElementById('tender-spec-text').value = SPECS[key];
+    }
+
+    document.getElementById('btn-call-isense').addEventListener('click', async () => {
+      const text = document.getElementById('tender-spec-text').value.trim();
+      const resContainer = document.getElementById('portal-isense-result');
+      const btn = document.getElementById('btn-call-isense');
+
+      btn.textContent = "Analyzing...";
+      btn.disabled = true;
+
+      try {
+        const resp = await fetch('http://localhost:8000/api/analyze', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text: text })
+        });
+        const data = await resp.json();
+
+        resContainer.style.display = 'block';
+
+        const primary = (data.standards && data.standards.length > 0) ? data.standards[0] : null;
+        if (primary) {
+          document.getElementById('res-is-number').textContent = primary.is_number;
+          document.getElementById('res-is-title').textContent = primary.title;
+          document.getElementById('res-reason').textContent = primary.reason;
+        } else {
+          document.getElementById('res-is-number').textContent = "MANUAL REVIEW";
+          document.getElementById('res-is-title').textContent = "No Direct Match Found";
+          document.getElementById('res-reason').textContent = "Specification requires clarification of intended operational domain.";
+        }
+
+        const tbody = document.getElementById('res-coverage-tbody');
+        tbody.innerHTML = '';
+        (data.coverage || []).forEach(c => {
+          let statusText = c.status;
+          let icon = c.status === 'FOUND' ? '✅' : (c.status === 'PARTIAL' || c.status === 'REVIEW') ? '⚠️' : '❌';
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td><strong>${c.category}</strong></td>
+            <td>${icon} ${statusText}</td>
+            <td>${c.standard || '—'}</td>
+            <td>${c.note || ''}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+
+        const gapsBox = document.getElementById('res-gaps-box');
+        if (data.gaps && data.gaps.length > 0) {
+          gapsBox.style.display = 'block';
+          gapsBox.innerHTML = `<strong>⚠️ Deficiencies Detected (${data.gaps.length}):</strong><ul style="margin: 4px 0 0; padding-left: 18px;">` +
+            data.gaps.map(g => `<li><strong>${g.category}:</strong> ${g.description} ${g.suggestion ? `(Amendment: ${g.suggestion})` : ''}</li>`).join('') +
+            `</ul>`;
+        } else {
+          gapsBox.style.display = 'none';
+        }
+
+        resContainer.scrollIntoView({ behavior: 'smooth' });
+      } catch (err) {
+        alert("Failed to connect to ISense API on http://localhost:8000. Is demo_server.py running?");
+      } finally {
+        btn.innerHTML = "<span>🛡️</span><span>Check with ISense Decision Support</span>";
+        btn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

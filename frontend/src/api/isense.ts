@@ -148,6 +148,48 @@ export interface AnalyzeResponse {
   unknown_standards_detected?: string[];
   specification_needs_clarification?: boolean;
   clarification_prompt?: string | null;
+  multilingual?: {
+    original_query: string;
+    detected_language: string;
+    language_name: string;
+    is_multilingual: boolean;
+    normalized_query: string;
+    engine: string;
+  };
+  pdf_document?: {
+    title: string;
+    total_pages: number;
+    total_characters: number;
+    extracted_text_preview: string;
+  };
+}
+
+export interface EvaluationBenchmarkTestCase {
+  id: string;
+  category: string;
+  query: string;
+  expected_is: string | null;
+  expected_action: string;
+  retrieved_top1: string | null;
+  retrieved_top3: string[];
+  passed: boolean;
+  outcome_detail: string;
+  latency_ms: number;
+}
+
+export interface EvaluationBenchmarkResponse {
+  summary: {
+    total_test_cases: number;
+    passed_test_cases: number;
+    overall_pass_rate_pct: number;
+    precision_at_1: number;
+    precision_at_3: number;
+    recall_at_1: number;
+    refusal_accuracy: number;
+    average_latency_ms: number;
+    benchmark_timestamp: string;
+  };
+  test_cases: EvaluationBenchmarkTestCase[];
 }
 
 export interface StandardSummary {
@@ -219,4 +261,57 @@ export const api = {
   async getQcoOrders(): Promise<QCOOrder[]> {
     return this.getQCOOrders();
   },
+
+  async analyzePdf(file: File): Promise<AnalyzeResponse> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = async () => {
+        try {
+          const base64String = reader.result as string;
+          const res = await fetch(`${API_BASE}/api/v1/analyze-pdf`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              pdf_base64: base64String,
+              tender_id: `GEM/2026/PDF-${file.name.replace(/[^a-zA-Z0-9]/g, "-").toUpperCase()}`,
+            }),
+          });
+          if (!res.ok) {
+            const err = await res.json().catch(() => ({ detail: "PDF analysis failed" }));
+            throw new Error(err.detail || `Server responded with status ${res.status}`);
+          }
+          const data = await res.json();
+          resolve(data);
+        } catch (e) {
+          reject(e);
+        }
+      };
+      reader.onerror = () => reject(new Error("Failed to read PDF file"));
+      reader.readAsDataURL(file);
+    });
+  },
+
+  async translate(text: string): Promise<{
+    original_query: string;
+    detected_language: string;
+    language_name: string;
+    is_multilingual: boolean;
+    normalized_query: string;
+    engine: string;
+  }> {
+    const res = await fetch(`${API_BASE}/api/v1/translate`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text }),
+    });
+    if (!res.ok) throw new Error("Translation failed");
+    return res.json();
+  },
+
+  async getEvaluationBenchmark(): Promise<EvaluationBenchmarkResponse> {
+    const res = await fetch(`${API_BASE}/api/v1/evaluate`);
+    if (!res.ok) throw new Error("Failed to run evaluation benchmark");
+    return res.json();
+  },
 };
+

@@ -17,6 +17,9 @@ import { NormativeGraphView } from './components/NormativeGraphView';
 import { QCOOrdersView } from './components/QCOOrdersView';
 import { SpecificationInput } from './components/SpecificationInput';
 import { StandardsRepository } from './components/StandardsRepository';
+import { DraftingAssistant } from './components/DraftingAssistant';
+import { PortalDemoView } from './components/PortalDemoView';
+import { EvaluationDashboard } from './components/EvaluationDashboard';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<NavTab>('evaluator');
@@ -39,6 +42,27 @@ export default function App() {
         err instanceof Error
           ? err.message
           : 'Decision-support service temporarily unavailable. Please verify backend server is active on port 8000.'
+      );
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const handleAnalyzePdf = useCallback(async (file: File) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const data = await api.analyzePdf(file);
+      setResult(data);
+      setTimeout(() => {
+        document.getElementById('evaluation-results-section')?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : 'Failed to extract and analyze tender PDF. Please verify backend server is running on port 8000.'
       );
     } finally {
       setLoading(false);
@@ -69,14 +93,14 @@ export default function App() {
                   </span>
                 </div>
 
-                <h1 className="text-2xl sm:text-3xl font-extrabold text-[#003366] tracking-tight">
+                <h1 className="text-2xl sm:text-3xl font-extrabold text-[#003366] tracking-normal leading-snug">
                   ISense — BIS Standards Decision-Support Engine
                 </h1>
-                <p className="text-xs sm:text-sm font-semibold text-slate-600 mt-1">
+                <p className="text-xs sm:text-sm font-semibold text-slate-600 mt-1.5">
                   भारतीय मानक निर्णय-सहायता एवं तकनीकी निविदा विश्लेषण प्रणाली (Smart India Hackathon Prototype)
                 </p>
 
-                <p className="text-xs sm:text-sm text-slate-600 mt-3 leading-relaxed">
+                <p className="text-xs sm:text-sm text-slate-600 mt-3.5 leading-relaxed">
                   Analyze draft procurement specifications to identify applicable Indian Standards (IS), reference statutory Quality Control Orders (QCO), inspect normative companion standards, and detect coverage gaps before tender publication.
                 </p>
 
@@ -101,7 +125,11 @@ export default function App() {
             </div>
 
             {/* Tender Specification Input Card */}
-            <SpecificationInput onAnalyze={handleAnalyze} loading={loading} />
+            <SpecificationInput 
+              onAnalyze={handleAnalyze} 
+              onAnalyzePdf={handleAnalyzePdf} 
+              loading={loading} 
+            />
 
             {/* Backend Connection / Fallback Error */}
             {error && (
@@ -127,6 +155,15 @@ export default function App() {
             )}
           </div>
         )}
+
+        {/* DRAFTING ASSISTANT TAB (Phase 5 ⭐) */}
+        {activeTab === 'drafter' && <DraftingAssistant />}
+
+        {/* GeM PROCUREMENT PORTAL & CHROME EXTENSION DEMO TAB (Phases 6 & 7) */}
+        {activeTab === 'portal-demo' && <PortalDemoView />}
+
+        {/* PROTOTYPE EVALUATION BENCHMARK TAB (Phase 8) */}
+        {activeTab === 'evaluation' && <EvaluationDashboard />}
 
         {/* STANDARDS CATALOGUE TAB */}
         {activeTab === 'catalogue' && <StandardsRepository />}

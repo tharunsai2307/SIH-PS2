@@ -1,0 +1,36 @@
+{
+  "manifest_version": 3,
+  "name": "ISense — BIS Standards Procurement Assistant",
+  "version": "1.0.0",
+  "description": "Analyze tender specifications directly on GeM/CPPP to detect applicable Indian Standards (IS), companion test standards, and coverage gaps.",
+  "permissions": [
+    "activeTab",
+    "contextMenus",
+    "storage",
+    "scripting"
+  ],
+  "host_permissions": [
+    "http://localhost:8000/*",
+    "http://127.0.0.1:8000/*",
+    "*://*.gem.gov.in/*",
+    "*://*.eprocure.gov.in/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "ISense Standards Assistant"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "css": ["overlay.css"]
+    }
+  ],
+  "icons": {
+    "48": "icon48.png",
+    "128": "icon128.png"
+  }
+}

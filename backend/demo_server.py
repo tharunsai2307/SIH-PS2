@@ -11,12 +11,19 @@ import re
 import sys
 import time
 import random
+import asyncio
+import base64
+import os
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from typing import Any
 
-# ── Inline standards data ──────────────────────────────────────────────────────
+# ── Inline standards data & Services ───────────────────────────────────────────
 sys.path.insert(0, ".")
 from data.standards_seed import RELATIONSHIPS_DATA, STANDARDS_DATA, QCO_ORDERS_DATA
+from app.retrieval.semantic_search import semantic_index
+from app.services.multilingual import process_multilingual_input, detect_language
+from app.services.pdf_extractor import extract_text_from_pdf, create_sample_tender_pdf
+from app.services.evaluation import run_evaluation_benchmark
 
 STANDARDS_BY_IS = {s["is_number"]: s for s in STANDARDS_DATA}
 KNOWN_DEMO_STANDARDS = set(STANDARDS_BY_IS.keys())
@@ -195,13 +202,14 @@ def extract_requirements(spec: str) -> dict:
     }
 
 
-def score_standard(std: dict, req: dict) -> tuple[float, list[str]]:
+def score_standard(std: dict, req: dict, semantic_score: float = 0.0) -> tuple[float, list[str]]:
     """
     Transparent deterministic ranking weights:
     - Product compatibility: 0.45
     - Explicit IS citation: 0.50 (Decisive deterministic boost)
     - Technical keyword overlap: 0.20
     - Scope semantic alignment: 0.15
+    - Dense vector semantic embedding: up to 0.35 (Phase 1)
     - Certification alignment: 0.10
     - Safety alignment: 0.10
     """
@@ -223,6 +231,12 @@ def score_standard(std: dict, req: dict) -> tuple[float, list[str]]:
     if req.get("specific_standards") and std["is_number"] in req["specific_standards"]:
         score += 0.50
         signals.append(f"Explicit standard citation in specification: '{std['is_number']}'")
+
+    # Dense vector semantic match (Phase 1 innovation)
+    if semantic_score > 0.08:
+        sem_contrib = min(round(semantic_score * 0.35, 3), 0.35)
+        score += sem_contrib
+        signals.append(f"Dense vector semantic match (cosine: {round(semantic_score, 3)})")
 
     # Keyword overlap
     kws = set(k.lower() for k in (std.get("keywords") or []))
@@ -251,10 +265,17 @@ def score_standard(std: dict, req: dict) -> tuple[float, list[str]]:
     return min(round(score, 3), 1.0), signals
 
 
-def retrieve_candidates(req: dict) -> list:
+def retrieve_candidates(req: dict, spec: str = "") -> list:
+    semantic_scores_by_is = {}
+    if spec:
+        matches = semantic_index.search(spec, top_k=len(STANDARDS_DATA))
+        for m in matches:
+            semantic_scores_by_is[m["is_number"]] = m["semantic_score"]
+
     scored = []
     for s in STANDARDS_DATA:
-        sc, sigs = score_standard(s, req)
+        sem_sc = semantic_scores_by_is.get(s["is_number"], 0.0)
+        sc, sigs = score_standard(s, req, sem_sc)
         if sc > 0.0:
             scored.append((s, sc, sigs))
     scored.sort(key=lambda x: x[1], reverse=True)
@@ -724,18 +745,30 @@ def generate_explanation(req: dict, primary: dict | None, gaps: list, score: int
 
 
 def full_pipeline(spec: str, tender_id: str = "", department: str = "", domain: str = "", strict_mode: bool = False) -> dict:
-    req = extract_requirements(spec)
-    candidates = retrieve_candidates(req)
+    # Phase 2: Multilingual input detection and normalization
+    try:
+        multi_info = asyncio.run(process_multilingual_input(spec))
+    except Exception:
+        multi_info = {
+            "original_query": spec,
+            "detected_language": "en",
+            "language_name": "English",
+            "is_multilingual": False,
+            "normalized_query": spec,
+            "engine": "DIRECT_ENGLISH"
+        }
+
+    normalized_spec = multi_info.get("normalized_query") or spec
+    req = extract_requirements(normalized_spec)
+    candidates = retrieve_candidates(req, normalized_spec)
 
     primary = None
     related = []
     status = "NOT_FOUND"
 
     if req.get("unknown_standards") and not req.get("specific_standards"):
-        # Explicit standard reference detected, but no matching standard exists in demonstration KB
         primary = None
         status = "MANUAL_REVIEW"
-        # Provide candidates as secondary suggestions
         for std, score, signals in candidates:
             if score >= 0.15:
                 related.append(build_recommendation(std, score, "preliminary_suggestion", signals=signals))
@@ -749,7 +782,6 @@ def full_pipeline(spec: str, tender_id: str = "", department: str = "", domain: 
             )
             status = "FOUND"
             related = expand_graph(top_std["is_number"], req)
-            # Add secondary candidates not already in related
             graph_nums = {r["standard"]["is_number"] for r in related}
             for std, score, signals in candidates[1:]:
                 if std["is_number"] not in graph_nums and score >= 0.15:
@@ -758,7 +790,7 @@ def full_pipeline(spec: str, tender_id: str = "", department: str = "", domain: 
         else:
             status = "MANUAL_REVIEW"
 
-    coverage, gaps, clauses_analysis = analyze_coverage(spec, req, primary, related)
+    coverage, gaps, clauses_analysis = analyze_coverage(normalized_spec, req, primary, related)
     score = calculate_compliance_score(coverage, gaps)
     explanation = generate_explanation(req, primary, gaps, score)
     gem_clause = generate_gem_clause(primary, req, gaps)
@@ -766,7 +798,6 @@ def full_pipeline(spec: str, tender_id: str = "", department: str = "", domain: 
     cert_id = f"ISENSE-SIH/2026/VAL-{random.randint(10000, 99999)}"
     eval_date = time.strftime("%d %b %Y, %H:%M:%S IST")
 
-    # Match relevant QCO
     matched_qco = None
     if primary:
         p_is = primary["standard"]["is_number"]
@@ -793,6 +824,7 @@ def full_pipeline(spec: str, tender_id: str = "", department: str = "", domain: 
         "matched_qco": matched_qco,
         "explanation": explanation,
         "processing_status": status,
+        "multilingual": multi_info,
         "decision_support_notice": "Decision-support output — final procurement qualification and compliance decisions remain with the authorized procurement officer.",
         "disclaimer": (
             "ISense is a Smart India Hackathon prototype and is not an official BIS, GeM, CVC or Government of India system. "
@@ -821,6 +853,14 @@ class ISenseHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(body)
 
+    def send_bytes(self, content: bytes, content_type: str = "application/octet-stream", status: int = 200):
+        self.send_response(status)
+        self.send_header("Content-Type", content_type)
+        self.send_header("Content-Length", str(len(content)))
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.end_headers()
+        self.wfile.write(content)
+
     def do_OPTIONS(self):
         self.send_response(200)
         self.send_header("Access-Control-Allow-Origin", "*")
@@ -839,8 +879,31 @@ class ISenseHandler(BaseHTTPRequestHandler):
                 "organization": "Smart India Hackathon Prototype (PS-2)",
                 "database": "curated-demonstration-knowledge-base",
                 "standards_count": len(STANDARDS_DATA),
+                "semantic_index_active": True,
+                "bhashini_multilingual_active": True,
+                "pdf_analysis_active": True,
+                "evaluation_benchmark_active": True,
                 "ai_configured": True
             })
+        elif path == "/api/v1/evaluate":
+            try:
+                eval_res = asyncio.run(run_evaluation_benchmark())
+                self.send_json(eval_res)
+            except Exception as e:
+                self.send_json({"detail": f"Evaluation error: {str(e)}"}, 500)
+        elif path == "/demo/procurement-portal":
+            portal_path = os.path.join(os.path.dirname(__file__), "data", "mock_procurement_portal.html")
+            if os.path.exists(portal_path):
+                with open(portal_path, "rb") as f:
+                    self.send_bytes(f.read(), "text/html; charset=utf-8")
+            else:
+                self.send_json({"detail": "Mock portal file not found"}, 404)
+        elif path == "/demo/sample-tender-pdf":
+            try:
+                pdf_data = create_sample_tender_pdf("motorcycle")
+                self.send_bytes(pdf_data, "application/pdf")
+            except Exception as e:
+                self.send_json({"detail": f"PDF creation error: {str(e)}"}, 500)
         elif path == "/api/v1/standards":
             self.send_json([{
                 "id": s["is_number"].replace(" ", "-").lower(),
@@ -872,14 +935,15 @@ class ISenseHandler(BaseHTTPRequestHandler):
             self.send_json({"detail": "Endpoint not found"}, 404)
 
     def do_POST(self):
-        if self.path == "/api/v1/analyze":
-            length = int(self.headers.get("Content-Length", 0))
-            body = self.rfile.read(length)
+        length = int(self.headers.get("Content-Length", 0))
+        body = self.rfile.read(length)
+
+        if self.path in ("/api/v1/analyze", "/api/analyze"):
             try:
                 data = json.loads(body)
-                spec = data.get("specification", "")
-                if len(spec.strip()) < 10:
-                    self.send_json({"detail": "Specification too short (minimum 10 characters required)"}, 422)
+                spec = data.get("specification") or data.get("text", "")
+                if len(spec.strip()) < 5:
+                    self.send_json({"detail": "Specification too short (minimum 5 characters required)"}, 422)
                     return
                 tender_id = data.get("tender_id", "")
                 department = data.get("department", "")
@@ -887,11 +951,104 @@ class ISenseHandler(BaseHTTPRequestHandler):
                 strict_mode = data.get("strict_mode", False)
 
                 result = full_pipeline(spec, tender_id, department, domain, strict_mode)
-                self.send_json(result)
+
+                # If calling /api/analyze (Phase 7 contract), return standards, related_standards, coverage, gaps
+                if self.path == "/api/analyze":
+                    std_list = []
+                    if result.get("primary_standard"):
+                        p = result["primary_standard"]
+                        std_list.append({
+                            "is_number": p["standard"]["is_number"],
+                            "title": p["standard"]["title"],
+                            "relevance_score": p["relevance_score"],
+                            "relevance_label": p["relevance_label"],
+                            "reason": p["reason"]
+                        })
+                    for r in result.get("related_standards", []):
+                        std_list.append({
+                            "is_number": r["standard"]["is_number"],
+                            "title": r["standard"]["title"],
+                            "relevance_score": r["relevance_score"],
+                            "relevance_label": r["relevance_label"],
+                            "reason": r["reason"]
+                        })
+
+                    resp_data = {
+                        "standards": std_list,
+                        "related_standards": [
+                            {"is_number": r["standard"]["is_number"], "title": r["standard"]["title"], "relationship_type": r.get("relationship_type")}
+                            for r in result.get("related_standards", [])
+                        ],
+                        "coverage": result.get("coverage", []),
+                        "gaps": result.get("gaps", []),
+                        "multilingual": result.get("multilingual"),
+                        "compliance_score": result.get("compliance_score"),
+                        "certificate_id": result.get("certificate_id"),
+                        "full_report": result
+                    }
+                    self.send_json(resp_data)
+                else:
+                    self.send_json(result)
             except Exception as e:
                 self.send_json({"detail": f"Analysis execution error: {str(e)}"}, 500)
+
+        elif self.path == "/api/v1/translate":
+            try:
+                data = json.loads(body)
+                text = data.get("text", "")
+                res = asyncio.run(process_multilingual_input(text))
+                self.send_json(res)
+            except Exception as e:
+                self.send_json({"detail": f"Translation error: {str(e)}"}, 500)
+
+        elif self.path == "/api/v1/analyze-pdf":
+            try:
+                # Support base64 JSON payload or raw bytes
+                pdf_bytes = b""
+                tender_id = "GEM/2026/PDF-EVAL"
+                content_type = self.headers.get("Content-Type", "")
+
+                if "application/json" in content_type:
+                    data = json.loads(body)
+                    b64_str = data.get("pdf_base64", "")
+                    if b64_str:
+                        if "," in b64_str:
+                            b64_str = b64_str.split(",")[1]
+                        pdf_bytes = base64.b64decode(b64_str)
+                    tender_id = data.get("tender_id", tender_id)
+                else:
+                    # Raw PDF bytes or multipart
+                    if b"%PDF-" in body:
+                        pdf_start = body.find(b"%PDF-")
+                        pdf_end = body.rfind(b"%%EOF")
+                        if pdf_end != -1:
+                            pdf_bytes = body[pdf_start:pdf_end + 5]
+                        else:
+                            pdf_bytes = body[pdf_start:]
+                    else:
+                        pdf_bytes = body
+
+                if not pdf_bytes or len(pdf_bytes) < 100:
+                    self.send_json({"detail": "Invalid or empty PDF file provided"}, 422)
+                    return
+
+                extracted = extract_text_from_pdf(pdf_bytes)
+                if extracted["is_scanned_empty"]:
+                    self.send_json({"detail": "PDF contains no extractable text or is a scanned image without OCR."}, 422)
+                    return
+
+                analysis = full_pipeline(extracted["raw_text"], tender_id=tender_id)
+                analysis["pdf_document"] = {
+                    "title": extracted["title"],
+                    "total_pages": extracted["total_pages"],
+                    "total_characters": extracted["total_characters"],
+                    "extracted_text_preview": extracted["raw_text"][:600] + "..." if len(extracted["raw_text"]) > 600 else extracted["raw_text"]
+                }
+                self.send_json(analysis)
+            except Exception as e:
+                self.send_json({"detail": f"PDF analysis error: {str(e)}"}, 500)
         else:
-            self.send_json({"detail": "Not found"}, 404)
+            self.send_json({"detail": "Endpoint not found"}, 404)
 
 
 if __name__ == "__main__":

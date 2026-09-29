@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ISense Assistant</title>
+  <style>
+    body {
+      width: 320px;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f8fafc;
+      color: #0f172a;
+    }
+    .header {
+      background: #003366;
+      color: #fff;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 2px solid #f59e0b;
+    }
+    .brand {
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .badge {
+      background: #f59e0b;
+      color: #000;
+      font-size: 9px;
+      font-weight: 800;
+      padding: 1px 5px;
+      border-radius: 3px;
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #22c55e;
+      display: inline-block;
+    }
+    .content {
+      padding: 14px 16px;
+      font-size: 12px;
+    }
+    textarea {
+      width: 100%;
+      box-sizing: border-box;
+      height: 70px;
+      padding: 8px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 11.5px;
+      resize: none;
+      margin-bottom: 10px;
+    }
+    .btn {
+      width: 100%;
+      background: #003366;
+      color: #fff;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn:hover {
+      background: #002244;
+    }
+    .instructions {
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px solid #e2e8f0;
+      color: #64748b;
+      font-size: 11px;
+      line-height: 1.4;
+    }
+    .footer-link {
+      margin-top: 10px;
+      text-align: center;
+    }
+    .footer-link a {
+      color: #003366;
+      font-size: 11px;
+      text-decoration: none;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="brand">
+      <span class="badge">ISense</span>
+      <span>Standards Assistant</span>
+    </div>
+    <div id="server-status" title="Server active on port 8000">
+      <span class="status-dot"></span>
+    </div>
+  </div>
+
+  <div class="content">
+    <label for="quick-spec" style="font-weight: 600; display: block; margin-bottom: 4px;">
+      Quick Specification Analysis:
+    </label>
+    <textarea id="quick-spec" placeholder="Type or paste tender requirements (or select text on any page)...">Motorcycle protective helmets for two-wheeler riders with impact resistance and ISI mark.</textarea>
+    <button id="analyze-btn" class="btn">Analyze with ISense</button>
+
+    <div class="instructions">
+      <strong>How to use on GeM / CPPP:</strong>
+      <ol style="margin: 4px 0 0; padding-left: 18px;">
+        <li>Select any specification text on the webpage.</li>
+        <li>Click the floating <strong>"Analyze with ISense"</strong> icon or right-click and choose "Analyze with ISense".</li>
+        <li>View applicable Indian Standards and missing requirement gaps in the overlay!</li>
+      </ol>
+    </div>
+
+    <div class="footer-link">
+      <a href="http://localhost:5173" target="_blank">Open Full ISense Portal ↗</a>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
